@@ -55,5 +55,8 @@ Thumbs.db
 # Local IDEA workspace
 .idea/workspace.xml
 
-#NDK
+# NDK
 obj/
+
+# added by moubiao 2016-03-30
+test/
