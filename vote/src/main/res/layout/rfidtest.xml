@@ -1,0 +1,133 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <Button
+        android:id="@+id/button_rfidopen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_rftest_RfidOpen" />
+
+    <TextView
+        android:id="@+id/textView_openecho"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/button_rfidopen"
+        android:layout_toRightOf="@id/button_rfidopen"
+        android:text="@string/text_rftest_openecho" />
+
+    <Button
+        android:id="@+id/button_rfidinit"
+        android:layout_width="101dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/button_rfidopen"
+        android:layout_below="@id/button_rfidopen"
+        android:text="@string/text_rftest_RfidInit" />
+
+    <TextView
+        android:id="@+id/textView_initecho"
+        android:layout_width="219dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/button_rfidinit"
+        android:layout_toRightOf="@id/button_rfidinit"
+        android:text="@string/text_rftest_initecho" />
+
+    <Button
+        android:id="@+id/button_getsnr"
+        android:layout_width="101dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/button_rfidinit"
+        android:layout_below="@id/button_rfidinit"
+        android:text="@string/text_rftest_GetSNR" />
+
+    <TextView
+        android:id="@+id/textView_getsnr"
+        android:layout_width="219dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/button_getsnr"
+        android:layout_toRightOf="@id/button_getsnr"
+        android:text="@string/text_rftest_snr" />
+
+    <Button
+        android:id="@+id/button_rats"
+        android:layout_width="101dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/button_getsnr"
+        android:layout_below="@id/button_getsnr"
+        android:text="@string/text_rftest_Rats" />
+
+    <TextView
+        android:id="@+id/textView_rats"
+        android:layout_width="218dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/button_rats"
+        android:layout_toRightOf="@id/button_rats"
+        android:text="@string/text_rftest_rats1" />
+
+    <EditText
+        android:id="@+id/editText_rfapdu"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_rats"
+        android:ems="10"
+        android:text="@string/text_rftest_cmd" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/button_rfapdu"
+        android:layout_width="101dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/editText_rfapdu"
+        android:layout_below="@id/editText_rfapdu"
+        android:layout_marginTop="5dp"
+        android:minHeight="48dp"
+        android:text="@string/text_rftest_RfApdu" />
+
+    <TextView
+        android:id="@+id/textView_rfapduecho"
+        android:layout_width="219dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/button_rfapdu"
+        android:layout_marginTop="40dp"
+        android:layout_toRightOf="@id/button_rfapdu"
+        android:text="@string/text_rftest_rfapduecho" />
+
+    <Button
+        android:id="@+id/button_rfidclose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/button_rfapdu"
+        android:layout_below="@id/button_rfapdu"
+        android:text="@string/text_rftest_RfidClose" />
+
+    <TextView
+        android:id="@+id/textView_rfidclose"
+        android:layout_width="213dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/button_rfidclose"
+        android:layout_toRightOf="@id/button_rfidclose"
+        android:text="@string/text_rftest_closeecho" />
+
+    <Button
+        android:id="@+id/button_rfclose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_rfidclose"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="false"
+        android:layout_below="@+id/button_rfidclose"
+        android:layout_marginTop="30dp"
+        android:layout_toLeftOf="@+id/textView_rfidclose"
+        android:text="@string/text_rftest_FieldOff" />
+
+    <TextView
+        android:id="@+id/textView_rfcloseEcho"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button_rfclose"
+        android:layout_toRightOf="@+id/button_rfclose"
+        android:text="@string/text_rftest_echo" />
+
+</RelativeLayout>

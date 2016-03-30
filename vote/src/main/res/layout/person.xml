@@ -1,0 +1,254 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical" >
+
+    <!-- android:background="#63C00E" -->
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/imageView_avater"
+            android:layout_width="160dip"
+            android:layout_height="170dip"
+            android:src="@drawable/logo" />
+
+        <ImageView
+            android:id="@+id/imageView_finger"
+            android:layout_width="140dip" android:layout_marginLeft="10dip"
+            android:layout_height="170dip"
+            android:scaleType="fitXY"
+            android:background="@drawable/vote_example"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout_result"
+        android:layout_width="match_parent"
+        android:layout_height="26dip"
+        android:background="#AA9BC032"
+        android:gravity="right|center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/textView_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.97"
+            android:gravity="center"
+            android:text="@string/personscreen_text_result_success"
+            android:textColor="#FF800000"
+            android:textSize="15dip" />
+
+        <View
+            android:layout_width="1dip"
+            android:layout_height="26dip"
+            android:layout_marginRight="2dip"
+            android:background="#ffffff" />
+
+        <ImageButton
+            android:id="@+id/button_result_close"
+            android:layout_width="26dip"
+            android:layout_height="26dip"
+            android:layout_gravity="right"
+            android:background="@drawable/person_result_layout_button" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/linearLayout2"
+        android:gravity="bottom"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dip"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingLeft="8dip"
+            android:paddingRight="8dip" >
+
+            <TextView
+                android:id="@+id/textView1"
+                style="@style/text_color_common"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/editText1"
+                android:layout_alignTop="@+id/imageView1"
+                android:text="@string/personscreen_text_name"
+                android:textSize="16dip" />
+
+            <EditText
+                android:id="@+id/editText_surname"
+                android:layout_width="match_parent"
+                android:layout_height="32dip"
+                android:layout_below="@+id/textView1"
+                android:layout_toRightOf="@+id/imageView1"
+                android:background="#22ffffff"
+                android:clickable="false"
+                android:editable="false"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center_vertical"
+                android:inputType="textPersonName"
+                android:paddingLeft="6dip"
+                android:textColor="@android:color/holo_red_dark" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/textView3"
+                style="@style/text_color_common"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personscreen_text_birthday"
+                android:textSize="16dip" />
+
+            <EditText
+                android:id="@+id/editText_name"
+                android:layout_width="match_parent"
+                android:layout_height="32dip"
+                android:background="#22ffffff"
+                android:clickable="false"
+                android:editable="false"
+                android:enabled="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center_vertical"
+                android:paddingLeft="6dip"
+                android:textColor="@android:color/holo_red_dark" />
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/text_color_common"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personscreen_text_vin"
+                android:textSize="16dip" />
+
+            <EditText
+                android:id="@+id/editText_vin"
+                android:layout_width="match_parent"
+                android:layout_height="32dip"
+                android:layout_alignRight="@+id/linearLayout1"
+                android:layout_below="@+id/textView2"
+                android:background="#22ffffff"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false"
+                android:gravity="center_vertical"
+                android:paddingLeft="6dip"
+                android:textColor="@android:color/holo_red_dark" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/textView4"
+                    style="@style/text_color_common"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/personscreen_text_code"
+                    android:textSize="16dip" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    style="@style/text_color_common"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dip"
+                    android:text="@string/personscreen_text_gender"
+                    android:textSize="16dip" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/editText_code"
+                    android:layout_width="154dp"
+                    android:layout_height="32dip"
+                    android:layout_alignRight="@+id/linearLayout1"
+                    android:layout_below="@+id/textView4"
+                    android:layout_weight="0.44"
+                    android:background="#22ffffff"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="6dip"
+                    android:textColor="@android:color/holo_red_dark" />
+
+                <EditText
+                    android:id="@+id/editText_gender"
+                    android:layout_width="130dp"
+                    android:layout_height="32dip"
+                    android:layout_alignRight="@+id/linearLayout1"
+                    android:layout_below="@+id/textView4"
+                    android:layout_marginLeft="30dip"
+                    android:layout_weight="0.45"
+                    android:background="#22ffffff"
+                    android:clickable="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="6dip"
+                    android:textColor="@android:color/holo_red_dark" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="60dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/button_rc"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_button_common3"
+                android:drawableTop="@drawable/buttonicon_person" />
+
+            <Button
+                android:id="@+id/button_fp"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_button_common3"
+                android:drawableTop="@drawable/buttonicon_finger" />
+
+
+
+            <Button
+                android:id="@+id/button4_back"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="@drawable/selector_button_common3"
+                android:drawableTop="@drawable/buttonicon_back" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

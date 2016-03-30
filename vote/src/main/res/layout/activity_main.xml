@@ -1,0 +1,140 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg" 
+    android:orientation="horizontal" >
+ 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="16dip" >
+
+        <Button
+            android:id="@+id/button_mPerson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mainbutton3"
+            android:nextFocusDown="@+id/button_mDataTransmit"
+            android:nextFocusLeft="@+id/button_mExit"
+            android:nextFocusRight="@+id/button_mQuery"
+            android:nextFocusUp="@+id/button_lockvote" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/mainmenu_text_gather" />
+
+        <Button
+            android:id="@+id/button_mDataTransmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/mainbutton2"
+            android:nextFocusDown="@id/button_lockvote"
+            android:nextFocusLeft="@+id/button_mQuery"
+            android:nextFocusRight="@+id/button_mAbout"
+            android:nextFocusUp="@+id/button_mPerson" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/mainmenu_text_querystate" />
+
+        <Button
+            android:id="@+id/button_lockvote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/mainbutton_scan"
+            android:nextFocusDown="@id/button_mPerson"
+            android:nextFocusLeft="@+id/button_mAbout"
+            android:nextFocusRight="@+id/button_mExit"
+            android:nextFocusUp="@+id/button_mDataTransmit" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_scan" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingRight="16dip" >
+
+        <Button
+            android:id="@+id/button_mQuery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mainbutton4"
+            android:nextFocusDown="@+id/button_mAbout"
+            android:nextFocusLeft="@+id/button_mPerson"
+            android:nextFocusRight="@+id/button_mDataTransmit"
+            android:nextFocusUp="@+id/button_mExit" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_datatransmit" />
+
+        <Button
+            android:id="@+id/button_mAbout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/mainbutton_printer"
+            android:nextFocusDown="@+id/button_mExit"
+            android:nextFocusLeft="@+id/button_mDataTransmit"
+            android:nextFocusRight="@+id/button_lockvote"
+            android:nextFocusUp="@+id/button_mQuery" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_BTPrinter" />
+
+        <Button
+            android:id="@+id/button_mExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/mainbutton6"
+            android:nextFocusDown="@id/button_mQuery"
+            android:nextFocusLeft="@+id/button_lockvote"
+            android:nextFocusRight="@+id/button_mPerson"
+            android:nextFocusUp="@+id/button_mAbout" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_exit" />
+    </LinearLayout>
+
+</LinearLayout>

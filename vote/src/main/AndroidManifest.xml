@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.jy.demo.fingerprint"
+    android:versionCode="1"
+    android:versionName="Version1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+	<uses-permission android:name="android.permission.VIBRATE" />
+	
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <!-- 关闭该包下的所有应用程序 -->
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+
+    <application
+    	android:name="com.example.jy.demo.fingerprint.MyApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/main"
+        android:label="@string/app_name"
+        android:launchMode="singleTop"
+        android:theme="@android:style/Theme.NoTitleBar" >
+        <activity
+            android:name="com.example.jy.demo.fingerprint.logo"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.MONKEY" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.MainActivity_V"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.AdminMainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.person"
+            android:launchMode="singleTop" 
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.jp2decoder"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.login"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.fprint"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.VinQuery"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.UserQuery"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.SystemConfig"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Wallpaper.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.DataEntry"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.DataEntryList"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.SystemAbout"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.DataSend"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.CameraOpen"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+        <activity
+            android:name="com.example.jy.demo.fingerprint.CameraOpen_Automatic"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
+            android:name="com.example.jy.demo.fingerprint.CameraOpen_gather"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.CameraOpen_back"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.login_ext"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.MainActivity_ext"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.inecmenu"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.Submain"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.SystemLog"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Wallpaper.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.CameraActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+        </activity>
+
+        
+        <activity
+            android:name="com.example.jy.demo.fingerprint.IdcardRunner"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="idcard.receiver" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="wintone.idcard.android.IDCardBean"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape" >
+            <intent-filter>
+                <action android:name="wintone.idcard" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="wintone.idcard.android.AuthService"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="wintone.idcard.authService" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="wintone.idcard.android.RecogService"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="wintone.idcard.recogService" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.example.jy.demo.fingerprint.nfc"
+            android:screenOrientation="portrait" >
+
+            <!--
+            <intent-filter>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERED"
+                android:resource="@xml/nfc_tech_filter" />
+             -->
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.gatherFinger"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.GatherQuery"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.gatherMain"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Wallpaper.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.BluetoothActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.PrintDataActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.ConsoleActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.SimTestActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.RfidTestActivity"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.M1"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.jy.demo.fingerprint.MainActivity_rftest"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:screenOrientation="portrait" >
+        </activity>
+
+		<activity
+			android:name=".DeviceListActivity"
+			android:configChanges="orientation|keyboardHidden"
+			android:label="@string/select_device"
+			android:theme="@android:style/Theme.Dialog" />
+			
+        <activity 
+        	android:name=".SFZActivity" >
+        </activity>
+        <activity 
+        	android:name=".ConnectActivity" >
+        </activity>
+
+    </application>
+
+</manifest>

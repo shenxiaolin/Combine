@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:paddingBottom="16dip"
+    android:paddingLeft="16dip"
+    android:paddingRight="16dip"
+    android:paddingTop="16dip" >
+
+    <Button
+        android:id="@+id/button_simtest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="75dp"
+        android:text="@string/text_rftest_SIMTest" />
+
+    <Button
+        android:id="@+id/button_rftest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_simtest"
+        android:layout_marginTop="20dp"
+        android:minHeight="75dp"
+        android:text="@string/text_rftest_RFTest" />
+
+    <Button
+        android:id="@+id/button_fprinttest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_rftest"
+        android:layout_alignRight="@+id/button_rftest"
+        android:layout_below="@+id/button_rftest"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="20dp"
+        android:minHeight="75dp"
+        android:text="@string/text_rftest_FprintTest" />
+
+    <Button
+        android:id="@+id/button_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button_fprinttest"
+        android:layout_marginTop="20dp"
+        android:minHeight="75dp"
+        android:text="@string/datasend_text_backbutton" />
+
+</RelativeLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg" >
+
+    <TextView
+        android:id="@+id/text_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/testname"
+        android:textColor="#ff0000"
+        android:textSize="30dip" />
+
+    <EditText
+        android:id="@+id/edit_file"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/takePic"
+        android:layout_alignLeft="@+id/text_content"
+        android:layout_below="@+id/text_content"
+        android:editable="false"
+        android:layout_marginTop="0dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/takePic"
+        android:layout_width="wrap_content"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/backIndex"
+        android:text="@string/camera_againest" 
+        
+        >
+
+    </Button>
+
+    <Button
+        android:id="@+id/backIndex"
+        android:layout_width="wrap_content"
+        android:layout_height="50dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/backIndex" >
+    </Button>
+
+</RelativeLayout>

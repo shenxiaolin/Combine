@@ -1,0 +1,140 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="16dip" >
+
+        <Button
+            android:id="@+id/button_adminUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/adminbutton_user"
+            android:nextFocusDown="@+id/button_adminreset"
+            android:nextFocusLeft="@+id/button_adminExit"
+            android:nextFocusRight="@+id/button_adminSetting"
+            android:nextFocusUp="@+id/button_adminLockVote" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_user" />
+
+        <Button
+            android:id="@+id/button_adminreset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/adminbutton_reset"
+            android:nextFocusDown="@+id/button_adminLockVote"
+            android:nextFocusLeft="@+id/button_adminSetting"
+            android:nextFocusRight="@+id/button_adminabout"
+            android:nextFocusUp="@+id/button_adminUser" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_reset" />
+
+        <Button
+            android:id="@+id/button_adminLockVote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/mainbutton_voteopen"
+            android:nextFocusDown="@id/button_adminUser"
+            android:nextFocusLeft="@+id/button_adminabout"
+            android:nextFocusRight="@+id/button_adminExit"
+            android:nextFocusUp="@+id/button_adminreset" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_lockverificate" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingRight="16dip" >
+
+        <Button
+            android:id="@+id/button_adminSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/adminbutton_setting"
+            android:nextFocusDown="@id/button_adminabout"
+            android:nextFocusLeft="@+id/button_adminUser"
+            android:nextFocusRight="@+id/button_adminreset"
+            android:nextFocusUp="@+id/button_adminExit" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_configSetting" />
+
+        <Button
+            android:id="@+id/button_adminabout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/adminbutton_setting_new"
+            android:nextFocusDown="@id/button_adminExit"
+            android:nextFocusLeft="@+id/button_adminreset"
+            android:nextFocusRight="@+id/button_adminLockVote"
+            android:nextFocusUp="@+id/button_adminSetting" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/System" />
+
+        <Button
+            android:id="@+id/button_adminExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" 
+            android:layout_marginTop="5dip"
+            android:background="@drawable/mainbutton6"
+            android:nextFocusDown="@id/button_adminSetting"
+            android:nextFocusLeft="@+id/button_adminLockVote"
+            android:nextFocusRight="@+id/button_adminUser"
+            android:nextFocusUp="@+id/button_adminabout" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_exit" />
+    </LinearLayout>
+
+</LinearLayout>
