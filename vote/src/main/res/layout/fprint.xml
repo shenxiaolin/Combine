@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/fprintimage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.59"
+        android:src="@drawable/logo" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#000000"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/buttonfprint"
+            android:layout_width="90dip"
+            android:layout_height="40dip"
+            android:gravity="center"
+            android:background="@drawable/selector_button_common"
+            android:text="@string/Scanning" />
+
+        <Button
+            android:id="@+id/buttonback"
+            android:layout_width="90dip"
+            android:background="@drawable/selector_button_common"
+            android:layout_height="40dip"
+            android:text="@string/datasend_text_backbutton" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <RelativeLayout
+            android:id="@+id/idcard_showlyaout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <SurfaceView
+                android:id="@+id/surfaceViwe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:visibility="visible" >
+            </SurfaceView>
+
+            <ProgressBar
+                android:id="@+id/progress_horizontal"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/locktextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wt_text_block"
+                android:textSize="25dip" />
+
+            <ImageView
+                android:id="@+id/unlockbutton"
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:layout_toLeftOf="@+id/locktextview" />
+
+            <!-- 25dip 700dip 120dip -->
+
+            <TextView
+                android:id="@+id/resulttextview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:scrollbars="vertical"
+                android:textColor="#000000" />
+
+            <RelativeLayout
+                android:id="@+id/idcard_rightlyaout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white" >
+
+                <ImageButton
+                    android:id="@+id/backbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dip"
+                    android:background="@drawable/back" />
+
+                <ImageButton
+                    android:id="@+id/takepic_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dip"
+                    android:background="@drawable/takepic" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/topleft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/topright"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/bottomleft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/bottomright"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/leftcut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/rightcut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</FrameLayout>

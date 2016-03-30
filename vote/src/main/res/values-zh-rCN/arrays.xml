@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- This came right out of frameworks/base/include/ui/KeycodeLabels.h -->
+    <string-array name="query_item">
+        <item>Vin</item>
+        <item>Status</item>
+    </string-array>
+    <string-array name="user_item">
+        <item>修改用户 </item>
+        <item>修改密码</item>
+    </string-array>
+    <string-array name="datalist_item">
+        <item>修改</item>
+        <item>删除</item>
+    </string-array>
+    <string-array name="system_config">
+        <item>Code</item>
+        <item>系统时间</item>
+        <item>起始时间</item>
+        <item>截止时间</item>
+        <item>GPRS IP地址</item>
+        <item>GPRS 端口</item>        
+        <item>核验类型</item>
+        <!--
+             <item>亮度</item>
+        <item>声音</item>
+        -->
+    </string-array>
+    <string-array name="system_config_sp">
+        <item>PU_CODE</item>
+        <item>SYSTEM_DATETIME </item>
+        <item>VOTE_BEGIN_DATETIME</item>
+        <item>VOTE_END_DATETIME</item>
+        <item>GPRS_IP</item>
+        <item>GPRS_PORT</item>
+        <item>ELECTION_TYPE</item>
+        <!--
+             <item>LIGHT_LEVEL</item>
+        <item>SOUND_LEVEL</item>
+        -->
+    </string-array>
+    
+        <string-array name="system_about">
+        <item>型号 </item>
+        <item>基带版本</item>
+        <item>Android 版本</item>
+        <item>系统版本</item>
+        <item>软件版本</item>
+        <!--
+             <item>亮度</item>
+        <item>声音</item>
+        -->
+    </string-array>
+
+            <string-array name="genderArray">
+        <item>男性</item>
+        <item>女性</item>
+    </string-array>
+    <string-array name="gather_query_item">
+        <item>ID号</item>
+        <item>名字</item>
+    </string-array>
+    <string-array name="textcardtype_array">
+        <item>一代身份证</item>
+        <item>二代身份证正面</item>
+        <item>二代身份证背面</item>
+        <item>临时身份证</item>
+        <item>驾照</item>
+        <item>行驶证</item>
+        <item>军官证</item>
+        <item>士兵证（暂不支持</item>
+        <item>港澳通行证</item>
+        <item>大陆通行证</item>
+        <item>台湾通行证</item>
+        <item>签证</item>
+        <item>护照</item>
+        <item>内地通行证正面</item>
+        <item>内地通行证背面</item>
+        <item>户口本</item>
+        <item>广东省居住证</item>
+        <item>香港永久性居民身份证</item>
+        <item>边防证A</item>
+        <item>边防证B</item>
+        <item>澳门身份证</item>
+        <item>领取凭证</item>
+        <item>律师证A</item>
+        <item>律师证B</item>
+        <item>中华人民共和国道路运输证IC卡</item>
+    </string-array>
+</resources>

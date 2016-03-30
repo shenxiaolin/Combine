@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical"
+    android:minHeight="48dip"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/vinlist_vin"
+        android:layout_width="300dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:textColor="#0000ff"
+        android:textSize="20dip" />
+
+    <View
+        android:layout_width="1dip"
+        android:layout_height="fill_parent"
+        android:background="@android:color/holo_orange_dark" />
+
+    <TextView
+        android:id="@+id/vinlist_status"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textColor="#0000ff"
+        android:textSize="20dip" />
+
+</LinearLayout>

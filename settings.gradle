@@ -1,1 +1,1 @@
-include ':app', ':recognition', ':test'
+include ':app', ':recognition', ':test', ':vote'

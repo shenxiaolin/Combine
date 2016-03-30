@@ -1,0 +1,94 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="16dip" >
+
+        <Button
+            android:id="@+id/button_subseting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/submainbutton_setting"
+            android:nextFocusLeft="@+id/button_subsyslog"
+            android:nextFocusUp="@+id/button_subabout" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/submainmenu_text_Setting" />
+
+        <Button
+            android:id="@+id/button_subabout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/mainbutton5"
+            android:nextFocusDown="@id/button_subseting"
+            android:nextFocusLeft="@+id/button_subback" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/adminmainmenu_text_about" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingRight="16dip" >
+
+        <Button
+            android:id="@+id/button_subsyslog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/submainbutton_report"
+            android:nextFocusRight="@+id/button_subseting"
+            android:nextFocusUp="@+id/button_subback" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/SystemLog" />
+
+        <Button
+            android:id="@+id/button_subback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/submainbutton_back"
+            android:nextFocusDown="@+id/button_subsyslog"
+            android:nextFocusRight="@+id/button_subabout" />
+
+        <TextView
+            style="@style/text_color_common"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dip"
+            android:paddingBottom="5dip"
+            android:text="@string/submainmenu_text_BACK" />
+    </LinearLayout>
+
+</LinearLayout>
