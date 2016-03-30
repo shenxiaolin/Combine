@@ -30,3 +30,30 @@ proguard/
 
 # Android Studio captures folder
 captures/
+
+
+# added by moubiao 2016-03-29
+fingerprint-recognition.iml
+
+# generated files
+out/
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX files
+.DS_Store
+
+# Eclipse project files
+.classpath
+.project
+
+# Android Studio
+*.iml
+.idea
+
+# Local IDEA workspace
+.idea/workspace.xml
+
+#NDK
+obj/
