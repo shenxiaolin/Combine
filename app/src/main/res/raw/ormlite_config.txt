@@ -1,0 +1,17 @@
+#
+# generated on 2016/03/18 01:49:55
+#
+# --table-start--
+dataClass=com.example.jy.demo.bean.Account
+tableName=account
+# --table-fields-start--
+# --field-start--
+fieldName=user
+id=true
+# --field-end--
+# --field-start--
+fieldName=password
+# --field-end--
+# --table-fields-end--
+# --table-end--
+#################################

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Identity</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <!-- MyApplication -->
+    <string name="connection_success">connection success</string>
+    <string name="connection_fail">connection fail</string>
+    <string name="connection_lost">connection lost</string>
+    <!-- BluetoothChat -->
+    <string name="enable_bluetooth">Bluetooth-enabled</string>
+    <string name="disable_bluetooth">Bluetooth has been disabled</string>
+    <string name="no_bluetooth">Device does not support Bluetooth</string>
+    <string name="connecting_bluetooth">connecting,please wait...</string>
+    <string name="connect_bluetooth">connect bluetooth</string>
+    <string name="scanning">scanning for devices...</string>
+    <string name="select_bluetooth_device">select a device to connect</string>
+    <string name="button_scan">Scan for devices</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <!-- sfz activity -->
+    <string name="read_sfz">Reader</string>
+    <string name="sequential_sfz">Continuous reader</string>
+    <string name="stop">Stop</string>
+    <string name="clear_sfz">Clear</string>
+    <string name="read_card_fail">Did not find a card</string>
+    <string name="read_card_success">Successful reader</string>
+    <string name="no_found_card_no_data">Not find the card,returndata!!</string>
+    <string name="no_card_time_out">Not find the card and no data ,time out !!</string>
+    <string name="other_exceptions">Other exceptions</string>
+    <string name="total">total：</string>
+    <string name="success"> success：</string>
+    <string name="fail"> fail：</string>
+    <string name="bluetooth_no_connetion">The bluetooth no connection</string>
+    <string name="reading">reading....</string>
+
+    <string name="AccessDataOCRLinesRx_fail">Access to information fail ，please again!!!</string>
+    <string name="device_open">device has been opened，please brush passport!!!</string>
+    <string name="press_fingerprint">Please press the fingerprint</string>
+    <!-- 护照 -->
+    <string name="fieldname">护照类型：</string>
+    <string name="fieldname1">护照号码MRZ：</string>
+    <string name="fieldname2">本国姓名：</string>
+    <string name="fieldname3">英文姓名：</string>
+    <string name="fieldname4">性别：</string>
+    <string name="fieldname5">出生日期：</string>
+    <string name="fieldname6">有效期至：</string>
+    <string name="fieldname7">签发国代码：</string>
+    <string name="fieldname8">英文姓：</string>
+    <string name="fieldname9">英文名：</string>
+    <string name="fieldname10">MRZ1：</string>
+    <string name="fieldname11">MRZ2：</string>
+    <string name="fieldname12">持证人国籍代码：</string>
+    <string name="fieldname13">护照号码：</string>
+    <string name="fieldname14">Discretionary：</string>
+    <string name="fieldname15">国籍：</string>
+    <string name="fieldname16">Discretionary2：</string>
+    <string name="fieldname17">签发地点：</string>
+    <!-- 港澳通行证 -->
+    <string name="fieldname00">证件类型：</string>
+    <string name="fieldname02">中文姓名：</string>
+    <string name="fieldname013">证件号码：</string>
+    <string name="fieldname01">证件号码MRZ：</string>
+
+    <string name="fieldname001">授权验证成功</string>
+    <string name="fieldname002">授权验证失败</string>
+
+
+    <string name="fieldname0001">指定序列号为null</string>
+    <string name="fieldname0002">未连接到服务器</string>
+    <string name="fieldname0003">获取激活码失败或未连接到服务器</string>
+    <string name="fieldname0004">授权服务器无此序列号</string>
+
+    <string name="fieldname0005">序列号已使用</string>
+    <string name="fieldname0006">无法创建授权文件或者创建失败</string>
+    <string name="fieldname0007">序列号线程出错或者激活码联网激活失败</string>
+    <string name="fieldname0008">序列号超过使用时间</string>
+    <string name="fieldname0009">激活码校验失败</string>
+    <string name="fieldname0010">该产品未授权</string>
+    <string name="fieldname0011">授权验证失败，返回错误码：</string>
+
+    <string name="error_configuration">Please configure your serial port first.</string>
+    <string name="error_security">You do not have read/write permission to the serialport.</string>
+    <string name="error_unknown">The serial port can not be opened for an unknown reason.</string>
+    <string name="adminmainmenu_text_access">MRZ</string>
+
+    <string name="text_Clean">Clean</string>
+
+    <string name="text_rftest_SIMTest">SIM Test</string>
+    <string name="text_rftest_RFTest">RF Test</string>
+    <string name="text_rftest_FprintTest">Fprint Test</string>
+
+    <string name="text_rftest_snr">snr</string>
+    <string name="text_rftest_Read">Read</string>
+    <string name="text_rftest_Write">Write</string>
+    <string name="text_rftest_hint">hint</string>
+
+    <string name="text_rftest_RfidOpen">Rfid Open</string>
+    <string name="text_rftest_openecho">open echo</string>
+    <string name="text_rftest_RfidInit">Rfid Init</string>
+    <string name="text_rftest_initecho">init echo</string>
+    <string name="text_rftest_GetSNR">Get SNR</string>
+    <string name="text_rftest_Rats">Rats</string>
+    <string name="text_rftest_rats1">rats</string>
+    <string name="text_rftest_cmd">cmd</string>
+    <string name="text_rftest_RfApdu">Rf Apdu</string>
+    <string name="text_rftest_rfapduecho">rfapdu echo</string>
+    <string name="text_rftest_RfidClose">Rfid Close</string>
+    <string name="text_rftest_closeecho">close echo</string>
+    <string name="text_rftest_FieldOff">Field Off</string>
+    <string name="text_rftest_echo">echo</string>
+
+    <string name="text_rftest_Slot">Slot:</string>
+    <string name="text_rftest_Baut">Baut:</string>
+    <string name="text_rftest_Volt">Volt:</string>
+    <string name="text_rftest_Apdu">Apdu</string>
+    <string name="text_rftest_Reset">Reset</string>
+    <string name="text_rftest_cmdEcho">cmdEcho</string>
+    <string name="text_rftest_resetEcho">resetEcho</string>
+    <string name="datasend_text_backbutton">Back</string>
+
+    <!-- 土耳其 -->
+
+
+    <string name="adminmainmenu_text_about">INFORMATION</string>
+    <string name="SystemConfig_sp">SystemConfig</string>
+
+    <string name="finger_input_l1">Please Put left thumb</string>
+    <string name="finger_input_l2">Please Put left index finger</string>
+    <string name="finger_input_l3">Please Put left middle finger</string>
+    <string name="finger_input_l4">Please Put left ring finger</string>
+    <string name="finger_input_l5">Please Putr left little finger</string>
+    <string name="finger_input_r1">Please Put Right thumb</string>
+    <string name="finger_input_r2">Please Put Right index finger</string>
+    <string name="finger_input_r3">Please Put Right middle finger</string>
+    <string name="finger_input_r4">Please Put Right ring finger</string>
+    <string name="finger_input_r5">Please Putr Right little finger</string>
+
+    <string name="dataentry_savefile_success">File saved !</string>
+    <string name="dataentry_file_nonexistent">The file does not exist !</string>
+    <string name="dataentry_savefile_error">Save file error !</string>
+    <string name="systemconfig_title">Setting</string>
+
+
+    <string name="systemconfig_dialog_set_success_toast">Setting Succeeded</string>
+    <string name="systemconfig_dialog_set_fail_toast">Setting failed</string>
+    <string name="systemconfig_sp_noset">No setting</string>
+    <string name="systemconfig_sp_set">Setting</string>
+    <string name="systemconfig_dialog_edittext_empty">Empty settings !</string>
+    <string name="systemconfig_toast_updatetime_s">Time update succeeded !</string>
+    <string name="systemconfig_toast_updatetime_f">Time update failed !</string>
+    <string name="systemconfig_set_begindatetime_error">Vote time cannot be earlier than current time!</string>
+    <string name="systemconfig_set_begindatetime_error_ext">Start time later than end time, please reset end time!</string>
+    <string name="systemconfig_set_enddatetime_error_ext">Vote end time should be later than start time, please reset!</string>
+    <string name="systemconfig_set_port_error">GPRS Port should be from 0 to 65535, please reset!</string>
+    <string name="systemconfig_dialog_set_election_type_title">Add Vote type</string>
+
+
+    <string name="finger_matchvlaue_fail">Fingerprint threshold error !</string>
+    <string name="systemconfig_toast_updateconfig_s">Parameter Updated !</string>
+    <string name="systemconfig_get_sc_fail_nofile_toast">Setting failed, configuration file is not found !</string>
+    <string name="entry_max_num_toast">Maximum insert quantity is</string>
+    <string name="systemconfig_dialog_set_pucode_fail">CODE is nine-digit number !</string>
+    <string name="System_Log_event_updateconfig">Update parameter</string>
+    <string name="System_Log_event_updatetime">Update Time</string>
+    <string name="download_new_software_f">network anomaly ！</string>
+    <string name="systemconfig_toast_updateconfig_wait">Downloading Config, please wait</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="Scanning">Scanning</string>
+
+
+    <string name="download_new_software_title">Downloading, please wait !</string>
+    <string name="download_new_software_s">Software download succeeded</string>
+    <string name="mainmenu_comparedate_toast">Not in the valid date !</string>
+    <string name="personscreen_text_dialog_readcard">Please put card !</string>
+    <string name="personscreen_text_dialog_getfinger">Fingerprint scan finished</string>
+    <string name="personscreen_text_readcard">Please read card first</string>
+    <string name="login_entry_changepwd_toast">Please change the passwd ASAP!</string>
+    <string name="System_Log_event_download">Download software</string>
+    <string name="software_new">software is latest version</string>
+    <string name="personscreen_text_readnfc_fail">Reading failed !</string>
+    <string name="login_user_error_toast">User does not exist !</string>
+
+    <string name="login_entry_PU_toast">Code is</string>
+    <string name="login_entry_ET_toast">Verification Type is</string>
+    <string name="login_entry_ET_begin_time_toast">Start Time is</string>
+    <string name="login_entry_ET_end_time_toast">End Time is</string>
+    <string name="login_pwd_error_toast">Password error , please try again !</string>
+    <string name="System_Log_event_login">Login</string>
+    <string name="user_pwd_error_toast">Password incorrect !</string>
+    <string name="handle_text_wait">请稍等 ...</string>
+    <string name="personscreen_text_result_fail2">此投票者已经认证 !</string>
+    <string name="personscreen_text_lockvote_fail">投票系统已经关闭 !</string>
+    <string name="personscreen_text_pucode_fail">非本选民点的卡 !</string>
+    <string name="personscreen_text_dialog_hint">正在读卡,请稍等 !</string>
+    <string name="personscreen_text_result_success">投票成功</string>
+    <string name="personscreen_text_result_fail">指纹比对失败</string>
+    <string name="personscreen_text_readnfc_success">读取NFC信息成功 !</string>
+    <string name="personscreen_text_name">NAME</string>
+    <string name="personscreen_text_vin">VOTER IDENTIFICATION NUMBER (VIN)</string>
+    <string name="personscreen_text_code">POLLING UNIT CODE</string>
+    <string name="personscreen_text_gender">GENDER</string>
+
+</resources>

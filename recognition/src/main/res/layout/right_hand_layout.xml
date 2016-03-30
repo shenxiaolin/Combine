@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/right_hand"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/right_hand_bg"
+    android:visibility="visible">
+
+    <Button
+        android:id="@+id/right_thumb_bt"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="205dp"
+        android:layout_marginStart="205dp"
+        android:layout_marginTop="110dp"
+        android:background="#cc99cc"
+        android:rotation="-28"/>
+
+    <Button
+        android:id="@+id/right_index_finger_bt"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="240dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="25dp"
+        android:background="#cc9933"
+        android:rotation="-16"/>
+
+    <Button
+        android:id="@+id/right_middle_finger_bt"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="285dip"
+        android:layout_marginStart="285dp"
+        android:layout_marginTop="15dip"
+        android:background="#336699"/>
+
+    <Button
+        android:id="@+id/right_ring_finger_bt"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="330dip"
+        android:layout_marginStart="330dp"
+        android:layout_marginTop="30dip"
+        android:background="#ffff66"
+        android:rotation="20"/>
+
+    <Button
+        android:id="@+id/right_little_finger_bt"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="360dp"
+        android:layout_marginStart="360dp"
+        android:layout_marginTop="60dp"
+        android:background="#99ccff"
+        android:rotation="30"/>
+
+</FrameLayout>

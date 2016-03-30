@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@mipmap/main_green_bg"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_size_10"
+        android:text="@string/write_info_title"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="@dimen/font_size_20"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/WriteInfoItemTitleStyle"
+                android:text="@string/info_title_ID"/>
+
+            <TextView
+                android:id="@+id/fill_ID_tx"
+                style="@style/WriteInfoItemContentStyle"
+                android:text="00000"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/WriteInfoItemTitleStyle"
+                android:text="@string/info_item_title_name"/>
+
+            <EditText
+                android:id="@+id/fill_name_text"
+                style="@style/WriteInfoItemContentStyle"
+                android:imeOptions="actionNext|flagNoFullscreen"
+                android:maxLength="15"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/WriteInfoItemTitleStyle"
+                android:text="@string/info_item_title_gender"/>
+
+            <TextView
+                android:id="@+id/gender_tv"
+                style="@style/WriteInfoItemContentStyle"
+                android:text="male"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/WriteInfoItemTitleStyle"
+                android:text="@string/info_item_title_birthday"/>
+
+            <TextView
+                android:id="@+id/birthday_tv"
+                style="@style/WriteInfoItemContentStyle"
+                android:text="2016-03-22"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/WriteInfoItemTitleStyle"
+                android:text="@string/info_item_title_address"/>
+
+            <EditText
+                android:id="@+id/address_ET"
+                style="@style/WriteInfoItemContentStyle"
+                android:imeOptions="actionDone|flagNoFullscreen"
+                android:maxLength="40"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/WriteInfoItemTitleStyle"
+                android:text="@string/info_item_title_id_no"/>
+
+            <EditText
+                android:id="@+id/ID_NO_et"
+                style="@style/WriteInfoItemContentStyle"
+                android:imeOptions="actionDone|flagNoFullscreen"
+                android:inputType="number"
+                android:maxLength="10"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include layout="@layout/bottom_bar"/>
+
+</LinearLayout>

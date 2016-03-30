@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@mipmap/main_green_bg"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/password_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/editText_name"
+            android:src="@mipmap/name"/>
+
+        <EditText
+            android:id="@+id/editText_name"
+            style="@style/LoginBoxStyle"
+            android:layout_below="@id/password_img"
+            android:imeOptions="actionNext|flagNoFullscreen"
+            android:inputType="textPersonName"
+            android:singleLine="true"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/user_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/editText_psw"
+            android:src="@mipmap/password"/>
+
+        <EditText
+            android:id="@+id/editText_psw"
+            style="@style/LoginBoxStyle"
+            android:layout_below="@id/user_img"
+            android:imeOptions="actionDone|flagNoFullscreen"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:textColor="@android:color/holo_red_dark"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/login_bt"
+        style="@style/CommonTextStyle"
+        android:layout_width="100dip"
+        android:layout_height="56dip"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dip"
+        android:background="@mipmap/login"/>
+
+</LinearLayout>

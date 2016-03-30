@@ -1,0 +1,239 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/adminmainmenu_text_about"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="23dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/dcs_id" />
+
+            <EditText
+                android:id="@+id/dcsinfo_id"
+                android:layout_width="match_parent"
+                android:layout_height="30dip"
+                android:background="#22ffffff"
+                android:clickable="false"
+                android:editable="false"
+                android:ems="10"
+                android:focusable="false"
+                android:imeOptions="actionNext"
+                android:inputType="none"
+                android:paddingLeft="6dip"
+                android:textColor="@android:color/holo_red_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:src="@drawable/dcs_name" />
+
+            <EditText
+                android:id="@+id/dcsinfo_name"
+                android:layout_width="match_parent"
+                android:layout_height="30dip"
+                android:layout_below="@+id/textView1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="16dp"
+                android:background="#22ffffff"
+                android:ems="20"
+                android:imeOptions="actionNext|flagNoFullscreen"
+                android:inputType="none"
+                android:paddingLeft="6dip"
+                android:textColor="@android:color/holo_red_dark"
+                android:textCursorDrawable="@null" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/dcsinfo_name"
+                android:layout_below="@+id/dcsinfo_name"
+                android:layout_marginTop="10dip"
+                android:src="@drawable/dcs_gender" />
+
+
+            <Button
+                android:id="@+id/dcsinfo_gender"
+                android:layout_width="match_parent"
+                android:layout_height="30dip"
+                android:background="#22ffffff"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="8dip"
+                android:text="Male"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="18dip" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dip"
+                android:src="@drawable/bir" />
+
+            <Button
+                android:id="@+id/dcsinfo_bir"
+                android:layout_width="match_parent"
+                android:layout_height="30dip"
+                android:layout_alignLeft="@+id/textView2"
+                android:layout_alignRight="@+id/dcsinfo_name"
+                android:layout_below="@+id/textView6"
+                android:layout_marginLeft="16dp"
+                android:background="#22ffffff"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="8dip"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="18dip" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:src="@drawable/dcs_address" />
+
+            <EditText
+                android:id="@+id/dcsinfo_address"
+                android:layout_width="match_parent"
+                android:layout_height="30dip"
+                android:layout_centerHorizontal="true"
+                android:background="#22ffffff"
+                android:imeOptions="actionNext|flagNoFullscreen"
+                android:inputType="none"
+                android:maxLines="2"
+                android:minLines="2"
+                android:paddingLeft="6dip"
+                android:textColor="@android:color/holo_red_dark"
+                android:textCursorDrawable="@null" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/id_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:src="@drawable/dcs_idno" />
+
+            <EditText
+                android:id="@+id/dcsinfo_IDNO"
+                android:layout_width="match_parent"
+                android:layout_height="30dip"
+                android:layout_marginLeft="16dp"
+                android:background="#22ffffff"
+                android:ems="10"
+                android:imeOptions="actionDone|flagNoFullscreen"
+                android:inputType="none"
+                android:singleLine="true"
+                android:numeric="integer"
+                android:paddingLeft="6dip"
+                android:textColor="@android:color/holo_red_dark"
+                android:textCursorDrawable="@null" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dip"
+        android:layout_weight="0"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dcs_info_next"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_common3"
+            android:drawableTop="@drawable/buttonicon_next" />
+
+        <Button
+            android:id="@+id/dcs_info_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_common3"
+            android:drawableTop="@drawable/buttonicon_back" />
+    </LinearLayout>
+
+</LinearLayout>

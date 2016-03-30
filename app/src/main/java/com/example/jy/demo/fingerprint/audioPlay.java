@@ -1,0 +1,195 @@
+package com.example.jy.demo.fingerprint;
+
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.ToneGenerator;
+import android.util.Log;
+
+import java.io.IOException;
+
+
+public class audioPlay {
+	//ToneGenerator.MAX_VOLUME = 100
+	private static final String TAG = "audioPlay";
+    private static ToneGenerator mToneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
+    private static MediaPlayer   mp  =   new MediaPlayer();
+    private Object mLock = new Object();//������������
+
+
+    //����ϵͳ���� (ToneGenerator.TONE_PROP_BEEP2, 100)
+    public int PlayTone(int toneType, int durationMs) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
+
+		synchronized(mLock) {
+			if (mToneGenerator == null) {
+			Log.e(TAG, "playTone: mToneGenerator == null");
+			return	0;
+			}
+			
+			if (mp == null) {
+			Log.e(TAG, "mp == null");
+			return	0;
+			}
+			
+		}
+
+    		if (mToneGenerator != null) {
+			//(Tone, TONE_LENGTH_MS)	ToneGenerator.TONE_PROP_BEEP, ToneGenerator.TONE_PROP_PROMPT
+			mToneGenerator.startTone(toneType, durationMs);
+			
+		}
+		else
+		{
+			Log.e(TAG, "mToneGenerator Invalid !");
+			return	-1;
+		}
+	    return	0;
+	}
+
+    //�����ļ�ϵͳ�� mp3 ����
+	public int PlayFile(String filewithpath) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
+//	    String  path   =  "/sdcard/1.mp3";
+		if (mp != null){
+
+            mp.reset();	// ���� MediaPlayer
+			mp.setDataSource(filewithpath);
+			mp.prepare();
+			mp.start();
+		}
+		else
+		{
+			Log.e(TAG, "MediaPlayer Invalid !");
+			return	-1;
+		}
+		return	0;
+	}
+	
+	
+	public void PlayAsset(int key , AssetManager am) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
+//	    String  path   =  "/sdcard/1.mp3";
+		
+		
+		switch (key) {
+		
+		case 1:	//PLAY_SOUND_PUCODE_ERROR
+			
+			Log.v("crjlog","1");
+			if (mp != null){
+				AssetFileDescriptor afd =  am.openFd("finger_scan_fail.wav");
+	            mp.reset();	// ���� MediaPlayer
+	            mp.setDataSource(afd.getFileDescriptor(),
+	            		afd.getStartOffset(),
+	            		afd.getLength());
+				mp.prepare();
+				mp.start();
+			}
+			else
+			{
+				Log.e(TAG, "MediaPlayer Invalid !"); 
+			}
+			
+			break;
+			
+		case 2:
+			
+			Log.v("crjlog","2");
+			if (mp != null){
+				AssetFileDescriptor afd =  am.openFd("put_finger.wav");
+	            mp.reset();	// ���� MediaPlayer
+	            mp.setDataSource(afd.getFileDescriptor(),
+	            		afd.getStartOffset(),
+	            		afd.getLength());
+				mp.prepare();
+				mp.start();
+			}
+			else
+			{
+				Log.e(TAG, "MediaPlayer Invalid !");
+			}
+			
+			break;
+			
+		case 3:
+			
+			break;
+			
+		case 4:	//fail
+			
+			if (mp != null){
+//				AssetFileDescriptor afd =  am.openFd("finger_authentication_fail.mp3");
+				AssetFileDescriptor afd =  am.openFd("verification_fail.wav");
+	            mp.reset();	// ���� MediaPlayer
+	            mp.setDataSource(afd.getFileDescriptor(),
+	            		afd.getStartOffset(),
+	            		afd.getLength());
+				mp.prepare();
+				mp.start();
+			}
+			else
+			{
+				Log.e(TAG, "MediaPlayer Invalid !");
+			}
+			
+			
+			break;
+			
+		case 5:	//success
+			
+			if (mp != null){
+//				AssetFileDescriptor afd =  am.openFd("finger_verification.mp3");
+				AssetFileDescriptor afd =  am.openFd("verification_passed.wav");
+	            mp.reset();	// ���� MediaPlayer
+	            mp.setDataSource(afd.getFileDescriptor(),
+	            		afd.getStartOffset(),
+	            		afd.getLength());
+				mp.prepare();
+				mp.start();
+			}
+			else
+			{
+				Log.e(TAG, "MediaPlayer Invalid !");
+			}
+			
+			break;
+
+		}
+		
+		
+
+	}
+
+	//�ͷ� ��������Դ
+	public int PlayRelease(){
+		
+		if (mToneGenerator != null){
+			//yjh 2014.03.13  ����ԭ��: esc���˳�Ӧ���Ժ�,�ٴν����������ϵͳ Tone Ӧ�ó�������˳�, ������ʾ: mToneGenerator �������ͷŽӿ�
+//			mToneGenerator.release();
+		}
+
+        if (mp != null) {
+        	//yjh 2014.03.13  add stop()
+        	mp.stop();
+            mp.reset();
+            //yjh 2014.03.13  ����ԭ��: �������� person ���������Ӧ�ó�������˳�, ������ʾ:Caused by: java.lang.IllegalStateException
+//            mp.release();
+        }
+		return	0;
+	}
+
+/*	protected void onResume(){
+		super.onResume();
+		
+		synchronized(mLock) {
+			if (mToneGenerator == null) {
+				try {
+					mToneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUM);
+				} catch (RuntimeException e) {
+					Log.e(TAG, "Exception caught while creating local tone generator: " + e);
+					mToneGenerator = null;
+				}
+			}
+	
+		}
+	}*/
+}

@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Recognition</string>
+
+    <!-- 填写登记信息界面-->
+    <string name="write_info_title">INFORMATION</string>
+    <string name="info_title_ID">ID</string>
+    <string name="info_item_title_name">NAME</string>
+    <string name="info_item_title_gender">GENDER</string>
+    <string name="info_item_title_birthday">BIRTHDAY</string>
+    <string name="info_item_title_address">ADDRESS</string>
+    <string name="info_item_title_id_no">ID_NO</string>
+
+    <string name="bottom_back">back</string>
+    <string name="bottom_take_picture">take picture</string>
+    <string name="bottom_save">save</string>
+    <string name="bottom_gather">gather</string>
+    <string name="tab_indicator_title_Left">LEFT HAND</string>
+    <string name="tab_indicator_title_right">RIGHT HAND</string>
+    <string name="tab_indicator_title_picture">PICTURE</string>
+
+    <string name="information_incomplete">信息不完整</string>
+
+    <string name="save_success">保存成功</string>
+    <string name="file_no_eixt">文件不存在</string>
+    <string name="save_failed">保存失败</string>
+    <string name="no_fingerprint">请录入指纹</string>
+    <string name="verify">verify</string>
+
+    <string name="camera_open_failed">camera open failed!</string>
+</resources>

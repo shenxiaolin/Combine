@@ -1,0 +1,179 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+    <TabHost
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg">
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <FrameLayout
+            android:id="@+id/tab01"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/left_hand_bg"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/bt_left1"
+                android:layout_width="35dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="165dip"
+                android:layout_marginTop="170dip"
+                android:background="@drawable/finger_bg"
+                android:rotation="-50"/>
+
+            <Button
+                android:id="@+id/bt_left2"
+                android:layout_width="35dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="215dip"
+                android:layout_marginTop="45dip"
+                android:background="@drawable/finger_bg"
+                android:rotation="-20"/>
+
+            <Button
+                android:id="@+id/bt_left3"
+                android:layout_width="33dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="290dip"
+                android:layout_marginTop="25dip"
+                android:background="@drawable/finger_bg"/>
+
+            <Button
+                android:id="@+id/bt_left4"
+                android:layout_width="33dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="360dip"
+                android:layout_marginTop="50dip"
+                android:background="@drawable/finger_bg"
+                android:rotation="16"/>
+
+            <Button
+                android:id="@+id/bt_left5"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="400dip"
+                android:layout_marginTop="100dip"
+                android:background="@drawable/finger_bg"
+                android:rotation="28"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/tab02"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/right_hand_bg"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+
+            <Button
+                android:id="@+id/bt_right1"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="400dp"
+                android:layout_marginTop="166dp"
+                android:background="@drawable/finger_bg"
+                android:rotation="40"/>
+
+            <Button
+                android:id="@+id/bt_right2"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="345dip"
+                android:layout_marginTop="37dip"
+                android:background="@drawable/finger_bg"
+                android:rotation="20"/>
+
+            <Button
+                android:id="@+id/bt_right3"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="272dip"
+                android:layout_marginTop="24dip"
+                android:background="@drawable/finger_bg"/>
+
+            <Button
+                android:id="@+id/bt_right4"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="203dp"
+                android:layout_marginTop="48dp"
+                android:background="@drawable/finger_bg"
+                android:rotation="-16"/>
+
+            <Button
+                android:id="@+id/bt_right5"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="160dp"
+                android:layout_marginTop="100dp"
+                android:background="@drawable/finger_bg"
+                android:rotation="-28"/>
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/tab03"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="60dip"
+            android:background="@drawable/bg"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/gf_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/pic_man"/>
+
+        </RelativeLayout>
+    </TabHost>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dip"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/gather_finger_back"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_common3"
+            android:drawableTop="@drawable/buttonicon_back"/>
+
+        <Button
+            android:id="@+id/gather_finger_next"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_common3"
+            android:drawableTop="@drawable/buttonicon_person"/>
+
+        <Button
+            android:id="@+id/gather_finger_save"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button_common3"
+            android:drawableTop="@drawable/buttonicon_save"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

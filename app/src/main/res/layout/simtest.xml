@@ -1,0 +1,125 @@
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.example.rftest"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" xmlns:android1="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android1:id="@+id/tvLabelSlot"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content"
+        android1:layout_marginLeft="10dp"
+        android1:text="Slot:" />
+
+    <TextView
+        android1:id="@+id/tvLabelBaut"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content"
+        android1:layout_alignBaseline="@+id/tvLabelSlot"
+        android1:layout_marginLeft="70dp"
+        android1:layout_toRightOf="@+id/tvLabelSlot"
+        android1:text="Baut:" />
+
+    <TextView
+        android1:id="@+id/tvLabelVolt"
+        android1:layout_width="wrap_content"
+        android1:layout_height="wrap_content"
+        android1:layout_alignBaseline="@+id/tvLabelBaut"
+        android1:layout_marginLeft="70dp"
+        android1:layout_toRightOf="@+id/tvLabelBaut"
+        android1:text="Volt:" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android1:layout_below="@+id/tvLabelSlot"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal" >
+
+            <Spinner
+                android:id="@+id/spinner_slot"
+                android:layout_width="90dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="0dp"
+                android:gravity="center_horizontal" />
+
+            <Spinner
+                android:id="@+id/spinner_baut"
+                android:layout_width="90dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_horizontal" />
+
+            <Spinner
+                android:id="@+id/spinner_volt"
+                android:layout_width="80dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/spinner_baut"
+                android:gravity="center_horizontal" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+     <Button
+        android:id="@+id/button_apdu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="250dp"
+        android:text="Apdu" />
+
+    <Button
+        android:id="@+id/button_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="150dp"
+        android:text="Reset" />
+
+    <TextView
+        android1:id="@+id/textView_cmdEcho"
+        android1:layout_width="fill_parent"
+        android1:layout_height="wrap_content"
+        android1:layout_alignBaseline="@id/button_apdu"
+        android1:layout_marginLeft="10dp"
+        android1:layout_marginTop="210dp"
+        android1:layout_toRightOf="@id/button_apdu"
+        android1:text="cmdEcho" />
+
+    <EditText
+        android1:id="@+id/editText_cmd"
+        android1:layout_width="fill_parent"
+        android1:layout_height="wrap_content"
+        android1:layout_marginTop="210dp"
+        android1:layout_weight="1"
+        android1:ems="10"
+        android1:text="111" />
+
+    <TextView
+        android:id="@+id/textView_para"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="90dp"
+        android1:layout_alignBaseline="@id/button_reset"
+        android1:layout_toRightOf="@id/button_reset"
+        android:text="resetEcho" />
+
+</RelativeLayout>
