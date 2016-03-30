@@ -3,11 +3,11 @@
 package com.example.jy.demo.fingerprint;
 
 public class CallFprint{
-//    public native static int pgmChangeToXyt(char[] inFile, char[] outFile);
-	public native static int pgmChangeToXyt(String inFile, String outFile);
+    //    public native static int pgmChangeToXyt(char[] inFile, char[] outFile);
+    public native static int pgmChangeToXyt(String inFile, String outFile);
     public native static int fprintCompare(String ScanXytFile, String RolledXytFile);
 
-    //导入的lib名去掉前面的lib
+    //瀵煎叆鐨刲ib鍚嶅幓鎺夊墠闈㈢殑lib
     static{
         System.loadLibrary("fprint");
     }

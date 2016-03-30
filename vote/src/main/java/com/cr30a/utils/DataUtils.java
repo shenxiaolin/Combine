@@ -27,8 +27,8 @@ public class DataUtils {
 	}
 
 	/**
-	 * 16½øÖÆ×Ö·û´®×ª»»³ÉÊı×é
-	 * 
+	 * 16è¿›åˆ¶å­—ç¬¦ä¸²è½¬æ¢æˆæ•°ç»„
+	 *
 	 * @param hex
 	 * @return
 	 */
@@ -53,8 +53,8 @@ public class DataUtils {
 	}
 
 	/**
-	 * Êı×é×ª³É16½øÖÆ×Ö·û´®
-	 * 
+	 * æ•°ç»„è½¬æˆ16è¿›åˆ¶å­—ç¬¦ä¸²
+	 *
 	 * @param b
 	 * @return
 	 */
@@ -76,7 +76,7 @@ public class DataUtils {
 	}
 
 	/**
-	 * Ê®Áù½øÖÆ×Ö·û´®×ª»»³É×Ö·û´®
+	 * åå…­è¿›åˆ¶å­—ç¬¦ä¸²è½¬æ¢æˆå­—ç¬¦ä¸²
 	 */
 	public static String hexStr2Str(String hexStr) {
 		String str = "0123456789ABCDEF";
@@ -92,7 +92,7 @@ public class DataUtils {
 	}
 
 	/**
-	 * ×Ö·û´®×ª»»³ÉÊ®Áù½øÖÆ×Ö·û´®
+	 * å­—ç¬¦ä¸²è½¬æ¢æˆåå…­è¿›åˆ¶å­—ç¬¦ä¸²
 	 */
 	public static String str2Hexstr(String str) {
 		char[] chars = "0123456789ABCDEF".toCharArray();
@@ -127,13 +127,13 @@ public class DataUtils {
 	}
 
 	/**
-	 * 16½øÖÆ×Ö·û´®·Ö¸î³ÉÈô¸É¿é£¬Ã¿¿é32¸ö16½øÖÆ×Ö·û£¬¼´16×Ö½Ú
-	 * 
+	 * 16è¿›åˆ¶å­—ç¬¦ä¸²åˆ†å‰²æˆè‹¥å¹²å—ï¼Œæ¯å—32ä¸ª16è¿›åˆ¶å­—ç¬¦ï¼Œå³16å­—èŠ‚
+	 *
 	 * @param str
 	 * @return
 	 */
 	public static String[] hexStr2StrArray(String str) {
-		// 32¸öÊ®Áù½øÖÆ×Ö·û´®±íÊ¾16×Ö½Ú
+		// 32ä¸ªåå…­è¿›åˆ¶å­—ç¬¦ä¸²è¡¨ç¤º16å­—èŠ‚
 		int len = 32;
 		int size = str.length() % len == 0 ? str.length() / len : str.length()
 				/ len + 1;
@@ -153,8 +153,8 @@ public class DataUtils {
 	}
 
 	/**
-	 * °Ñ16½øÖÆ×Ö·û´®Ñ¹Ëõ³É×Ö½ÚÊı×é£¬ÔÚ°Ñ×Ö½ÚÊı×é×ª»»³É16½øÖÆ×Ö·û´®
-	 * 
+	 * æŠŠ16è¿›åˆ¶å­—ç¬¦ä¸²å‹ç¼©æˆå­—èŠ‚æ•°ç»„ï¼Œåœ¨æŠŠå­—èŠ‚æ•°ç»„è½¬æ¢æˆ16è¿›åˆ¶å­—ç¬¦ä¸²
+	 *
 	 * @param hexstr
 	 * @return
 	 * @throws IOException
@@ -168,8 +168,8 @@ public class DataUtils {
 	}
 
 	/**
-	 * °Ñ16½øÖÆ×Ö·û´®½âÑ¹ËõÑ¹Ëõ³É×Ö½ÚÊı×é£¬ÔÚ°Ñ×Ö½ÚÊı×é×ª»»³É16½øÖÆ×Ö·û´®
-	 * 
+	 * æŠŠ16è¿›åˆ¶å­—ç¬¦ä¸²è§£å‹ç¼©å‹ç¼©æˆå­—èŠ‚æ•°ç»„ï¼Œåœ¨æŠŠå­—èŠ‚æ•°ç»„è½¬æ¢æˆ16è¿›åˆ¶å­—ç¬¦ä¸²
+	 *
 	 * @param hexstr
 	 * @return
 	 * @throws IOException

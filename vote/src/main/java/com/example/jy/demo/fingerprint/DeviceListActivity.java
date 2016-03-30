@@ -42,14 +42,14 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
- * ÕâÏî»î¶¯ËÆºõÊÇÒ»¸ö¶Ô»°¿ò¡£ËüÁĞ³öµÄÈÎºÎÅä¶ÔµÄÉè±¸ºÍ×°ÖÃ
- *ÔÚÏÖ³¡·¢ÏÖºóµÄ·¢ÏÖ¡£µ±Ò»¸öÉè±¸ÊÇÓÉÓÃ»§Ñ¡Ôñ£¬
- *µØÖ·µÄÉè±¸·¢ËÍ¸ø¼Ò³¤»î¶¯µÄ
- *½á¹ûÒâÍ¼¡£
+ * è¿™é¡¹æ´»åŠ¨ä¼¼ä¹æ˜¯ä¸€ä¸ªå¯¹è¯æ¡†ã€‚å®ƒåˆ—å‡ºçš„ä»»ä½•é…å¯¹çš„è®¾å¤‡å’Œè£…ç½®
+ *åœ¨ç°åœºå‘ç°åçš„å‘ç°ã€‚å½“ä¸€ä¸ªè®¾å¤‡æ˜¯ç”±ç”¨æˆ·é€‰æ‹©ï¼Œ
+ *åœ°å€çš„è®¾å¤‡å‘é€ç»™å®¶é•¿æ´»åŠ¨çš„
+ *ç»“æœæ„å›¾ã€‚
  */
 public class DeviceListActivity extends Activity
 {
-	// µ÷ÊÔ
+	// è°ƒè¯•
 	private static final String TAG = "DeviceListActivity";
 	private static final boolean D = true;
 
@@ -79,34 +79,34 @@ public class DeviceListActivity extends Activity
 		});
 
 
-         //Ò»¸öĞÂ·¢ÏÖµÄÉè±¸
+		//ä¸€ä¸ªæ–°å‘ç°çš„è®¾å¤‡
 		mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this,
 				R.layout.device_name);
 		mNewDevicesArrayAdapter = new ArrayAdapter<String>(this,
 				R.layout.device_name);
 
-		//Ñ°ÕÒºÍ½¨Á¢Åä¶ÔÉè±¸ÁĞ±í
+		//å¯»æ‰¾å’Œå»ºç«‹é…å¯¹è®¾å¤‡åˆ—è¡¨
 		ListView pairedListView = (ListView) findViewById(R.id.paired_devices);
 		pairedListView.setAdapter(mPairedDevicesArrayAdapter);
 		pairedListView.setOnItemClickListener(mDeviceClickListener);
 
-		// Ñ°ÕÒºÍ½¨Á¢ÎªĞÂ·¢ÏÖµÄÉè±¸ÁĞ±í
+		// å¯»æ‰¾å’Œå»ºç«‹ä¸ºæ–°å‘ç°çš„è®¾å¤‡åˆ—è¡¨
 		ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
 		newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
 		newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
-		// ×¢²áÊ±·¢ËÍ¹ã²¥¸øÉè±¸
+		// æ³¨å†Œæ—¶å‘é€å¹¿æ’­ç»™è®¾å¤‡
 		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 		this.registerReceiver(mReceiver, filter);
 
-		// ¹ã²¥Ê±·¢ÏÖÒÑÍê³É×¢²á
+		// å¹¿æ’­æ—¶å‘ç°å·²å®Œæˆæ³¨å†Œ
 		filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
 		this.registerReceiver(mReceiver, filter);
 
-		// »ñÈ¡±¾µØÀ¶ÑÀÊÊÅäÆ÷
+		// è·å–æœ¬åœ°è“ç‰™é€‚é…å™¨
 		mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-		// µÃµ½Ò»Ì×Ä¿Ç°Åä¶ÔÉè±¸
+		// å¾—åˆ°ä¸€å¥—ç›®å‰é…å¯¹è®¾å¤‡
 		Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
 		// If there are paired devices, add each one to the ArrayAdapter
@@ -141,26 +141,26 @@ public class DeviceListActivity extends Activity
 	}
 
 	/**
-	 * ·¢ÏÖÓëbluetoothadapterÆô¶¯×°ÖÃ
+	 * å‘ç°ä¸bluetoothadapterå¯åŠ¨è£…ç½®
 	 */
 	private void doDiscovery()
 	{
 		if (D) Log.d(TAG, "doDiscovery()");
 
-		// ÏÔÊ¾É¨ÃèµÄ³ÆºÅ
+		// æ˜¾ç¤ºæ‰«æçš„ç§°å·
 		setProgressBarIndeterminateVisibility(true);
 		setTitle(R.string.scanning);
 
-		// ´ò¿ªĞÂÉè±¸µÄ×ÖÄ»
+		// æ‰“å¼€æ–°è®¾å¤‡çš„å­—å¹•
 		findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
 
-		// Èç¹ûÎÒÃÇÒÑ¾­·¢ÏÖ£¬×èÖ¹Ëü
+		// å¦‚æœæˆ‘ä»¬å·²ç»å‘ç°ï¼Œé˜»æ­¢å®ƒ
 		if (mBtAdapter.isDiscovering())
 		{
 			mBtAdapter.cancelDiscovery();
 		}
 
-		// ÒªÇó´Óbluetoothadapter·¢ÏÖ
+		// è¦æ±‚ä»bluetoothadapterå‘ç°
 		mBtAdapter.startDiscovery();
 	}
 
@@ -175,20 +175,20 @@ public class DeviceListActivity extends Activity
 			String address = info.substring(info.length() - 17);
 			Log.i("wy","12222222222222222address="+address);
 			if(info.equals("No devices have been paired"))
-							{
-							Log.i("wy","333address ="+address);
-							//	ToastUtil.showToast(this, R.string.none_found);
-							//	Toast toast.makeText(this, R.string.none_found, Toast.LENGTH_SHORT).show();
-								finish();
-							}else
-								{
+			{
+				Log.i("wy","333address ="+address);
+				//	ToastUtil.showToast(this, R.string.none_found);
+				//	Toast toast.makeText(this, R.string.none_found, Toast.LENGTH_SHORT).show();
+				finish();
+			}else
+			{
 
-			Intent intent = new Intent();
-			intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+				Intent intent = new Intent();
+				intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
 
-			setResult(Activity.RESULT_OK, intent);
-			finish();
-								}
+				setResult(Activity.RESULT_OK, intent);
+				finish();
+			}
 		}
 	};
 
@@ -199,7 +199,7 @@ public class DeviceListActivity extends Activity
 		{
 			String action = intent.getAction();
 
-			// µ±·¢ÏÖÉè±¸
+			// å½“å‘ç°è®¾å¤‡
 			if (BluetoothDevice.ACTION_FOUND.equals(action))
 			{
 				BluetoothDevice device = intent

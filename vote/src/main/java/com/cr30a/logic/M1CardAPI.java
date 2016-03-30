@@ -18,26 +18,26 @@ public class M1CardAPI {
 	public static final int KEY_B = 2;
 
 	private static final byte[] SWITCH_COMMAND = "D&C00040104".getBytes();
-	// ·¢ËÍÊı¾İ°üµÄÇ°×º
+	// å‘é€æ•°æ®åŒ…çš„å‰ç¼€
 	private static final String DATA_PREFIX = "c050605";
-	private static final String FIND_CARD_ORDER = "01";// Ñ°¿¨Ö¸Áî
-	private static final String PASSWORD_SEND_ORDER = "02";// ÃÜÂëÏÂ·¢Ö¸Áî
-	private static final String PASSWORD_VALIDATE_ORDER = "03";// ÃÜÂëÈÏÖ¤ÃüÁî
-	private static final String READ_DATA_ORDER = "04";// ¶ÁÖ¸Áî
-	private static final String WRITE_DATA_ORDER = "05";// Ğ´Ö¸Áî
-	private static final String ENTER = "\r\n";// »»ĞĞ·û
+	private static final String FIND_CARD_ORDER = "01";// å¯»å¡æŒ‡ä»¤
+	private static final String PASSWORD_SEND_ORDER = "02";// å¯†ç ä¸‹å‘æŒ‡ä»¤
+	private static final String PASSWORD_VALIDATE_ORDER = "03";// å¯†ç è®¤è¯å‘½ä»¤
+	private static final String READ_DATA_ORDER = "04";// è¯»æŒ‡ä»¤
+	private static final String WRITE_DATA_ORDER = "05";// å†™æŒ‡ä»¤
+	private static final String ENTER = "\r\n";// æ¢è¡Œç¬¦
 
-	private static final String TURN_OFF = "c050602\r\n";// ¹Ø±ÕÌìÏß³¡
+	private static final String TURN_OFF = "c050602\r\n";// å…³é—­å¤©çº¿åœº
 
-	// Ñ°¿¨µÄÖ¸Áî°ü
+	// å¯»å¡çš„æŒ‡ä»¤åŒ…
 	private static final String FIND_CARD = DATA_PREFIX + FIND_CARD_ORDER
 			+ ENTER;
 
-	// ÏÂ·¢ÃÜÂëÖ¸Áî°ü(A£¬B¶ÎÃÜÂë¸÷12¸ö¡¯f¡®)
+	// ä¸‹å‘å¯†ç æŒ‡ä»¤åŒ…(Aï¼ŒBæ®µå¯†ç å„12ä¸ªâ€™fâ€˜)
 	private static final String SEND_PASSWORD = DATA_PREFIX
 			+ PASSWORD_SEND_ORDER + "ffffffffffffffffffffffff" + ENTER;
 
-	// //ÃÜÂëÈÏÖ¤Ö¸Áî°ü
+	// //å¯†ç è®¤è¯æŒ‡ä»¤åŒ…
 	// private static final static PASSWORD_VALIDATE =
 
 	// private static final String FIND_SUCCESS = "c05060501" + ENTER + "0x00,";
@@ -55,37 +55,37 @@ public class M1CardAPI {
 
 
 	/**
-	 * ÇĞ»»³É¶ÁÈ¡RFID
+	 * åˆ‡æ¢æˆè¯»å–RFID
 	 * @return
 	 */
 	private boolean switchStatus() {
-		
+
 		int length = -1 ;
-		
+
 		sendCommand(SWITCH_COMMAND);
 		Log.i("whw", "SWITCH_COMMAND hex=" + new String(SWITCH_COMMAND));
 		length = chatService.read(buffer, 3000, 200);
-		
+
 		if(length == 1 )
 		{
 			BluetoothChatService.switchRFID = true;
 			return true;
-			
+
 		}
 		else
 		{
 			BluetoothChatService.switchRFID = false;
 			return false;
-		}		
-		
-	//	SystemClock.sleep(300);
+		}
+
+		//	SystemClock.sleep(300);
 
 	}
 
 	private int receive(byte[] command, byte[] buffer) {
 		int length = -1;
 		//if (!BluetoothChatService.switchRFID) {
-			switchStatus();
+		switchStatus();
 		//}
 		sendCommand(command);
 
@@ -94,42 +94,42 @@ public class M1CardAPI {
 	}
 
 	private void sendCommand(byte[] command) {
-		
-		
+
+
 		final int seg_bytes = 20 ;
-		
+
 		int seglen =  command.length/seg_bytes ;
-		int remain =  command.length%seg_bytes ;	
-		   
-		   if(seglen > 0)
-		   {   
-			    byte[] cmd = new byte[seg_bytes];
-		   
-				for(int i = 0 ; i < seglen ; i++)
-				{
-					System.arraycopy(command, seg_bytes*i, cmd, 0,  seg_bytes); 
-					chatService.write(cmd);
-				}
-			
-		   }
-		
-		   if(remain > 0)
-		   {   
-			   byte[] cmd = new byte[remain];
-		   
-			   System.arraycopy(command, seg_bytes*seglen,cmd, 0, remain);
-			   
-			   chatService.write(cmd);
-		   }
-		
-		   SystemClock.sleep(50);   	
+		int remain =  command.length%seg_bytes ;
+
+		if(seglen > 0)
+		{
+			byte[] cmd = new byte[seg_bytes];
+
+			for(int i = 0 ; i < seglen ; i++)
+			{
+				System.arraycopy(command, seg_bytes*i, cmd, 0,  seg_bytes);
+				chatService.write(cmd);
+			}
+
+		}
+
+		if(remain > 0)
+		{
+			byte[] cmd = new byte[remain];
+
+			System.arraycopy(command, seg_bytes*seglen,cmd, 0, remain);
+
+			chatService.write(cmd);
+		}
+
+		SystemClock.sleep(50);
 
 	}
 
 	private static final String DEFAULT_PASSWORD = "ffffffffffff";
 
 	private String getCompletePassword(int keyType, String passwordHexStr) {
-		// A.B¶ËÃÜÂë³¤¶È¸÷Îª6×Ö½Ú£¬»»Ëã³É16½øÖÆ×Ö·û´®£¬ÃÜÂë³¤¶È¾ÍÎª12¸ö×Ö·û³¤¶È
+		// A.Bç«¯å¯†ç é•¿åº¦å„ä¸º6å­—èŠ‚ï¼Œæ¢ç®—æˆ16è¿›åˆ¶å­—ç¬¦ä¸²ï¼Œå¯†ç é•¿åº¦å°±ä¸º12ä¸ªå­—ç¬¦é•¿åº¦
 		StringBuffer passwordBuffer = new StringBuffer();
 		passwordBuffer.append(passwordHexStr);
 		if (passwordHexStr != null && passwordHexStr.length() < 12) {
@@ -141,15 +141,15 @@ public class M1CardAPI {
 		passwordHexStr = passwordBuffer.toString();
 		String completePasswordHexStr = "";
 		switch (keyType) {
-		case KEY_A:
-			completePasswordHexStr = passwordHexStr + DEFAULT_PASSWORD;
-			break;
-		case KEY_B:
-			completePasswordHexStr = DEFAULT_PASSWORD + passwordHexStr;
-			break;
+			case KEY_A:
+				completePasswordHexStr = passwordHexStr + DEFAULT_PASSWORD;
+				break;
+			case KEY_B:
+				completePasswordHexStr = DEFAULT_PASSWORD + passwordHexStr;
+				break;
 
-		default:
-			break;
+			default:
+				break;
 		}
 		return completePasswordHexStr;
 	}
@@ -157,27 +157,27 @@ public class M1CardAPI {
 	private String getKeyTypeStr(int keyType) {
 		String keyTypeStr = null;
 		switch (keyType) {
-		case KEY_A:
-			keyTypeStr = "60";
-			break;
-		case KEY_B:
-			keyTypeStr = "61";
-			break;
-		default:
-			keyTypeStr = "60";
-			break;
+			case KEY_A:
+				keyTypeStr = "60";
+				break;
+			case KEY_B:
+				keyTypeStr = "61";
+				break;
+			default:
+				keyTypeStr = "60";
+				break;
 		}
 		return keyTypeStr;
 	}
 
-	// ×ª»»ÉÈÇøÀï¿éµÄµØÖ·ÎªÁ½Î»
+	// è½¬æ¢æ‰‡åŒºé‡Œå—çš„åœ°å€ä¸ºä¸¤ä½
 	private String getZoneId(int position) {
 		return DataUtils.byte2Hexstr((byte) position);
 	}
 
-	
+
 	/**
-	 * ¶ÁÈ¡M1¿¨¿¨ºÅ
+	 * è¯»å–M1å¡å¡å·
 	 * Read the M1 card number
 	 * @return
 	 */
@@ -202,9 +202,9 @@ public class M1CardAPI {
 		}
 		return result;
 	}
-	
+
 	/**
-	 * ÑéÖ¤ÃÜÂë
+	 * éªŒè¯å¯†ç 
 	 * Verify password
 	 * @param position  block number
 	 * @param keyType   Password type
@@ -215,7 +215,7 @@ public class M1CardAPI {
 		Log.i("whw", "!!!!!!!!!!!!!!keyType=" + keyType);
 		byte[] command1 = null;
 		if (password == null) {
-			// ÏÂ·¢ÈÏÖ¤ÃüÁî
+			// ä¸‹å‘è®¤è¯å‘½ä»¤
 			command1 = SEND_PASSWORD.getBytes();
 		} else {
 			String passwordHexStr = DataUtils.toHexString(password);
@@ -228,7 +228,7 @@ public class M1CardAPI {
 		int tempLength = receive(command1, buffer);
 		String verifyStr = new String(buffer, 0, tempLength);
 		Log.i("whw", "validatePassword verifyStr=" + verifyStr);
-		// ÑéÖ¤ÃÜÂë
+		// éªŒè¯å¯†ç 
 		byte[] command2 = (DATA_PREFIX + PASSWORD_VALIDATE_ORDER
 				+ getKeyTypeStr(keyType) + getZoneId(position) + ENTER)
 				.getBytes();
@@ -245,7 +245,7 @@ public class M1CardAPI {
 
 
 	/**
-	 * ¶ÁÈ¡Ö¸¶¨¿éºÅ´æ´¢µÄÊı¾İ£¬³¤¶ÈÒ»°ãÎª16×Ö½Ú
+	 * è¯»å–æŒ‡å®šå—å·å­˜å‚¨çš„æ•°æ®ï¼Œé•¿åº¦ä¸€èˆ¬ä¸º16å­—èŠ‚
 	 * Reads the specified number stored data, length of 16 bytes
 	 * @param position  block number
 	 * @return
@@ -275,7 +275,7 @@ public class M1CardAPI {
 
 
 	/**
-	 * ÏòÖ¸¶¨µÄ¿éºÅĞ´ÈëÊı¾İ£¬³¤¶ÈÎª16×Ö½Ú
+	 * å‘æŒ‡å®šçš„å—å·å†™å…¥æ•°æ®ï¼Œé•¿åº¦ä¸º16å­—èŠ‚
 	 * Write data to the specified block, length is 16 bytes
 	 * @param data
 	 * @param position
@@ -295,8 +295,8 @@ public class M1CardAPI {
 		}
 		return false;
 	}
-	
-	// ¹Ø±ÕÌìÏß³§
+
+	// å…³é—­å¤©çº¿å‚
 	public String turnOff() {
 		// byte[] command = TURN_OFF.getBytes();
 		// int length = receive(command, buffer);
@@ -311,49 +311,49 @@ public class M1CardAPI {
 
 	public static class Result {
 		/**
-		 * ³É¹¦
+		 * æˆåŠŸ
 		 * successful
 		 */
 		public static final int SUCCESS = 1;
 		/**
-		 * Ñ°¿¨Ê§°Ü
+		 * å¯»å¡å¤±è´¥
 		 * Find card failure
 		 */
 		public static final int FIND_FAIL = 2;
 		/**
-		 * ÑéÖ¤Ê§°Ü
+		 * éªŒè¯å¤±è´¥
 		 * Validation fails
 		 */
 		public static final int VALIDATE_FAIL = 3;
 		/**
-		 * Ğ´¿¨Ê§°Ü
+		 * å†™å¡å¤±è´¥
 		 * Write card failure
 		 */
 		public static final int WRITE_FAIL = 4;
 		/**
-		 * ³¬Ê±
+		 * è¶…æ—¶
 		 * timeout
 		 */
 		public static final int TIME_OUT = 5;
 		/**
-		 * ÆäËüÒì³£
+		 * å…¶å®ƒå¼‚å¸¸
 		 * other exception
 		 */
 		public static final int OTHER_EXCEPTION = 6;
 
 		/**
-		 * È·ÈÏÂë 1: ³É¹¦ 2£ºÑ°¿¨Ê§°Ü 3£ºÑéÖ¤Ê§°Ü 4:Ğ´¿¨Ê§°Ü 5£º³¬Ê± 6£ºÆäËüÒì³£
+		 * ç¡®è®¤ç  1: æˆåŠŸ 2ï¼šå¯»å¡å¤±è´¥ 3ï¼šéªŒè¯å¤±è´¥ 4:å†™å¡å¤±è´¥ 5ï¼šè¶…æ—¶ 6ï¼šå…¶å®ƒå¼‚å¸¸
 		 */
 		public int confirmationCode;
 
 		/**
-		 * ½á¹û¼¯:µ±È·ÈÏÂëÎª1Ê±£¬ÔÙÅĞ¶ÏÊÇ·ñÓĞ½á¹û
+		 * ç»“æœé›†:å½“ç¡®è®¤ç ä¸º1æ—¶ï¼Œå†åˆ¤æ–­æ˜¯å¦æœ‰ç»“æœ
 		 * Results: when the code is 1, then determine whether to have the result
 		 */
 		public Object resultInfo;
-		
+
 		/**
-		 * ¿¨ºÅ
+		 * å¡å·
 		 * The card number
 		 */
 		public String num;

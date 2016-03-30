@@ -56,22 +56,22 @@ public class gatherFinger extends TabActivity {
 	private SharedPreferences preferences;
 	private String gather_id, gather_name, gender, birthday, address , id_no;
 	private String filePath3;
-	
+
 	private static final int PICK_FROM_CAMERA_FOR_XYT = 0;
 	private static final int PICK_FROM_CAMERA = 1;
 	private static final int CROP_FROM_CAMERA = 2;
-	
+
 	private static final String IMAGE_NAME = "Photo";
 	private static final String TXT_NAME = "BASIC INFO";
 
 	private Uri mImageCaptureUri;
 	private String fileName;
 	private ImageView avatar;
-	
+
 	private File pic_fileFolder;
 	private Bitmap bm;
-	private int finger_num = 0; 
-	
+	private int finger_num = 0;
+
 	private CallDecoder cd;
 	private CallFprint cf;
 	@Override
@@ -87,21 +87,21 @@ public class gatherFinger extends TabActivity {
 		address = preferences.getString("address", "shenzhen");
 		id_no = preferences.getString("idno", "6688960542583245613");
 		mGatherDB = new Vote_DBHelper(this);
-		
-		cd = new CallDecoder();				
+
+		cd = new CallDecoder();
 		cf = new CallFprint();
 
 		filePath3 = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id;
 		File fileFolder = new File(filePath3);
-        if (!fileFolder.exists()) { // Èç¹ûÄ¿Â¼²»´æÔÚ£¬Ôò´´½¨Ò»¸öÃûÎª"finger"µÄÄ¿Â¼    
-            fileFolder.mkdir();  
-        }  
-        
-        fileName = filePath3 + "/" + IMAGE_NAME +".jpg";  
+		if (!fileFolder.exists()) { // å¦‚æœç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºä¸€ä¸ªåä¸º"finger"çš„ç›®å½•
+			fileFolder.mkdir();
+		}
+
+		fileName = filePath3 + "/" + IMAGE_NAME +".jpg";
 		mImageCaptureUri = Uri.fromFile(new File(fileName));
-		
+
 		pic_fileFolder = new File(fileName);
-		
+
 		TabHost tabHost = getTabHost();
 		LayoutInflater.from(this).inflate(R.layout.gather_finger,tabHost.getTabContentView(), true);
 		tabHost.addTab(tabHost.newTabSpec("tab01").setIndicator(" ",getResources().getDrawable(R.drawable.lefthand)).setContent(R.id.tab01));
@@ -109,33 +109,33 @@ public class gatherFinger extends TabActivity {
 		tabHost.addTab(tabHost.newTabSpec("tab03").setIndicator(" ",getResources().getDrawable(R.drawable.avatar)).setContent(R.id.tab03));
 
 		avatar = (ImageView) findViewById(R.id.gf_img);
-		
+
 		tabHost.setOnTabChangedListener(new OnTabChangeListener() {
 			@Override
 			public void onTabChanged(String arg0) {
 				// TODO Auto-generated method stub
-				Log.v("crjlog", "arg0333333333333 = " + arg0); 
+				Log.v("crjlog", "arg0333333333333 = " + arg0);
 				if(arg0.equals("tab03")){
-					
+
 					//update 
-			        if (!pic_fileFolder.exists()) { // Èç¹ûÄ¿Â¼²»´æÔÚ£¬Ôò´´½¨Ò»¸öÃûÎª"finger"µÄÄ¿Â¼    
-			        	
-			        	avatar.setImageResource(R.drawable.pic_man);  
-			        	
-			        }else{
-			        	
-					//	mImageCaptureUri = Uri.fromFile(new File(fileName));
-			        	//	avatar.setImageURI(mImageCaptureUri);	
-						
-				       // bm = BitmapFactory.decodeFile(fileName);
-				       // avatar.setImageBitmap(bm);
-				        
-			        	
-			        }
+					if (!pic_fileFolder.exists()) { // å¦‚æœç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºä¸€ä¸ªåä¸º"finger"çš„ç›®å½•
+
+						avatar.setImageResource(R.drawable.pic_man);
+
+					}else{
+
+						//	mImageCaptureUri = Uri.fromFile(new File(fileName));
+						//	avatar.setImageURI(mImageCaptureUri);
+
+						// bm = BitmapFactory.decodeFile(fileName);
+						// avatar.setImageBitmap(bm);
+
+
+					}
 				}
 			}
 		});
-		
+
 		// lefthand finger
 		bt_lf1 = (Button) findViewById(R.id.bt_left1);
 		bt_lf1.setOnClickListener(listener);
@@ -145,7 +145,7 @@ public class gatherFinger extends TabActivity {
 		bt_lf3.setOnClickListener(listener);
 		bt_lf4 = (Button) findViewById(R.id.bt_left4);
 		bt_lf4.setOnClickListener(listener);
-		bt_lf5 = (Button) findViewById(R.id.bt_left5); 
+		bt_lf5 = (Button) findViewById(R.id.bt_left5);
 		bt_lf5.setOnClickListener(listener);
 		// righthand finger
 		bt_rf1 = (Button) findViewById(R.id.bt_right1);
@@ -164,25 +164,25 @@ public class gatherFinger extends TabActivity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				
-				//µ÷ÓÃ×Ô¶¨ÒåÏà»ú
-				Intent it = new Intent(gatherFinger.this, CameraOpen_back.class); 
+
+				//è°ƒç”¨è‡ªå®šä¹‰ç›¸æœº
+				Intent it = new Intent(gatherFinger.this, CameraOpen_back.class);
 				startActivityForResult(it, PICK_FROM_CAMERA);
-				
-				
-			  // µ÷ÓÃÏµÍ³Ïà»ú	
+
+
+				// è°ƒç”¨ç³»ç»Ÿç›¸æœº
 //			  String fileName = filePath3 + "/" + gather_name +".jpg";  
 //			  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);  
 //			  mImageCaptureUri = Uri.fromFile(new File(fileName));
 //			  intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
 //            startActivityForResult(intent, PICK_FROM_CAMERA);   
-	              
-				
+
+
 			}
 		});
 
 		bt_back = (Button) findViewById(R.id.gather_finger_back);
-		bt_back.setOnClickListener(new OnClickListener() { 
+		bt_back.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
@@ -191,50 +191,50 @@ public class gatherFinger extends TabActivity {
 				finish();
 			}
 		});
-		
+
 		bt_save = (Button) findViewById(R.id.gather_finger_save);
-		bt_save.setOnClickListener(new OnClickListener() { 
+		bt_save.setOnClickListener(new OnClickListener() {
 			@Override
-			public void onClick(View arg0) { 
-			// TODO Auto-generated method stub
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
 				StringBuffer Buffer = new StringBuffer();
 				String data = getCurrentTime();
-				String txt = "[BasicInfo]" + "\r\n" 
-							 + "NAME: " + gather_name + "\r\n"
-							 + "SEX: "  + gender + "\r\n"
-							 + "BIRTHDAY: " + birthday + "\r\n"
-							 + "ADDRESS: " + address + "\r\n"
-							 + "ISSUEDATE: " + data + "\r\n"
-							 + "ID NO.: "+ id_no;
-			    Buffer = Buffer.append(txt);
+				String txt = "[BasicInfo]" + "\r\n"
+						+ "NAME: " + gather_name + "\r\n"
+						+ "SEX: "  + gender + "\r\n"
+						+ "BIRTHDAY: " + birthday + "\r\n"
+						+ "ADDRESS: " + address + "\r\n"
+						+ "ISSUEDATE: " + data + "\r\n"
+						+ "ID NO.: "+ id_no;
+				Buffer = Buffer.append(txt);
 
 				Log.d("huangmin","Buffer.toString() = "+Buffer.toString());
-				
+
 				saveFileToDevice(Buffer.toString());
-				
-				mGatherDB.insert_gathertable(gather_name, gender, birthday, address); 
-				
+
+				mGatherDB.insert_gathertable(gather_name, gender, birthday, address);
+
 				Intent it = new Intent(gatherFinger.this, gatherMain.class);
 				startActivity(it);
-				
+
 				finish();
 			}
 		});
 	}
-	
 
-	public static String getCurrentTime() {//È¡µÃÏµÍ³Ê±¼ä
+
+	public static String getCurrentTime() {//å–å¾—ç³»ç»Ÿæ—¶é—´
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		String str = format.format(new Date());
 		return str;
 	}
 
 
-	Button.OnClickListener listener = new Button.OnClickListener() {// ´´½¨¼àÌı¶ÔÏó
+	Button.OnClickListener listener = new Button.OnClickListener() {// åˆ›å»ºç›‘å¬å¯¹è±¡
 		public void onClick(View v) {
 
 			String toast_txt = null;
-			
+
 			if(v.getId() == R.id.bt_left1) {
 				toast_txt = getResources().getString(R.string.finger_input_l1);
 				finger_num = 6;
@@ -266,161 +266,161 @@ public class gatherFinger extends TabActivity {
 				toast_txt = getResources().getString(R.string.finger_input_r5);
 				finger_num = 5;
 			}
-			
+
 			Toast.makeText(gatherFinger.this,toast_txt,Toast.LENGTH_SHORT).show();
-			Intent it = new Intent(gatherFinger.this, CameraOpen_gather.class); 
+			Intent it = new Intent(gatherFinger.this, CameraOpen_gather.class);
 			it.putExtra("fingerNum", finger_num);
 			startActivityForResult(it, PICK_FROM_CAMERA_FOR_XYT);
 
 		}
 	};
-	public static void copyFile(String srcFileName, String destFileName) 
-	    throws IOException {
-		    Log.d("huangmin", "copyFile, begin");
-		    File srcFile = new File(srcFileName);
-		    File destFile = new File(destFileName);  
-		    if(!srcFile.exists()) {
-		        Log.d("huangmin", "copyFile, source file not exist.");
-				return;
-		    }
-		    if(!srcFile.isFile()) {
-		        Log.d("huangmin", "copyFile, source file not a file.");
-				return;
-		    }
-		    if(!srcFile.canRead()) {
-		        Log.d("huangmin", "copyFile, source file can't read.");
-				return;
-		    }
-			
-		    if(destFile.exists()){
-		   		destFile.createNewFile();
-		    }
-		 
-		    Log.d("huangmin", "destFile.exists()= "+destFile.exists());
-		    try {
-		       if (srcFile.exists()) {
-			        InputStream inStream = new FileInputStream(srcFile);
-			        FileOutputStream outStream = new FileOutputStream(destFile);
-			        byte[] buf = new byte[1024];
-			        int byteRead = 0;
-			        while ((byteRead = inStream.read(buf)) != -1) {
-			            outStream.write(buf, 0, byteRead);
-			        }
-					
-			        outStream.flush();
-			        outStream.close();
-			        inStream.close();
-		      }
-		    } catch (IOException e) {
-		        throw e;
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		    }
-		 
+	public static void copyFile(String srcFileName, String destFileName)
+			throws IOException {
+		Log.d("huangmin", "copyFile, begin");
+		File srcFile = new File(srcFileName);
+		File destFile = new File(destFileName);
+		if(!srcFile.exists()) {
+			Log.d("huangmin", "copyFile, source file not exist.");
+			return;
+		}
+		if(!srcFile.isFile()) {
+			Log.d("huangmin", "copyFile, source file not a file.");
+			return;
+		}
+		if(!srcFile.canRead()) {
+			Log.d("huangmin", "copyFile, source file can't read.");
+			return;
+		}
+
+		if(destFile.exists()){
+			destFile.createNewFile();
+		}
+
+		Log.d("huangmin", "destFile.exists()= "+destFile.exists());
+		try {
+			if (srcFile.exists()) {
+				InputStream inStream = new FileInputStream(srcFile);
+				FileOutputStream outStream = new FileOutputStream(destFile);
+				byte[] buf = new byte[1024];
+				int byteRead = 0;
+				while ((byteRead = inStream.read(buf)) != -1) {
+					outStream.write(buf, 0, byteRead);
+				}
+
+				outStream.flush();
+				outStream.close();
+				inStream.close();
+			}
+		} catch (IOException e) {
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
-    private void isDirExist(String dir){  
-       File file = new File(dir);  
-        if(!file.exists()) { 
-            file.mkdir();  
-        }
-    } 	
-	
+	private void isDirExist(String dir){
+		File file = new File(dir);
+		if(!file.exists()) {
+			file.mkdir();
+		}
+	}
+
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
 		if (resultCode == Activity.RESULT_OK) {
 
 			//compareFinger();
 			Toast.makeText(gatherFinger.this,"success !",Toast.LENGTH_SHORT).show();
-			
+
 			switch (requestCode) {
-			
-			case PICK_FROM_CAMERA_FOR_XYT:
-				String picPath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num;
-				
-				cd.Bmp2Pgm(picPath + ".bmp" , picPath + ".pgm"); 
-				cf.pgmChangeToXyt(picPath + ".pgm", picPath + ".xyt");
-				
-				String oldpicPath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num+".xyt";
-				//String newpicPath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + "vote" + finger_num+".xyt";
 
-				//File file = new File(oldpicPath);
-  			    //file.renameTo(new File(newpicPath));
-  			    
-				String newFilepath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + "Fingerprint";
-				isDirExist(newFilepath);
+				case PICK_FROM_CAMERA_FOR_XYT:
+					String picPath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num;
 
-				String destFilepath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + "Fingerprint" + "/" + "vote" + finger_num+".xyt";
-				try {
-	 				copyFile(oldpicPath,destFilepath);
-    			} catch (Exception e) {
-        			e.printStackTrace();
-    			}
-				//delete old folder
-				String picPath_bmp = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num + ".bmp";
-		        File fileFolder_bmp = new File(picPath_bmp);
-				
-				String picPath_pgm = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num + ".pgm";
-		        File fileFolder_pgm = new File(picPath_pgm);
+					cd.Bmp2Pgm(picPath + ".bmp" , picPath + ".pgm");
+					cf.pgmChangeToXyt(picPath + ".pgm", picPath + ".xyt");
 
-				String picPath_xyt = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num + ".xyt";
-		        File fileFolder_xyt = new File(picPath_xyt);
+					String oldpicPath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num+".xyt";
+					//String newpicPath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + "vote" + finger_num+".xyt";
 
-				if (fileFolder_bmp.exists()) {
-					delete(fileFolder_bmp); 
-		        }
-		        if (fileFolder_pgm.exists()) {
-					delete(fileFolder_pgm); 
-		        }
-		        if (fileFolder_xyt.exists()) {
-					delete(fileFolder_xyt); 
-		        }
-				break;
-			
-			case PICK_FROM_CAMERA:
-				doCrop();
-				break;
-				
-			case CROP_FROM_CAMERA:
-				
-				//if (null != data) {
-				//	saveCutPic(data);
-				//}
-		        bm = BitmapFactory.decodeFile(fileName);
-		        avatar.setImageBitmap(bm);
-				
-				break;
+					//File file = new File(oldpicPath);
+					//file.renameTo(new File(newpicPath));
+
+					String newFilepath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + "Fingerprint";
+					isDirExist(newFilepath);
+
+					String destFilepath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + "Fingerprint" + "/" + "vote" + finger_num+".xyt";
+					try {
+						copyFile(oldpicPath,destFilepath);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					//delete old folder
+					String picPath_bmp = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num + ".bmp";
+					File fileFolder_bmp = new File(picPath_bmp);
+
+					String picPath_pgm = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num + ".pgm";
+					File fileFolder_pgm = new File(picPath_pgm);
+
+					String picPath_xyt = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/" + gather_id + "_" + finger_num + ".xyt";
+					File fileFolder_xyt = new File(picPath_xyt);
+
+					if (fileFolder_bmp.exists()) {
+						delete(fileFolder_bmp);
+					}
+					if (fileFolder_pgm.exists()) {
+						delete(fileFolder_pgm);
+					}
+					if (fileFolder_xyt.exists()) {
+						delete(fileFolder_xyt);
+					}
+					break;
+
+				case PICK_FROM_CAMERA:
+					doCrop();
+					break;
+
+				case CROP_FROM_CAMERA:
+
+					//if (null != data) {
+					//	saveCutPic(data);
+					//}
+					bm = BitmapFactory.decodeFile(fileName);
+					avatar.setImageBitmap(bm);
+
+					break;
 
 			}
 
-			
+
 //			 String fileName = "/sdcard/Image/"+gather_name+".bmp";  
 //             File f = new File(fileName);  
 
 //			 String path = f.getAbsolutePath();
 //             Intent intent = new Intent();
 //             intent.setAction( "com.android.camera.action.CROP" );
-//             intent.setDataAndType(Uri. fromFile( newFile(path)), "image/*" );// mUriÊÇÒÑ¾­Ñ¡ÔñµÄÍ¼Æ¬ Uri
+//             intent.setDataAndType(Uri. fromFile( newFile(path)), "image/*" );// mUriæ˜¯å·²ç»é€‰æ‹©çš„å›¾ç‰‡ Uri
 //             intent.putExtra( "crop", "true");
-//             intent.putExtra( "aspectX", 3); // ²Ã¼ô¿ò±ÈÀı
+//             intent.putExtra( "aspectX", 3); // è£å‰ªæ¡†æ¯”ä¾‹
 //             intent.putExtra( "aspectY", 3);
-//             intent.putExtra( "outputX", 150); // Êä³öÍ¼Æ¬´óĞ¡
+//             intent.putExtra( "outputX", 150); // è¾“å‡ºå›¾ç‰‡å¤§å°
 //             intent.putExtra( "outputY", 150);
 //             intent.putExtra( "return-data", true);
 //             startActivityForResult(intent,8);
-			
+
 //			 Bundle bundle = data.getExtras();  
-//	         Bitmap bitmap = (Bitmap) bundle.get("data");// »ñÈ¡Ïà»ú·µ»ØµÄÊı¾İ£¬²¢×ª»»ÎªBitmapÍ¼Æ¬¸ñÊ½  
+//	         Bitmap bitmap = (Bitmap) bundle.get("data");// è·å–ç›¸æœºè¿”å›çš„æ•°æ®ï¼Œå¹¶è½¬æ¢ä¸ºBitmapå›¾ç‰‡æ ¼å¼  
 //
 //	         FileOutputStream b = null;           
 //	            File file = new File(filePath3);  
-//	            file.mkdirs();// ´´½¨ÎÄ¼ş¼Ğ  
+//	            file.mkdirs();// åˆ›å»ºæ–‡ä»¶å¤¹  
 //	            //String fileName = "/sdcard/Image/"+gather_name+".bmp";  
 //				String fileName = filePath3 + "/" + gather_name +".bmp";  
 //	  
 //	            try {  
 //	                b = new FileOutputStream(fileName);  
-//	                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// °ÑÊı¾İĞ´ÈëÎÄ¼ş  
+//	                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// æŠŠæ•°æ®å†™å…¥æ–‡ä»¶  
 //	            } catch (FileNotFoundException e) {  
 //	                e.printStackTrace();  
 //	            } finally {  
@@ -433,9 +433,9 @@ public class gatherFinger extends TabActivity {
 //	            }  
 		}
 	};
-	
-	
-	
+
+
+
 	private void doCrop() {
 		final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
 
@@ -453,7 +453,7 @@ public class gatherFinger extends TabActivity {
 
 			return;
 		} else {
-			
+
 			mImageCaptureUri = Uri.fromFile(new File(fileName));
 
 			intent.setData(mImageCaptureUri);
@@ -467,10 +467,10 @@ public class gatherFinger extends TabActivity {
 			intent.putExtra("scale", true);
 			intent.putExtra("return-data", false);
 			intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-		    intent.putExtra("noFaceDetection", true); 
-			
-			intent.putExtra("output", Uri.fromFile(new File(filePath3 + "/" + IMAGE_NAME +".jpg"))); 
- 
+			intent.putExtra("noFaceDetection", true);
+
+			intent.putExtra("output", Uri.fromFile(new File(filePath3 + "/" + IMAGE_NAME +".jpg")));
+
 			if (size == 1) {
 				Intent i = new Intent(intent);
 				ResolveInfo res = list.get(0);
@@ -529,13 +529,13 @@ public class gatherFinger extends TabActivity {
 			}
 		}
 	}
-	
-	
+
+
 	private void saveFileToDevice(String toSaveString) {
 		try {
 
-			String filePath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) 
-							  + "/" + gather_id + "/" + TXT_NAME + ".ini";
+			String filePath = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name)
+					+ "/" + gather_id + "/" + TXT_NAME + ".ini";
 
 			File saveFile = new File(filePath);
 			if (!saveFile.exists()) {
@@ -562,33 +562,33 @@ public class gatherFinger extends TabActivity {
 		}
 	}
 
-	
-	
+
+
 	private void saveCutPic(Intent picdata) {
 		Bundle bundle = picdata.getExtras();
-        Bitmap bitmap = (Bitmap) bundle.get("data");// »ñÈ¡Ïà»ú·µ»ØµÄÊı¾İ£¬²¢×ª»»ÎªBitmapÍ¼Æ¬¸ñÊ½  
+		Bitmap bitmap = (Bitmap) bundle.get("data");// è·å–ç›¸æœºè¿”å›çš„æ•°æ®ï¼Œå¹¶è½¬æ¢ä¸ºBitmapå›¾ç‰‡æ ¼å¼
 
-        FileOutputStream b = null;           
-           File file = new File(filePath3);  
-           file.mkdirs();// ´´½¨ÎÄ¼ş¼Ğ  
-		   String fileName = filePath3 + "/" + gather_name +".bmp";   
- 
-           try {  
-               b = new FileOutputStream(fileName);  
-               bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// °ÑÊı¾İĞ´ÈëÎÄ¼ş  
-           } catch (FileNotFoundException e) {  
-               e.printStackTrace();  
-           } finally {  
-               try {  
-                   b.flush();  
-                   b.close();  
-               } catch (IOException e) {  
-                   e.printStackTrace();  
-               }  
-           }  
-		
+		FileOutputStream b = null;
+		File file = new File(filePath3);
+		file.mkdirs();// åˆ›å»ºæ–‡ä»¶å¤¹
+		String fileName = filePath3 + "/" + gather_name +".bmp";
+
+		try {
+			b = new FileOutputStream(fileName);
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// æŠŠæ•°æ®å†™å…¥æ–‡ä»¶
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				b.flush();
+				b.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
-	
+
 	public void delete(File file) {
 		if (file.isFile()) {
 			file.delete();
@@ -606,5 +606,5 @@ public class gatherFinger extends TabActivity {
 			file.delete();
 		}
 	}
-	
+
 }

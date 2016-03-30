@@ -44,9 +44,9 @@ public class DataEntry extends Activity {
 	private AlertDialog dlg;
 	private Button dialog_bt_cancel, dialog_bt_ok;
 	private TextView dialog_title, dialog_tv;
-	
+
 	private boolean is_modify = false;
-	
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +101,9 @@ public class DataEntry extends Activity {
 								saveFileToDevice(medittext.getText().toString());
 							}
 
-							 if(is_modify){
-								 finish();	
-							 }
+							if(is_modify){
+								finish();
+							}
 
 							Intent it = new Intent(DataEntry.this,
 									DataEntryList.class);
@@ -142,9 +142,9 @@ public class DataEntry extends Activity {
 						saveFileToDevice(medittext.getText().toString());
 					}
 
-					 if(is_modify){
-						 finish();
-					 }
+					if(is_modify){
+						finish();
+					}
 
 					// medittext.setText(null);
 				}
@@ -174,8 +174,8 @@ public class DataEntry extends Activity {
 				fos = this.openFileOutput(dataPath, 1);
 			}
 
-			fos.write(toSaveString.getBytes());// –¥»Î
-			fos.close(); // πÿ±’ ‰≥ˆ¡˜
+			fos.write(toSaveString.getBytes());// ÂÜôÂÖ•
+			fos.close(); // ÂÖ≥Èó≠ËæìÂá∫ÊµÅ
 
 			Toast.makeText(DataEntry.this, R.string.dataentry_savefile_success,
 					Toast.LENGTH_SHORT).show();

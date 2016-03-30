@@ -24,17 +24,17 @@ public class MainActivity_rftest extends Activity {
 	private final String TAG = "MainMenu activity";
 	private Button btn_simtest, btn_rftest, btn_fprinttest,btn_back;
 	private Intent mintent;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_rftest);
-		
+
 		btn_simtest = (Button) this.findViewById(R.id.button_simtest);
 		btn_rftest = (Button) this.findViewById(R.id.button_rftest);
 		btn_fprinttest = (Button) this.findViewById(R.id.button_fprinttest);
 		btn_back = (Button) this.findViewById(R.id.button_back);
-		
+
 		btn_simtest.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -45,9 +45,9 @@ public class MainActivity_rftest extends Activity {
 				startActivity(mintent);
 //				finish();					
 			}
-		});	
-		
-		
+		});
+
+
 		btn_rftest.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -58,18 +58,18 @@ public class MainActivity_rftest extends Activity {
 			}
 		});
 
-		
+
 		btn_fprinttest.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				//×Ô¶¨ÒåÏà»ú		yjh 2014.04.22
-			    Intent it = new Intent(MainActivity_rftest.this, CameraOpen.class);
-		        startActivityForResult(it, 1);
+				//è‡ªå®šä¹‰ç›¸æœº		yjh 2014.04.22
+				Intent it = new Intent(MainActivity_rftest.this, CameraOpen.class);
+				startActivityForResult(it, 1);
 
 			}
 		});
-		
+
 		btn_back.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -81,30 +81,30 @@ public class MainActivity_rftest extends Activity {
 	}
 
 
-	// Ïà»úÈ·ÈÏ·µ»Ø
+	// ç›¸æœºç¡®è®¤è¿”å›
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		String info = null;
 		int fMatch = 0;
-		
+
 //		EMgpio.SetGpioOutput(85);	//yjh 2014.03.10PM
 //		EMgpio.SetGpioDataLow(85);
 //		EMgpio.GPIOUnInit();
 
 		info = "fprint Not match !";
-		if (resultCode == Activity.RESULT_OK) {	//ÏµÍ³Ïà»ú°´ÁË "¹´" È·ÈÏ·µ»Ø
+		if (resultCode == Activity.RESULT_OK) {	//ç³»ç»Ÿç›¸æœºæŒ‰äº† "å‹¾" ç¡®è®¤è¿”å›
 
-			String sdStatus = Environment.getExternalStorageState();// »ñÈ¡sd¿¨Â·¾¶
-			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // ¼ì²âsdÊÇ·ñ¿ÉÓÃ
+			String sdStatus = Environment.getExternalStorageState();// è·å–sdå¡è·¯å¾„
+			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // æ£€æµ‹sdæ˜¯å¦å¯ç”¨
 				Log.v("TestFile",
 						"SD card is not avaiable/writeable right now.");
 				return;
 			}
 
-		
-			//×Ô¶¨ÒåÏà»ú·µ»Ø		yjh 2014.04.22
+
+			//è‡ªå®šä¹‰ç›¸æœºè¿”å›		yjh 2014.04.22
 //			String filePath = Environment.getExternalStorageDirectory().toString() + "/"
 //					+ getResources().getString(R.string.app_name) + "/"
 //					+ getResources().getString(R.string.app_name) + ".bmp";
@@ -112,7 +112,7 @@ public class MainActivity_rftest extends Activity {
 //			String fileName = Environment.getExternalStorageDirectory().toString() + "/"
 //					+ getResources().getString(R.string.app_name) + "/"
 //					+ getResources().getString(R.string.app_name) + ".bmp";
-			
+
 			String bmpFile = getFilesDir().getParent().toString() + "/"
 					+ getResources().getString(R.string.app_name) + ".bmp";
 			String pgmFile = getFilesDir().getParent().toString() + "/"
@@ -120,19 +120,19 @@ public class MainActivity_rftest extends Activity {
 			String xytFile = getFilesDir().getParent().toString() + "/"
 					+ getResources().getString(R.string.app_name) + ".xyt";
 //			FileInputStream fis;
-			
+
 			long t0 = System.currentTimeMillis();
 			long t1 = System.currentTimeMillis();
 
-			CallDecoder cd = new CallDecoder();				
+			CallDecoder cd = new CallDecoder();
 //			cd.Bmp2Pgm("/sdcard/myImage/myImage.bmp", "/sdcard/myImage/Vote.pgm");
 			cd.Bmp2Pgm(bmpFile, pgmFile);
-			
-			
+
+
 			CallFprint cf = new CallFprint();
 //			cf.pgmChangeToXyt("/sdcard/myImage/Vote.pgm", "/sdcard/myImage/Vote.xyt");
 			cf.pgmChangeToXyt(pgmFile, xytFile);
-			
+
 			Toast.makeText(MainActivity_rftest.this, "Finger .xyt date saved in [" + xytFile + "]", Toast.LENGTH_SHORT).show();
 		}
 		else
@@ -140,8 +140,8 @@ public class MainActivity_rftest extends Activity {
 			;
 		}
 	}
-	
-	
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

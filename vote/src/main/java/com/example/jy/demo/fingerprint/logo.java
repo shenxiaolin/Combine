@@ -18,8 +18,8 @@ public class logo extends Activity {
 
 	private ImageView logoview;
 
-	private Vote_DBHelper mVoteDB; 
-	
+	private Vote_DBHelper mVoteDB;
+
 	private Cursor mCursor_user;
 	private String ADMIN_USER_NAME;
 	@Override
@@ -52,7 +52,7 @@ public class logo extends Activity {
 //					System.out.println("3");
 //					int count = 0;
 //
-//					// ¿ªÊ¼¸´ÖÆLogoÍ¼Æ¬ÎÄ¼ş
+//					// å¼€å§‹å¤åˆ¶Logoå›¾ç‰‡æ–‡ä»¶
 //					while ((count = is.read(buffer)) > 0) {
 //						fos.write(buffer, 0, count);
 //						System.out.println("4");
@@ -75,15 +75,15 @@ public class logo extends Activity {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				// TODO Auto-generated method stub
-				// ÈıÃëÖ®ºóÌø³ö
+				// ä¸‰ç§’ä¹‹åè·³å‡º
 				Intent it = new Intent(logo.this, login.class);
 				startActivity(it);
-				
+
 //				Intent it = new Intent(logo.this, login_ext.class);
 //				startActivity(it);
-				
-				// ÈıÃëÖ®ºó Õâ¸ö´°¿Ú¾ÍÃ»ÓÃÁË Ó¦¸Ãfinish
-				finish(); 
+
+				// ä¸‰ç§’ä¹‹å è¿™ä¸ªçª—å£å°±æ²¡ç”¨äº† åº”è¯¥finish
+				finish();
 			}
 		});
 	}
@@ -93,13 +93,13 @@ public class logo extends Activity {
 		mVoteDB = new Vote_DBHelper(this);
 		ADMIN_USER_NAME = mVoteDB.ADMIN_USER_NAME;
 		mCursor_user = mVoteDB.Query_User_table();
-		if (mCursor_user.getCount() == 0) {// Ä¬ÈÏµÚÒ»´ÎĞ´ÈëÒ»ÌõadminµÄ¼ÇÂ¼
+		if (mCursor_user.getCount() == 0) {// é»˜è®¤ç¬¬ä¸€æ¬¡å†™å…¥ä¸€æ¡adminçš„è®°å½•
 			mVoteDB.insert_usertable(ADMIN_USER_NAME,"8888",0);
-			mVoteDB.insert_usertable("userc","123",1);			
+			mVoteDB.insert_usertable("userc","123",1);
 			mVoteDB.insert_usertable("userv","123",2);
 		}
 	}
-	
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
@@ -109,26 +109,26 @@ public class logo extends Activity {
 		mSendBroadcast_close();
 		String filePath3 = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/";
 		File fileFolder = new File(filePath3);
-        if (!fileFolder.exists()) { 
-            fileFolder.mkdir();  
-        }
+		if (!fileFolder.exists()) {
+			fileFolder.mkdir();
+		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		
+
 		if(mCursor_user != null)
-		mCursor_user.close();
+			mCursor_user.close();
 	}
-	
+
 	public void mSendBroadcast_close() {
-		
-	   Intent intent = new Intent();
-	   intent.setAction("nfc.action.close");
-	   //·¢ËÍ Ò»¸öÎŞĞò¹ã²¥
-	   logo.this.sendBroadcast(intent);
+
+		Intent intent = new Intent();
+		intent.setAction("nfc.action.close");
+		//å‘é€ ä¸€ä¸ªæ— åºå¹¿æ’­
+		logo.this.sendBroadcast(intent);
 	}
 
 }

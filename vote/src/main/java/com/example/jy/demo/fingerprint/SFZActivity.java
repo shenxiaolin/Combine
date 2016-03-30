@@ -62,7 +62,7 @@ public class SFZActivity extends Activity implements OnClickListener {
 	private int readFailTime = 0;
 	private int readSuccessTime = 0;
 	/**
-	 *  «∑Ò «¡¨–¯∂¡»°
+	 * ÊòØÂê¶ÊòØËøûÁª≠ËØªÂèñ
 	 */
 	private boolean isSequentialRead = false;
 
@@ -139,8 +139,8 @@ public class SFZActivity extends Activity implements OnClickListener {
 			return;
 		}
 		mHandler.postDelayed(task, 1000);
-		String result =getResources().getString(R.string.total) + readTime + getResources().getString(R.string.success) + readSuccessTime 
-			+ getResources().getString(R.string.fail) + readFailTime;
+		String result =getResources().getString(R.string.total) + readTime + getResources().getString(R.string.success) + readSuccessTime
+				+ getResources().getString(R.string.fail) + readFailTime;
 		Log.i("whw", "result=" + result);
 		resultInfo.setText(result);
 	}
@@ -153,31 +153,31 @@ public class SFZActivity extends Activity implements OnClickListener {
 		}
 		int id = v.getId();
 		switch (id) {
-		case R.id.read_sfz:
-			resultInfo.setText("");
-			isSequentialRead = false;
-			showProgressDialog(getResources().getString(R.string.reading));
-			asyncParseSFZ.readSFZ();
-			Log.i("whw", "read_sfz");
-			break;
-		case R.id.clear_sfz:
-			clear();
-			// int temp =
-			// application.getmChatService().getNewAsyncVersion().getMachineVersion();
-			// Log.i("whw", "temp="+temp);
-			break;
-		case R.id.sequential_read:
-			isSequentialRead = true;
-			readTime = 0;
-			readFailTime = 0;
-			readSuccessTime = 0;
-			mHandler.post(task);
-			break;
-		case R.id.stop:
-			mHandler.removeCallbacks(task);
-			break;
-		default:
-			break;
+			case R.id.read_sfz:
+				resultInfo.setText("");
+				isSequentialRead = false;
+				showProgressDialog(getResources().getString(R.string.reading));
+				asyncParseSFZ.readSFZ();
+				Log.i("whw", "read_sfz");
+				break;
+			case R.id.clear_sfz:
+				clear();
+				// int temp =
+				// application.getmChatService().getNewAsyncVersion().getMachineVersion();
+				// Log.i("whw", "temp="+temp);
+				break;
+			case R.id.sequential_read:
+				isSequentialRead = true;
+				readTime = 0;
+				readFailTime = 0;
+				readSuccessTime = 0;
+				mHandler.post(task);
+				break;
+			case R.id.stop:
+				mHandler.removeCallbacks(task);
+				break;
+			default:
+				break;
 		}
 
 	}
@@ -192,7 +192,7 @@ public class SFZActivity extends Activity implements OnClickListener {
 			}
 			readTime++;
 			showProgressDialog(getResources().getString(R.string.reading));
-			Log.i("whw", "asyncParseSFZ.readSFZ()£°");
+			Log.i("whw", "asyncParseSFZ.readSFZ()ÔºÅ");
 			asyncParseSFZ.readSFZ();
 		}
 	};

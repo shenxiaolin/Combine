@@ -116,7 +116,7 @@ public class SystemLog extends Activity {
 	class CustomerDatePickerDialog extends mDatePickerDialog {
 
 		public CustomerDatePickerDialog(Context context,
-				OnDateSetListener callBack, int year, int monthOfYear) {
+										OnDateSetListener callBack, int year, int monthOfYear) {
 			super(context, callBack, year, monthOfYear);
 		}
 
@@ -143,7 +143,7 @@ public class SystemLog extends Activity {
 			}
 
 			String datatime = mMouth1 + "-" + mDay1;
-			// ²éÑ¯
+			// æŸ¥è¯¢
 			mCursor = mVoteDB.query(SYSTEMLOG_TABLE_NAME, null, "date=?",
 					new String[] { datatime }, null, null, null);
 
@@ -161,7 +161,7 @@ public class SystemLog extends Activity {
 						+ mCursor.getCount()
 						+ " "
 						+ getResources().getString(
-								R.string.System_Log_query_num);
+						R.string.System_Log_query_num);
 			} else {
 				toasttext = getResources().getString(
 						R.string.System_Log_query_fail);
@@ -172,14 +172,14 @@ public class SystemLog extends Activity {
 
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		if (mCursor != null)
 			mCursor.close();
-		
+
 	}
 
 	public class DBSysLogAdapter extends BaseAdapter {
@@ -218,28 +218,28 @@ public class SystemLog extends Activity {
 
 			mCursor.moveToPosition(position);
 			ViewHolder viewHolder;
-			
+
 			if (convertView == null) {
 				viewHolder = new ViewHolder();
 				inflater = (LayoutInflater) SystemLog.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				convertView = inflater.inflate(R.layout.systemlog_list, null);
 				convertView.setTag(viewHolder);
-				
+
 				viewHolder.NameTitle = (TextView) convertView.findViewById(R.id.sysloglist_name);
 				viewHolder.DateTitle = (TextView) convertView.findViewById(R.id.sysloglist_date);
 				viewHolder.EventTitle = (TextView) convertView.findViewById(R.id.sysloglist_event);
-				
+
 			} else {
 				viewHolder = (ViewHolder) convertView.getTag();
 			}
-			
+
 			viewHolder.NameTitle.setText(mCursor.getString(1));
 			viewHolder.DateTitle.setText(mCursor.getString(2) + "," + mCursor.getString(3));
 			viewHolder.EventTitle.setText(mCursor.getString(4));
 
 			return convertView;
 		}
-		
+
 		class ViewHolder {
 			private TextView NameTitle;
 			private TextView DateTitle;

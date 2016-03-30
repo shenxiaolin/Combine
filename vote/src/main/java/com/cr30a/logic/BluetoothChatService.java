@@ -40,45 +40,45 @@ import android.os.SystemClock;
 import android.util.Log;
 
 /**
- * 
+ *
  */
 public class BluetoothChatService {
-	// µ÷ÊÔ
+	// è°ƒè¯•
 	private static final String TAG = "BluetoothChatService";
 	private static final boolean D = true;
 	/**
-	 * À¶ÑÀÁ¬½Ó³É¹¦
+	 * è“ç‰™è¿æ¥æˆåŠŸ
 	 */
 	public static final int CONNECTION_SUCCESS = 100;
 	/**
-	 * À¶ÑÀÁ¬½ÓÊ§°Ü
+	 * è“ç‰™è¿æ¥å¤±è´¥
 	 */
 	public static final int CONNECTION_FAIL = 101;
 	/**
-	 * À¶ÑÀÁ¬½Ó¶ªÊ§
+	 * è“ç‰™è¿æ¥ä¸¢å¤±
 	 */
 	public static final int CONNECTION_LOST = 102;
 
-	// ¼ÇÂ¼µ±´´½¨·şÎñÆ÷Ì×½Ó×Ö
+	// è®°å½•å½“åˆ›å»ºæœåŠ¡å™¨å¥—æ¥å­—
 	private static final String NAME = "BluetoothChat";
 
 	private static final UUID MY_UUID = UUID
 			.fromString("00001101-0000-1000-8000-00805F9B34FB");
 	public static StringBuffer hexString = new StringBuffer();
-	// ÊÊÅäÆ÷³ÉÔ±
+	// é€‚é…å™¨æˆå‘˜
 	private final BluetoothAdapter mAdapter;
 
 	private ConnectThread mConnectThread;
 	private ConnectedThread mConnectedThread;
 	private int mState;
-	// ³£Êı£¬Ö¸Ê¾µ±Ç°µÄÁ¬½Ó×´Ì¬
-	public static final int STATE_NONE = 0; // µ±Ç°Ã»ÓĞ¿ÉÓÃµÄÁ¬½Ó
-	public static final int STATE_LISTEN = 1; // ÏÖÔÚÕìÌı´«ÈëµÄÁ¬½Ó
-	public static final int STATE_CONNECTING = 2; // ÏÖÔÚ¿ªÊ¼´«³öÁªÏµ
-	public static final int STATE_CONNECTED = 3; // ÏÖÔÚÁ¬½Óµ½Ô¶³ÌÉè±¸
+	// å¸¸æ•°ï¼ŒæŒ‡ç¤ºå½“å‰çš„è¿æ¥çŠ¶æ€
+	public static final int STATE_NONE = 0; // å½“å‰æ²¡æœ‰å¯ç”¨çš„è¿æ¥
+	public static final int STATE_LISTEN = 1; // ç°åœ¨ä¾¦å¬ä¼ å…¥çš„è¿æ¥
+	public static final int STATE_CONNECTING = 2; // ç°åœ¨å¼€å§‹ä¼ å‡ºè”ç³»
+	public static final int STATE_CONNECTED = 3; // ç°åœ¨è¿æ¥åˆ°è¿œç¨‹è®¾å¤‡
 	public static boolean bRun = true;
 	public static boolean bConnect_State = false;
-	
+
 	public static boolean switchRFID;
 
 	private OnConnectListener onConnectListener;
@@ -92,7 +92,7 @@ public class BluetoothChatService {
 	};
 
 	/**
-	 * ¹¹Ôìº¯Êı¡£
+	 * æ„é€ å‡½æ•°ã€‚
 	 */
 	public BluetoothChatService(OnConnectListener onConnectListener) {
 		mAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -107,7 +107,7 @@ public class BluetoothChatService {
 	}
 
 	/**
-	 * ·µ»Øµ±Ç°µÄÁ¬½Ó×´Ì¬¡£
+	 * è¿”å›å½“å‰çš„è¿æ¥çŠ¶æ€ã€‚
 	 */
 	public synchronized int getState() {
 		return mState;
@@ -137,7 +137,7 @@ public class BluetoothChatService {
 	}
 
 	public synchronized void connected(BluetoothSocket socket,
-			BluetoothDevice device) {
+									   BluetoothDevice device) {
 		if (D)
 			Log.d(TAG, "connected");
 
@@ -158,7 +158,7 @@ public class BluetoothChatService {
 	}
 
 	/**
-	 * Í£Ö¹ËùÓĞÓëÀ¶ÑÀÁ¬½ÓÓĞ¹ØµÄÏß³Ì
+	 * åœæ­¢æ‰€æœ‰ä¸è“ç‰™è¿æ¥æœ‰å…³çš„çº¿ç¨‹
 	 */
 	public synchronized void stop() {
 		if (D)
@@ -176,17 +176,17 @@ public class BluetoothChatService {
 
 	/**
 	 * Write to the ConnectedThread in an unsynchronized manner
-	 * 
+	 *
 	 * @param out
 	 *            The bytes to write
 	 * @see ConnectedThread#write(byte[])
 	 */
 	public synchronized void write(byte[] out) {
 		ConnectedThread r;
-		
+
 		for(int i = 0;i<out.length;i++){
 			android.util.Log.e("hm", "out[]= "+out[i]);
-		
+
 		}
 		synchronized (this) {
 			if (mState != STATE_CONNECTED)
@@ -197,14 +197,14 @@ public class BluetoothChatService {
 	}
 
 	/**
-	 * ¶ÁÈ¡Êı¾İ
-	 * 
+	 * è¯»å–æ•°æ®
+	 *
 	 * @param out
 	 * @param waittime
 	 * @return
 	 */
 	public int read(byte[] out, int waittime, int endWaitTimeout) {
-		// ´´½¨ÁÙÊ±¶ÔÏó
+		// åˆ›å»ºä¸´æ—¶å¯¹è±¡
 		ConnectedThread r;
 		android.util.Log.d("hm","mState= "+mState);
 		synchronized (this) {
@@ -213,17 +213,17 @@ public class BluetoothChatService {
 			r = mConnectedThread;
 		}
 		int length = r.read(out, waittime, endWaitTimeout);
-		
+
 		for(int i = 0;i<out.length;i++){
 			android.util.Log.e("hm", "read11111111 out[]= "+out[i]);
-		
+
 		}
 		android.util.Log.d("hm","length= "+length);
 		return length;
 	}
 
 	public int readImage(byte[] out, int waittime, int requestLength) {
-		// ´´½¨ÁÙÊ±¶ÔÏó
+		// åˆ›å»ºä¸´æ—¶å¯¹è±¡
 		ConnectedThread r;
 		synchronized (this) {
 			if (mState != STATE_CONNECTED)
@@ -261,7 +261,7 @@ public class BluetoothChatService {
 	}
 
 	/**
-	 * ±¾ÏßÔÚÊÔÍ¼Ê¹´«³öÁªÏµ ÓëÉè±¸¡£Ëü¾¶Ö±´©¹ıÁ¬½Ó£»»òÕß ³É¹¦»òÊ§°Ü¡£
+	 * æœ¬çº¿åœ¨è¯•å›¾ä½¿ä¼ å‡ºè”ç³» ä¸è®¾å¤‡ã€‚å®ƒå¾„ç›´ç©¿è¿‡è¿æ¥ï¼›æˆ–è€… æˆåŠŸæˆ–å¤±è´¥ã€‚
 	 */
 	private class ConnectThread extends Thread {
 		private final BluetoothSocket mmSocket;
@@ -271,8 +271,8 @@ public class BluetoothChatService {
 			mmDevice = device;
 			BluetoothSocket tmp = null;
 
-			// µÃµ½Ò»¸öbluetoothsocketÎªÓëÁ¬½Ó
-			// ÓÉÓÚÀ¶ÑÀÉè±¸
+			// å¾—åˆ°ä¸€ä¸ªbluetoothsocketä¸ºä¸è¿æ¥
+			// ç”±äºè“ç‰™è®¾å¤‡
 			try {
 				tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
 			} catch (IOException e) {
@@ -287,10 +287,10 @@ public class BluetoothChatService {
 
 			mAdapter.cancelDiscovery();
 
-			// Ê¹Ò»¸öÁ¬½Óµ½bluetoothsocket
+			// ä½¿ä¸€ä¸ªè¿æ¥åˆ°bluetoothsocket
 			try {
-				// ÕâÊÇÒ»¸ö×èÈûµ÷ÓÃºÍ½«Ö»·µ»ØÒ»¸ö
-				// ³É¹¦µÄÁ¬½Ó»òÀıÍâ
+				// è¿™æ˜¯ä¸€ä¸ªé˜»å¡è°ƒç”¨å’Œå°†åªè¿”å›ä¸€ä¸ª
+				// æˆåŠŸçš„è¿æ¥æˆ–ä¾‹å¤–
 				mmSocket.connect();
 				// mHandler.sendEmptyMessage(CONNECTION_SUCCESS);
 				if (onConnectListener != null) {
@@ -299,7 +299,7 @@ public class BluetoothChatService {
 				bConnect_State = true;
 			} catch (IOException e) {
 				connectionFailed();
-				// ¹Ø±ÕÕâ¸ösocket
+				// å…³é—­è¿™ä¸ªsocket
 				try {
 					mmSocket.close();
 				} catch (IOException e2) {
@@ -315,7 +315,7 @@ public class BluetoothChatService {
 				mConnectThread = null;
 			}
 
-			// Æô¶¯Á¬½ÓÏß³Ì
+			// å¯åŠ¨è¿æ¥çº¿ç¨‹
 			connected(mmSocket, mmDevice);
 		}
 
@@ -330,7 +330,7 @@ public class BluetoothChatService {
 	}
 
 	/**
-	 * ±¾ÏßÔÚÁ¬½ÓÓëÔ¶³ÌÉè±¸¡£ Ëü´¦ÀíËùÓĞ´«ÈëºÍ´«³öµÄ´«Êä¡£
+	 * æœ¬çº¿åœ¨è¿æ¥ä¸è¿œç¨‹è®¾å¤‡ã€‚ å®ƒå¤„ç†æ‰€æœ‰ä¼ å…¥å’Œä¼ å‡ºçš„ä¼ è¾“ã€‚
 	 */
 	private class ConnectedThread extends Thread {
 		private final BluetoothSocket mmSocket;
@@ -345,7 +345,7 @@ public class BluetoothChatService {
 			InputStream tmpIn = null;
 			OutputStream tmpOut = null;
 
-			// »ñµÃbluetoothsocketÊäÈëÊä³öÁ÷
+			// è·å¾—bluetoothsocketè¾“å…¥è¾“å‡ºæµ
 			try {
 				tmpIn = socket.getInputStream();
 				tmpOut = socket.getOutputStream();
@@ -363,21 +363,21 @@ public class BluetoothChatService {
 			byte[] buffer = new byte[1024 * 4];
 			int bytes;
 
-			// ¼ÌĞøÌıInputStreamÍ¬Ê±Á¬½Ó
+			// ç»§ç»­å¬InputStreamåŒæ—¶è¿æ¥
 			while (true) {
 				try {
-					// ¶ÁÈ¡ÊäÈëÁ÷
+					// è¯»å–è¾“å…¥æµ
 					bytes = mmInStream.read(buffer);
 					System.arraycopy(buffer, 0, mmRecvbuffer, mmbytes, bytes);
 					mmbytes += bytes;
 					Log.i("whw", "input stream mmbytes=" + mmbytes
 							+ "     current read=" + bytes);
-					
+
 					Log.i("hm", "input stream mmbytes=" + mmbytes
 							+ "     current read=" + bytes);
 				} catch (IOException e) {
 					Log.e(TAG, "disconnected", e);
-					
+
 					Log.i("hm", "disconnected", e);
 					Log.i("whw", "exception=" + e.getMessage());
 					connectionLost();
@@ -387,16 +387,16 @@ public class BluetoothChatService {
 		}
 
 		/**
-		 * Ğ´Êä³öµÄÁ¬½Ó¡£
-		 * 
+		 * å†™è¾“å‡ºçš„è¿æ¥ã€‚
+		 *
 		 * @param buffer
-		 *            ÕâÊÇÒ»¸ö×Ö½ÚÁ÷
+		 *            è¿™æ˜¯ä¸€ä¸ªå­—èŠ‚æµ
 		 */
 		public synchronized void write(byte[] buffer) {
-			 android.util.Log.e("hm", "mmSocket isConnected="+mmSocket.isConnected());
+			android.util.Log.e("hm", "mmSocket isConnected="+mmSocket.isConnected());
 			mmbytes = 0;
 			try {
-				
+
 				for(int i = 0;i<buffer.length;i++){
 					android.util.Log.e("hm", "buffer[]= "+buffer[i]);
 
@@ -408,54 +408,54 @@ public class BluetoothChatService {
 			}
 		}
 
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
 		public synchronized int read(byte[] buffer, int waittime,
-				int endWaitTimeout) {		
-			
-			    int lastGetBytes = mmbytes ;
-				int timeOut = 0 ;
-				
-				long lastTime = System.currentTimeMillis();
-				
-				Log.i("hm", "read");
-				
-				if(mmbytes > 0 )
+									 int endWaitTimeout) {
+
+			int lastGetBytes = mmbytes ;
+			int timeOut = 0 ;
+
+			long lastTime = System.currentTimeMillis();
+
+			Log.i("hm", "read");
+
+			if(mmbytes > 0 )
+			{
+				timeOut = endWaitTimeout ;
+			}
+			else
+			{
+				timeOut = waittime ;
+			}
+
+
+			while(true)
+			{
+
+				if( System.currentTimeMillis()- lastTime >= timeOut  )
 				{
+					System.arraycopy(mmRecvbuffer, 0, buffer, 0, mmbytes);
+					return  mmbytes ;
+				}
+
+				if( mmbytes > lastGetBytes )
+				{
+					lastGetBytes = mmbytes ;
 					timeOut = endWaitTimeout ;
+					lastTime = System.currentTimeMillis() ;
 				}
-				else
-				{
-					timeOut = waittime ;
-				}	
-				
-				
-				while(true)
-				{
-				
-					if( System.currentTimeMillis()- lastTime >= timeOut  )
-					{
-						System.arraycopy(mmRecvbuffer, 0, buffer, 0, mmbytes); 
-						return  mmbytes ;
-					}
-					
-					if( mmbytes > lastGetBytes )
-					{
-						lastGetBytes = mmbytes ;
-						timeOut = endWaitTimeout ;
-						lastTime = System.currentTimeMillis() ;
-					}
-					
-				}
+
+			}
 		}
 
 		public synchronized int readImage(byte[] buffer, int waittime,
-				int requestLength) {
+										  int requestLength) {
 			int sleepTime = 10;
 			int length = waittime / sleepTime;
 			boolean shutDown = false;

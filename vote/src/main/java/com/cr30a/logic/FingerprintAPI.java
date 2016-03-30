@@ -21,136 +21,136 @@ import android.util.Log;
 public class FingerprintAPI {
 
 	private BluetoothChatService chatService;
-  
+
 	/**
-	 * »º³åÇø:ÏÂÎ»»ú·µ»ØÊı¾İ´æ·ÅµØ Buffer: The next crew to return data storage places
+	 * ç¼“å†²åŒº:ä¸‹ä½æœºè¿”å›æ•°æ®å­˜æ”¾åœ° Buffer: The next crew to return data storage places
 	 */
-	private byte[] data = new byte[1024 * 50];  
+	private byte[] data = new byte[1024 * 50];
 
 	private byte[] buffer = new byte[1024 * 50];
 
 	private byte[] bufferImage = new byte[1024 * 50];
 
 	/**
-	 * ÏìÓ¦°üºÍÍ¼ÏñÊı¾İ¹²40044×Ö½Ú
+	 * å“åº”åŒ…å’Œå›¾åƒæ•°æ®å…±40044å­—èŠ‚
 	 */
 	private static final int UP_IMAGE_RESPONSE_SIZE = 40044;
 
 	/**
-	 * È·ÈÏÂë£º0x20¡ª0xefÎª±£ÁôµÄÈ·ÈÏÂë ±íÊ¾Ö¸ÁîÖ´ĞĞÍê±Ï»òOK£» 0x20¡ª0xefThe for the Reserved Indicates
+	 * ç¡®è®¤ç ï¼š0x20â€”0xefä¸ºä¿ç•™çš„ç¡®è®¤ç  è¡¨ç¤ºæŒ‡ä»¤æ‰§è¡Œå®Œæ¯•æˆ–OKï¼› 0x20â€”0xefThe for the Reserved Indicates
 	 * instruction completes or OK
 	 */
 	public static final int EXEC_COMMAND_SUCCESS = 0x00;
 	/**
-	 * ±íÊ¾Êı¾İ°ü½ÓÊÕ´íÎó£» Indicates that the data packet reception error;
+	 * è¡¨ç¤ºæ•°æ®åŒ…æ¥æ”¶é”™è¯¯ï¼› Indicates that the data packet reception error;
 	 */
 	public static final int RECEIVE_PACKAGE_ERROR = 0x01;
 	/**
-	 * ±íÊ¾´«¸ĞÆ÷ÉÏÃ»ÓĞÊÖÖ¸£» Indicates that the sensor does not have fingers;
+	 * è¡¨ç¤ºä¼ æ„Ÿå™¨ä¸Šæ²¡æœ‰æ‰‹æŒ‡ï¼› Indicates that the sensor does not have fingers;
 	 */
 	public static final int NO_FINGER = 0x02;
 	/**
-	 * ±íÊ¾Â¼ÈëÖ¸ÎÆÍ¼ÏñÊ§°Ü£» Input fingerprint image indicates failure;
+	 * è¡¨ç¤ºå½•å…¥æŒ‡çº¹å›¾åƒå¤±è´¥ï¼› Input fingerprint image indicates failure;
 	 */
 	public static final int GET_IMAGE_FAIL = 0x03;
 	/**
-	 * ±íÊ¾Ö¸ÎÆÍ¼ÏñÌ«¸É¡¢Ì«µ­¶øÉú²»³ÉÌØÕ÷£» Represents the fingerprint image is too dry, not too
+	 * è¡¨ç¤ºæŒ‡çº¹å›¾åƒå¤ªå¹²ã€å¤ªæ·¡è€Œç”Ÿä¸æˆç‰¹å¾ï¼› Represents the fingerprint image is too dry, not too
 	 * light and health characteristics;
 	 */
 	public static final int FINGERPRINT_SMALL = 0x04;
 	/**
-	 * ±íÊ¾Ö¸ÎÆÍ¼ÏñÌ«Êª¡¢Ì«ºı¶øÉú²»³ÉÌØÕ÷£» Represents the fingerprint image is too wet, not too
+	 * è¡¨ç¤ºæŒ‡çº¹å›¾åƒå¤ªæ¹¿ã€å¤ªç³Šè€Œç”Ÿä¸æˆç‰¹å¾ï¼› Represents the fingerprint image is too wet, not too
 	 * paste feature is born;
 	 */
 	public static final int FINGERPRINT_BLURRING = 0x05;
 	/**
-	 * ±íÊ¾Ö¸ÎÆÍ¼ÏñÌ«ÂÒ¶øÉú²»³ÉÌØÕ÷£» Indicates born fingerprint image is too chaotic
+	 * è¡¨ç¤ºæŒ‡çº¹å›¾åƒå¤ªä¹±è€Œç”Ÿä¸æˆç‰¹å¾ï¼› Indicates born fingerprint image is too chaotic
 	 * fragmentation characteristics;
 	 */
 	public static final int FINGERPRINT_NOT_GENCHAR = 0x06;
 	/**
-	 * ±íÊ¾Ö¸ÎÆÍ¼ÏñÕı³££¬µ«ÌØÕ÷µãÌ«ÉÙ£¨»òÃæ»ıÌ«Ğ¡£©¶øÉú²»³ÉÌØÕ÷£» Represents the fingerprint image is normal,
+	 * è¡¨ç¤ºæŒ‡çº¹å›¾åƒæ­£å¸¸ï¼Œä½†ç‰¹å¾ç‚¹å¤ªå°‘ï¼ˆæˆ–é¢ç§¯å¤ªå°ï¼‰è€Œç”Ÿä¸æˆç‰¹å¾ï¼› Represents the fingerprint image is normal,
 	 * but too few feature points (or too small) was born not characteristic;
 	 */
 	public static final int FINGERPRINT_CHAR_LESS = 0x07;
 	/**
-	 * ±íÊ¾Ö¸ÎÆ²»Æ¥Åä£» Means that fingerprints do not match;
+	 * è¡¨ç¤ºæŒ‡çº¹ä¸åŒ¹é…ï¼› Means that fingerprints do not match;
 	 */
 	public static final int FINGERPRINT_NO_MATCH = 0x08;
 	/**
-	 * ±íÊ¾Ã»ËÑË÷µ½Ö¸ÎÆ£» Said they were not searching to fingerprint;
+	 * è¡¨ç¤ºæ²¡æœç´¢åˆ°æŒ‡çº¹ï¼› Said they were not searching to fingerprint;
 	 */
 	public static final int FINGERPRINT_NO_SEARCH = 0x09;
 	/**
-	 * ±íÊ¾ÌØÕ÷ºÏ²¢Ê§°Ü£» Indicates characteristics merge failed;
+	 * è¡¨ç¤ºç‰¹å¾åˆå¹¶å¤±è´¥ï¼› Indicates characteristics merge failed;
 	 */
 	public static final int FINGERPRINT_REG_MODEL_FAIL = 0x0a;
 	/**
-	 * ±íÊ¾·ÃÎÊÖ¸ÎÆ¿âÊ±µØÖ·ĞòºÅ³¬³öÖ¸ÎÆ¿â·¶Î§£» Represents the address number when accessing
+	 * è¡¨ç¤ºè®¿é—®æŒ‡çº¹åº“æ—¶åœ°å€åºå·è¶…å‡ºæŒ‡çº¹åº“èŒƒå›´ï¼› Represents the address number when accessing
 	 * fingerprint database fingerprint database beyond the scope;
 	 */
 	public static final int FLASH_OUT_OF_INDEX = 0x0b;
 	/**
-	 * ±íÊ¾´ÓÖ¸ÎÆ¿â¶ÁÄ£°å³ö´í»òÎŞĞ§£» Represents a template from a fingerprint database read
+	 * è¡¨ç¤ºä»æŒ‡çº¹åº“è¯»æ¨¡æ¿å‡ºé”™æˆ–æ— æ•ˆï¼› Represents a template from a fingerprint database read
 	 * error or invalid;
 	 */
 	public static final int READ_MODEL_FROM_FLASH = 0x0c;
 	/**
-	 * ±íÊ¾ÉÏ´«ÌØÕ÷Ê§°Ü£» Uploads a feature to fail;
+	 * è¡¨ç¤ºä¸Šä¼ ç‰¹å¾å¤±è´¥ï¼› Uploads a feature to fail;
 	 */
 	public static final int UP_CHAR_FAIL = 0x0d;
 	/**
-	 * ±íÊ¾Ä£¿é²»ÄÜ½ÓÊÜºóĞøÊı¾İ°ü£» Indicates that the module can not accept subsequent
+	 * è¡¨ç¤ºæ¨¡å—ä¸èƒ½æ¥å—åç»­æ•°æ®åŒ…ï¼› Indicates that the module can not accept subsequent
 	 * packets;
 	 */
 	public static final int NOT_RECEIVE_PACKAGE = 0x0e;
 	/**
-	 * ±íÊ¾ÉÏ´«Í¼ÏñÊ§°Ü£» Upload image indicates failure;
+	 * è¡¨ç¤ºä¸Šä¼ å›¾åƒå¤±è´¥ï¼› Upload image indicates failure;
 	 */
 	public static final int UP_IMAGE_FAIL = 0x0f;
 	/**
-	 * ±íÊ¾É¾³ıÄ£°åÊ§°Ü£» Means to delete the template failed;
+	 * è¡¨ç¤ºåˆ é™¤æ¨¡æ¿å¤±è´¥ï¼› Means to delete the template failed;
 	 */
 	public static final int DELETE_MODEL_FAIL = 0x10;
 	/**
-	 * ±íÊ¾Çå¿ÕÖ¸ÎÆ¿âÊ§°Ü£» Empty fingerprint database indicates failure;
+	 * è¡¨ç¤ºæ¸…ç©ºæŒ‡çº¹åº“å¤±è´¥ï¼› Empty fingerprint database indicates failure;
 	 */
 	public static final int EMPTY_FLASH = 0x11;
 	/**
-	 * ±íÊ¾²»ÄÜ½øÈëµÍ¹¦ºÄ×´Ì¬£» That they can not enter a low power state;
+	 * è¡¨ç¤ºä¸èƒ½è¿›å…¥ä½åŠŸè€—çŠ¶æ€ï¼› That they can not enter a low power state;
 	 */
 	public static final int NOT_ENTRY_LESS_STATUS = 0x12;
 	/**
-	 * ±íÊ¾¿ÚÁî²»ÕıÈ·£» Means that the password is incorrect;
+	 * è¡¨ç¤ºå£ä»¤ä¸æ­£ç¡®ï¼› Means that the password is incorrect;
 	 */
 	public static final int COMMAND_FAIL = 0x13;
-	public static final int ERROR1 = 0x14;// ±íÊ¾ÏµÍ³¸´Î»Ê§°Ü£»
-	public static final int ERROR2 = 0x15;// ±íÊ¾»º³åÇøÄÚÃ»ÓĞÓĞĞ§Ô­Ê¼Í¼¶øÉú²»³ÉÍ¼Ïñ£»
-	public static final int ERROR3 = 0x16;// ±íÊ¾ÔÚÏßÉı¼¶Ê§°Ü£»
-	public static final int ERROR4 = 0x17;// ±íÊ¾²ĞÁôÖ¸ÎÆ»òÁ½´Î²É¼¯Ö®¼äÊÖÖ¸Ã»ÓĞÒÆ¶¯¹ı£»
-	public static final int ERROR5 = 0x18;// ±íÊ¾¶ÁĞ´FLASH ³ö´í£»
-	public static final int ERROR6 = 0xf0;// ÓĞºóĞøÊı¾İ°üµÄÖ¸Áî£¬ÕıÈ·½ÓÊÕºóÓÃ0xf0 Ó¦´ğ£»
-	public static final int ERROR7 = 0xf1;// ÓĞºóĞøÊı¾İ°üµÄÖ¸Áî£¬ÃüÁî°üÓÃ0xf1 Ó¦´ğ£»
-	public static final int ERROR8 = 0xf2;// ±íÊ¾ÉÕĞ´ÄÚ²¿FLASH Ê±£¬Ğ£ÑéºÍ´íÎó£»
-	public static final int ERROR9 = 0xf3;// ±íÊ¾ÉÕĞ´ÄÚ²¿FLASH Ê±£¬°ü±êÊ¶´íÎó£»
-	public static final int ERROR10 = 0xf4;// ±íÊ¾ÉÕĞ´ÄÚ²¿FLASH Ê±£¬°ü³¤¶È´íÎó£»
-	public static final int ERROR11 = 0xf5;// ±íÊ¾ÉÕĞ´ÄÚ²¿FLASH Ê±£¬´úÂë³¤¶ÈÌ«³¤£»
-	public static final int ERROR12 = 0xf6;// ±íÊ¾ÉÕĞ´ÄÚ²¿FLASH Ê±£¬ÉÕĞ´FLASH Ê§°Ü£»
-	public static final int ERROR13 = 0x19;// Î´¶¨Òå´íÎó£»
-	public static final int ERROR14 = 0x1a;// ÎŞĞ§¼Ä´æÆ÷ºÅ£»
-	public static final int ERROR15 = 0x1b;// ¼Ä´æÆ÷Éè¶¨ÄÚÈİ´íÎóºÅ£»
-	public static final int ERROR16 = 0x1c;// ¼ÇÊÂ±¾Ò³ÂëÖ¸¶¨´íÎó£»
-	public static final int ERROR17 = 0x1d;// ¶Ë¿Ú²Ù×÷Ê§°Ü£»
+	public static final int ERROR1 = 0x14;// è¡¨ç¤ºç³»ç»Ÿå¤ä½å¤±è´¥ï¼›
+	public static final int ERROR2 = 0x15;// è¡¨ç¤ºç¼“å†²åŒºå†…æ²¡æœ‰æœ‰æ•ˆåŸå§‹å›¾è€Œç”Ÿä¸æˆå›¾åƒï¼›
+	public static final int ERROR3 = 0x16;// è¡¨ç¤ºåœ¨çº¿å‡çº§å¤±è´¥ï¼›
+	public static final int ERROR4 = 0x17;// è¡¨ç¤ºæ®‹ç•™æŒ‡çº¹æˆ–ä¸¤æ¬¡é‡‡é›†ä¹‹é—´æ‰‹æŒ‡æ²¡æœ‰ç§»åŠ¨è¿‡ï¼›
+	public static final int ERROR5 = 0x18;// è¡¨ç¤ºè¯»å†™FLASH å‡ºé”™ï¼›
+	public static final int ERROR6 = 0xf0;// æœ‰åç»­æ•°æ®åŒ…çš„æŒ‡ä»¤ï¼Œæ­£ç¡®æ¥æ”¶åç”¨0xf0 åº”ç­”ï¼›
+	public static final int ERROR7 = 0xf1;// æœ‰åç»­æ•°æ®åŒ…çš„æŒ‡ä»¤ï¼Œå‘½ä»¤åŒ…ç”¨0xf1 åº”ç­”ï¼›
+	public static final int ERROR8 = 0xf2;// è¡¨ç¤ºçƒ§å†™å†…éƒ¨FLASH æ—¶ï¼Œæ ¡éªŒå’Œé”™è¯¯ï¼›
+	public static final int ERROR9 = 0xf3;// è¡¨ç¤ºçƒ§å†™å†…éƒ¨FLASH æ—¶ï¼ŒåŒ…æ ‡è¯†é”™è¯¯ï¼›
+	public static final int ERROR10 = 0xf4;// è¡¨ç¤ºçƒ§å†™å†…éƒ¨FLASH æ—¶ï¼ŒåŒ…é•¿åº¦é”™è¯¯ï¼›
+	public static final int ERROR11 = 0xf5;// è¡¨ç¤ºçƒ§å†™å†…éƒ¨FLASH æ—¶ï¼Œä»£ç é•¿åº¦å¤ªé•¿ï¼›
+	public static final int ERROR12 = 0xf6;// è¡¨ç¤ºçƒ§å†™å†…éƒ¨FLASH æ—¶ï¼Œçƒ§å†™FLASH å¤±è´¥ï¼›
+	public static final int ERROR13 = 0x19;// æœªå®šä¹‰é”™è¯¯ï¼›
+	public static final int ERROR14 = 0x1a;// æ— æ•ˆå¯„å­˜å™¨å·ï¼›
+	public static final int ERROR15 = 0x1b;// å¯„å­˜å™¨è®¾å®šå†…å®¹é”™è¯¯å·ï¼›
+	public static final int ERROR16 = 0x1c;// è®°äº‹æœ¬é¡µç æŒ‡å®šé”™è¯¯ï¼›
+	public static final int ERROR17 = 0x1d;// ç«¯å£æ“ä½œå¤±è´¥ï¼›
 	/**
-	 * ×Ô¶¯×¢²á£¨enroll£©Ê§°Ü£» Automatically register (enroll) failed;
+	 * è‡ªåŠ¨æ³¨å†Œï¼ˆenrollï¼‰å¤±è´¥ï¼› Automatically register (enroll) failed;
 	 */
 	public static final int ENROLL_FAIL = 0x1e;
 	/**
-	 * Ö¸ÎÆ¿âÂú Fingerprint database is full
+	 * æŒ‡çº¹åº“æ»¡ Fingerprint database is full
 	 */
 	public static final int FLASH_FULL = 0x1f;
 	/**
-	 * ÎŞÏìÓ¦ No response
+	 * æ— å“åº” No response
 	 */
 	public static final int NO_RESPONSE = 0xff;
 
@@ -159,10 +159,10 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * Â¼ÈëÖ¸ÎÆÍ¼Ïñ ¹¦ÄÜËµÃ÷£º Ì½²âÊÖÖ¸£¬Ì½²âµ½ºóÂ¼ÈëÖ¸ÎÆÍ¼Ïñ´æÓÚImageBuffer¡£ ·µ»ØÈ·ÈÏÂë±íÊ¾£ºÂ¼Èë³É¹¦¡¢ÎŞÊÖÖ¸µÈ¡£
-	 * 
-	 * @return ·µ»ØÖµÎªÈ·ÈÏÂë È·ÈÏÂë=00H±íÊ¾Â¼Èë³É¹¦ È·ÈÏÂë=01H±íÊ¾ÊÕ°üÓĞ´í È·ÈÏÂë=02H±íÊ¾´«¸ĞÆ÷ÉÏÎŞÊÖÖ¸
-	 *         È·ÈÏÂë=03H±íÊ¾Â¼Èë²»³É¹¦ È·ÈÏÂë=ffH ±íÊ¾ÎŞÏìÓ¦ Input fingerprint image Function:
+	 * å½•å…¥æŒ‡çº¹å›¾åƒ åŠŸèƒ½è¯´æ˜ï¼š æ¢æµ‹æ‰‹æŒ‡ï¼Œæ¢æµ‹åˆ°åå½•å…¥æŒ‡çº¹å›¾åƒå­˜äºImageBufferã€‚ è¿”å›ç¡®è®¤ç è¡¨ç¤ºï¼šå½•å…¥æˆåŠŸã€æ— æ‰‹æŒ‡ç­‰ã€‚
+	 *
+	 * @return è¿”å›å€¼ä¸ºç¡®è®¤ç  ç¡®è®¤ç =00Hè¡¨ç¤ºå½•å…¥æˆåŠŸ ç¡®è®¤ç =01Hè¡¨ç¤ºæ”¶åŒ…æœ‰é”™ ç¡®è®¤ç =02Hè¡¨ç¤ºä¼ æ„Ÿå™¨ä¸Šæ— æ‰‹æŒ‡
+	 *         ç¡®è®¤ç =03Hè¡¨ç¤ºå½•å…¥ä¸æˆåŠŸ ç¡®è®¤ç =ffH è¡¨ç¤ºæ— å“åº” Input fingerprint image Function:
 	 *         probing fingers, detected after the entry stored in the
 	 *         fingerprint image ImageBuffer. Return Confirmation code said:
 	 *         Entry Success, no fingers.
@@ -185,21 +185,21 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ¹¦ÄÜËµÃ÷£º ½«ImageBuffer ÖĞµÄÔ­Ê¼Í¼ÏñÉú³ÉÖ¸ÎÆÌØÕ÷ÎÄ¼ş´æÓÚCharBuffer1 »òCharBuffer2 ÊäÈë²ÎÊı£º
-	 * BufferID(ÌØÕ÷»º³åÇøºÅ)
-	 * 
+	 * åŠŸèƒ½è¯´æ˜ï¼š å°†ImageBuffer ä¸­çš„åŸå§‹å›¾åƒç”ŸæˆæŒ‡çº¹ç‰¹å¾æ–‡ä»¶å­˜äºCharBuffer1 æˆ–CharBuffer2 è¾“å…¥å‚æ•°ï¼š
+	 * BufferID(ç‰¹å¾ç¼“å†²åŒºå·)
+	 *
 	 * @param bufferId
-	 *            £¨CharBuffer1:1h,CharBuffer2:2h£©
-	 * @return ·µ»ØÖµÎªÈ·ÈÏÂë È·ÈÏÂë=00H±íÊ¾Éú³ÉÌØÕ÷³É¹¦ È·ÈÏÂë=01H±íÊ¾ÊÕ°üÓĞ´í È·ÈÏÂë=06H±íÊ¾Ö¸ÎÆÍ¼ÏñÌ«ÂÒ¶øÉú²»³ÉÌØÕ÷
-	 *         È·ÈÏÂë=07H±íÊ¾Ö¸ÎÆÍ¼ÏñÕı³££¬µ«ÌØÕ÷µãÌ«ÉÙ¶øÉú²»³ÉÌØÕ÷ È·ÈÏÂë=15H±íÊ¾Í¼Ïñ»º³åÇøÄÚÃ»ÓĞÓĞĞ§Ô­Ê¼Í¼¶øÉú²»³ÉÍ¼Ïñ
-	 *         È·ÈÏÂë=ffH±íÊ¾ÎŞÏìÓ¦ Function Description: ImageBuffer the original image
+	 *            ï¼ˆCharBuffer1:1h,CharBuffer2:2hï¼‰
+	 * @return è¿”å›å€¼ä¸ºç¡®è®¤ç  ç¡®è®¤ç =00Hè¡¨ç¤ºç”Ÿæˆç‰¹å¾æˆåŠŸ ç¡®è®¤ç =01Hè¡¨ç¤ºæ”¶åŒ…æœ‰é”™ ç¡®è®¤ç =06Hè¡¨ç¤ºæŒ‡çº¹å›¾åƒå¤ªä¹±è€Œç”Ÿä¸æˆç‰¹å¾
+	 *         ç¡®è®¤ç =07Hè¡¨ç¤ºæŒ‡çº¹å›¾åƒæ­£å¸¸ï¼Œä½†ç‰¹å¾ç‚¹å¤ªå°‘è€Œç”Ÿä¸æˆç‰¹å¾ ç¡®è®¤ç =15Hè¡¨ç¤ºå›¾åƒç¼“å†²åŒºå†…æ²¡æœ‰æœ‰æ•ˆåŸå§‹å›¾è€Œç”Ÿä¸æˆå›¾åƒ
+	 *         ç¡®è®¤ç =ffHè¡¨ç¤ºæ— å“åº” Function Description: ImageBuffer the original image
 	 *         to generate the fingerprint profiles stored in CharBuffer1 or
 	 *         CharBuffer2 Input parameters: BufferID (characteristic buffer
 	 *         number)
 	 * @param bufferId
-	 *            £¨CharBuffer1:1h,CharBuffer2:2h£©
+	 *            ï¼ˆCharBuffer1:1h,CharBuffer2:2hï¼‰
 	 * @return Confirmation code
-	 * 
+	 *
 	 *         Confirmation code=00H Indicates successful generation features
 	 *         Confirmation code=01H An indication that the package is wrong
 	 *         Confirmation code=06H Indicates born fingerprint image is too
@@ -226,15 +226,15 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ºÏ²¢ÌØÕ÷Éú³ÉÄ£°å£¬½«CharBuffer1ºÍCharBuffer2ÖĞµÄÌØÕ÷ÎÄ¼şºÏ²¢Éú³ÉÄ£°å£¬
-	 * ½á¹û´æÓÚCharBuffer1ºÍCharBuffer2ÖĞ¡£
-	 * 
-	 * @return ·µ»ØÖµÎªÈ·ÈÏÂë È·ÈÏÂë=00H±íÊ¾ºÏ²¢³É¹¦ È·ÈÏÂë=01H±íÊ¾ÊÕ°üÓĞ´í È·ÈÏÂë=0aH±íÊ¾ºÏ²¢Ê§°Ü£¨Á½Ã¶Ö¸ÎÆ²»ÊôÓÚÍ¬Ò»ÊÖÖ¸£©
-	 *         È·ÈÏÂë=ffH ±íÊ¾ÎŞÏìÓ¦ Function Description: Merge features generate a
+	 * åˆå¹¶ç‰¹å¾ç”Ÿæˆæ¨¡æ¿ï¼Œå°†CharBuffer1å’ŒCharBuffer2ä¸­çš„ç‰¹å¾æ–‡ä»¶åˆå¹¶ç”Ÿæˆæ¨¡æ¿ï¼Œ
+	 * ç»“æœå­˜äºCharBuffer1å’ŒCharBuffer2ä¸­ã€‚
+	 *
+	 * @return è¿”å›å€¼ä¸ºç¡®è®¤ç  ç¡®è®¤ç =00Hè¡¨ç¤ºåˆå¹¶æˆåŠŸ ç¡®è®¤ç =01Hè¡¨ç¤ºæ”¶åŒ…æœ‰é”™ ç¡®è®¤ç =0aHè¡¨ç¤ºåˆå¹¶å¤±è´¥ï¼ˆä¸¤æšæŒ‡çº¹ä¸å±äºåŒä¸€æ‰‹æŒ‡ï¼‰
+	 *         ç¡®è®¤ç =ffH è¡¨ç¤ºæ— å“åº” Function Description: Merge features generate a
 	 *         template that will CharBuffer1 and CharBuffer2 features in the
 	 *         file merge generation templates The result is stored in
 	 *         CharBuffer1 and CharBuffer2 in.
-	 * 
+	 *
 	 * @return Confirmation code Confirmation code=00H Means that the merge was
 	 *         successful Confirmation code=01H An indication that the package
 	 *         is wrong Confirmation code=0aH Expressed merge failure (two
@@ -254,14 +254,14 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ½«CharBufferÖĞµÄÄ£°å´¢´æµ½Ö¸¶¨µÄpageIdºÅµÄflashÊı¾İ¿âÎ»ÖÃ bufferId:Ö»ÄÜÎª1h»ò2h
-	 * pageId£º·¶Î§Îª0~1010 ÊäÈë²ÎÊı£º BufferID(»º³åÇøºÅ)£¬PageID£¨Ö¸ÎÆ¿âÎ»ÖÃºÅ£©
-	 * 
-	 * @return ·µ»ØÖµÎªÈ·ÈÏÂë È·ÈÏÂë=00H±íÊ¾´¢´æ³É¹¦ È·ÈÏÂë=01H±íÊ¾ÊÕ°üÓĞ´í È·ÈÏÂë=0bH±íÊ¾PageID³¬³öÖ¸ÎÆ¿â·¶Î§
-	 *         È·ÈÏÂë=18H±íÊ¾Ğ´FLASH³ö´í È·ÈÏÂë=ffH ±íÊ¾ÎŞÏìÓ¦ Function Description: The
+	 * å°†CharBufferä¸­çš„æ¨¡æ¿å‚¨å­˜åˆ°æŒ‡å®šçš„pageIdå·çš„flashæ•°æ®åº“ä½ç½® bufferId:åªèƒ½ä¸º1hæˆ–2h
+	 * pageIdï¼šèŒƒå›´ä¸º0~1010 è¾“å…¥å‚æ•°ï¼š BufferID(ç¼“å†²åŒºå·)ï¼ŒPageIDï¼ˆæŒ‡çº¹åº“ä½ç½®å·ï¼‰
+	 *
+	 * @return è¿”å›å€¼ä¸ºç¡®è®¤ç  ç¡®è®¤ç =00Hè¡¨ç¤ºå‚¨å­˜æˆåŠŸ ç¡®è®¤ç =01Hè¡¨ç¤ºæ”¶åŒ…æœ‰é”™ ç¡®è®¤ç =0bHè¡¨ç¤ºPageIDè¶…å‡ºæŒ‡çº¹åº“èŒƒå›´
+	 *         ç¡®è®¤ç =18Hè¡¨ç¤ºå†™FLASHå‡ºé”™ ç¡®è®¤ç =ffH è¡¨ç¤ºæ— å“åº” Function Description: The
 	 *         CharBuffer templates stored to the specified number of flash
 	 *         pageId database location bufferId: can only 1h or 2h
-	 *         pageId£º0~1010 Input parameters: BufferID (buffer number), PageID
+	 *         pageIdï¼š0~1010 Input parameters: BufferID (buffer number), PageID
 	 *         (fingerprint location number)
 	 * @return Confirmation code Confirmation code=00H Expressed successfully
 	 *         saved Confirmation code=01H An indication that the package is
@@ -294,16 +294,16 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ½«flash Êı¾İ¿âÖĞÖ¸¶¨pageIdºÅµÄÖ¸ÎÆÄ£°å¶ÁÈëµ½Ä£°å»º³åÇøCharBuffer1»òCharBuffer2
-	 * bufferId:Ö»ÄÜÎª1h»ò2h pageId£º·¶Î§Îª0~1023 ÊäÈë²ÎÊı£º BufferID(»º³åÇøºÅ)£¬PageID(Ö¸ÎÆ¿âÄ£°åºÅ)
-	 * 
+	 * å°†flash æ•°æ®åº“ä¸­æŒ‡å®špageIdå·çš„æŒ‡çº¹æ¨¡æ¿è¯»å…¥åˆ°æ¨¡æ¿ç¼“å†²åŒºCharBuffer1æˆ–CharBuffer2
+	 * bufferId:åªèƒ½ä¸º1hæˆ–2h pageIdï¼šèŒƒå›´ä¸º0~1023 è¾“å…¥å‚æ•°ï¼š BufferID(ç¼“å†²åŒºå·)ï¼ŒPageID(æŒ‡çº¹åº“æ¨¡æ¿å·)
+	 *
 	 * @param index
-	 *            pageIdºÅ
-	 * @return ·µ»ØÖµÎªÈ·ÈÏÂë È·ÈÏÂë=00H±íÊ¾¶Á³ö³É¹¦ È·ÈÏÂë=01H±íÊ¾ÊÕ°üÓĞ´í È·ÈÏÂë=0cH±íÊ¾¶Á³öÓĞ´í»òÄ£°åÓĞ´í
-	 *         È·ÈÏÂë=0BH±íÊ¾PageID³¬³öÖ¸ÎÆ¿â·¶Î§ È·ÈÏÂë=ffH ±íÊ¾ÎŞÏìÓ¦ Function Description:
+	 *            pageIdå·
+	 * @return è¿”å›å€¼ä¸ºç¡®è®¤ç  ç¡®è®¤ç =00Hè¡¨ç¤ºè¯»å‡ºæˆåŠŸ ç¡®è®¤ç =01Hè¡¨ç¤ºæ”¶åŒ…æœ‰é”™ ç¡®è®¤ç =0cHè¡¨ç¤ºè¯»å‡ºæœ‰é”™æˆ–æ¨¡æ¿æœ‰é”™
+	 *         ç¡®è®¤ç =0BHè¡¨ç¤ºPageIDè¶…å‡ºæŒ‡çº¹åº“èŒƒå›´ ç¡®è®¤ç =ffH è¡¨ç¤ºæ— å“åº” Function Description:
 	 *         Specified in the database will flash fingerprint template pageId
 	 *         number read into the stencil buffer CharBuffer1 or CharBuffer2
-	 *         bufferId:1h or 2h pageId£º0~1010 Input parameters: BufferID
+	 *         bufferId:1h or 2h pageIdï¼š0~1010 Input parameters: BufferID
 	 *         (buffer number), PageID (fingerprint database template number)
 	 * @return Confirmation code Confirmation code=00H Readout indicates success
 	 *         Confirmation code=01H An indication that the package is wrong
@@ -331,32 +331,32 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ÒÔCharBuffer1 »òCharBuffer2 ÖĞµÄÌØÕ÷ÎÄ¼şËÑË÷Õû¸ö»ò²¿·ÖÖ¸ÎÆ¿â¡£ÈôËÑË÷µ½£¬Ôò·µ»ØÒ³Âë¡£ ÊäÈë²ÎÊı£º BufferID£¬
-	 * StartPage(ÆğÊ¼Ò³)£¬PageNum£¨Ò³Êı£© ·µ»Ø²ÎÊı£º È·ÈÏ×Ö£¬Ò³Âë£¨ÏàÅäÖ¸ÎÆÄ£°å£©
-	 * 
+	 * ä»¥CharBuffer1 æˆ–CharBuffer2 ä¸­çš„ç‰¹å¾æ–‡ä»¶æœç´¢æ•´ä¸ªæˆ–éƒ¨åˆ†æŒ‡çº¹åº“ã€‚è‹¥æœç´¢åˆ°ï¼Œåˆ™è¿”å›é¡µç ã€‚ è¾“å…¥å‚æ•°ï¼š BufferIDï¼Œ
+	 * StartPage(èµ·å§‹é¡µ)ï¼ŒPageNumï¼ˆé¡µæ•°ï¼‰ è¿”å›å‚æ•°ï¼š ç¡®è®¤å­—ï¼Œé¡µç ï¼ˆç›¸é…æŒ‡çº¹æ¨¡æ¿ï¼‰
+	 *
 	 * @param bufferId
-	 *            »º³åÇø1h£¬2h
+	 *            ç¼“å†²åŒº1hï¼Œ2h
 	 * @param startPageId
-	 *            ÆğÊ¼Ò³
+	 *            èµ·å§‹é¡µ
 	 * @param pageNum
-	 *            Ò³Êı
-	 * @return È·ÈÏÂë=00H ±íÊ¾ËÑË÷µ½£» È·ÈÏÂë=01H ±íÊ¾ÊÕ°üÓĞ´í£» È·ÈÏÂë=09H ±íÊ¾Ã»ËÑË÷µ½£»´ËÊ±Ò³ÂëÓëµÃ·ÖÎª0 È·ÈÏÂë=ffH
-	 *         ±íÊ¾ÎŞÏìÓ¦ Function Description:In CharBuffer1 or CharBuffer2 the
+	 *            é¡µæ•°
+	 * @return ç¡®è®¤ç =00H è¡¨ç¤ºæœç´¢åˆ°ï¼› ç¡®è®¤ç =01H è¡¨ç¤ºæ”¶åŒ…æœ‰é”™ï¼› ç¡®è®¤ç =09H è¡¨ç¤ºæ²¡æœç´¢åˆ°ï¼›æ­¤æ—¶é¡µç ä¸å¾—åˆ†ä¸º0 ç¡®è®¤ç =ffH
+	 *         è¡¨ç¤ºæ— å“åº” Function Description:In CharBuffer1 or CharBuffer2 the
 	 *         feature to search the entire or part of the file fingerprint
 	 *         database. If found, it returns the page number. Input parameters:
 	 *         BufferID, StartPage (Home), PageNum (Pages) Return parameter:
 	 *         confirm the word, page (match fingerprint templates)
 	 * @param bufferId
-	 *            buffer:1h£¬2h
+	 *            buffer:1hï¼Œ2h
 	 * @param startPageId
 	 * @param pageNum
 	 * @return Confirmation code=00H Indicates that the search to; Confirmation
-	 *         code=01H An indication that the package is wrong£» Confirmation
+	 *         code=01H An indication that the package is wrongï¼› Confirmation
 	 *         code=09H Said they were not searched; this time with a score of 0
 	 *         page Confirmation code=ffH Indicates no response
 	 */
 	public synchronized Result PSSearch(int bufferId, int startPageId,
-			int pageNum) {
+										int pageNum) {
 		byte[] startPageIDArray = short2byte((short) startPageId);
 		byte[] pageNumArray = short2byte((short) pageNum);
 		int checkSum = 0x01 + 0x00 + 0x08 + 0x04 + bufferId
@@ -386,14 +386,14 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ¾«È·±È¶ÔCharBuffer1ÓëCharBuffer2ÖĞµÄÌØÕ÷ÎÄ¼ş ×¢Òâµã:ÏÂÎ»»ú·µ»ØµÄÊı¾İÀïÃæ»¹ÓĞÒ»¸öµÃ·Ö£¬µ±µÃ·Ö´óÓÚµÈÓÚ50Ê±£¬Ö¸ÎÆÆ¥Åä
-	 * 
-	 * @return true£ºÖ¸ÎÆÆ¥Åä³É¹¦ false£º±È¶ÔÊ§°Ü Function Description: Exact Match
+	 * ç²¾ç¡®æ¯”å¯¹CharBuffer1ä¸CharBuffer2ä¸­çš„ç‰¹å¾æ–‡ä»¶ æ³¨æ„ç‚¹:ä¸‹ä½æœºè¿”å›çš„æ•°æ®é‡Œé¢è¿˜æœ‰ä¸€ä¸ªå¾—åˆ†ï¼Œå½“å¾—åˆ†å¤§äºç­‰äº50æ—¶ï¼ŒæŒ‡çº¹åŒ¹é…
+	 *
+	 * @return trueï¼šæŒ‡çº¹åŒ¹é…æˆåŠŸ falseï¼šæ¯”å¯¹å¤±è´¥ Function Description: Exact Match
 	 *         CharBuffer1 the signature file with CharBuffer2 attention point:
 	 *         the next crew returned data there is also a score when the score
 	 *         is greater than or equal to 50, the fingerprint matching
-	 * 
-	 * @return true£ºFingerprint matching is successful false£ºMatch fails
+	 *
+	 * @return trueï¼šFingerprint matching is successful falseï¼šMatch fails
 	 */
 	public synchronized boolean PSMatch() {
 		byte[] command = { (byte) 0xef, (byte) 0x01, (byte) 0xff, (byte) 0xff,
@@ -411,15 +411,15 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ²É¼¯Ò»´ÎÖ¸ÎÆ×¢²áÄ£°å£¬ÔÚÖ¸ÎÆ¿âÖĞËÑË÷¿ÕÎ»²¢´æ´¢£¬·µ»Ø´æ´¢pageId ·µ»Ø²ÎÊı£º È·ÈÏ×Ö£¬Ò³Âë£¨ÏàÅäÖ¸ÎÆÄ£°å£©
-	 * 
-	 * @return È·ÈÏÂë=00H ±íÊ¾×¢²á³É¹¦£» È·ÈÏÂë=01H ±íÊ¾ÊÕ°üÓĞ´í£» È·ÈÏÂë=1eH ±íÊ¾×¢²áÊ§°Ü¡£ È·ÈÏÂë=ffH ±íÊ¾ÎŞÏìÓ¦
+	 * é‡‡é›†ä¸€æ¬¡æŒ‡çº¹æ³¨å†Œæ¨¡æ¿ï¼Œåœ¨æŒ‡çº¹åº“ä¸­æœç´¢ç©ºä½å¹¶å­˜å‚¨ï¼Œè¿”å›å­˜å‚¨pageId è¿”å›å‚æ•°ï¼š ç¡®è®¤å­—ï¼Œé¡µç ï¼ˆç›¸é…æŒ‡çº¹æ¨¡æ¿ï¼‰
+	 *
+	 * @return ç¡®è®¤ç =00H è¡¨ç¤ºæ³¨å†ŒæˆåŠŸï¼› ç¡®è®¤ç =01H è¡¨ç¤ºæ”¶åŒ…æœ‰é”™ï¼› ç¡®è®¤ç =1eH è¡¨ç¤ºæ³¨å†Œå¤±è´¥ã€‚ ç¡®è®¤ç =ffH è¡¨ç¤ºæ— å“åº”
 	 *         Function Description: Collect a fingerprint registration
 	 *         template, fingerprint database search space and storage,
 	 *         Storeback pageId Return parameter: confirm the word, page (match
 	 *         fingerprint templates)
 	 * @return Confirmation code=00H Indicates successful registration;
-	 *         Confirmation code=01H An indication that the package is wrong£»
+	 *         Confirmation code=01H An indication that the package is wrongï¼›
 	 *         Confirmation code=1eH Means that the registration failed.
 	 *         Confirmation code=ffH Indicates no response
 	 */
@@ -441,11 +441,11 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ×Ô¶¯²É¼¯Ö¸ÎÆ£¬ÔÚÖ¸ÎÆ¿âÖĞËÑË÷Ä¿±êÄ£°å²¢·µ»ØËÑË÷½á¹û¡£ Èç¹ûÄ¿±êÄ£°åÍ¬µ±Ç°²É¼¯µÄÖ¸ÎÆ±È¶ÔµÃ·Ö´óÓÚ×î¸ß·§Öµ£¬
-	 * ²¢ÇÒÄ¿±êÄ£°åÎª²»ÍêÕûÌØÕ÷ÔòÒÔ²É¼¯µÄÌØÕ÷¸üĞÂÄ¿±êÄ£°åµÄ¿Õ°×ÇøÓò¡£ ·µ»Ø²ÎÊı£º È·ÈÏÂë£¬Ò³Âë£¨ÏàÅäÖ¸ÎÆÄ£°å£©
-	 * 
-	 * @return È·ÈÏÂë=00H ±íÊ¾ËÑË÷µ½£» È·ÈÏÂë=01H ±íÊ¾ÊÕ°üÓĞ´í£» È·ÈÏÂë=09H ±íÊ¾Ã»ËÑË÷µ½£»´ËÊ±Ò³ÂëÓëµÃ·ÖÎª0 È·ÈÏÂë=ffH
-	 *         ±íÊ¾ÎŞÏìÓ¦ Function Description: Automatic fingerprint in the
+	 * è‡ªåŠ¨é‡‡é›†æŒ‡çº¹ï¼Œåœ¨æŒ‡çº¹åº“ä¸­æœç´¢ç›®æ ‡æ¨¡æ¿å¹¶è¿”å›æœç´¢ç»“æœã€‚ å¦‚æœç›®æ ‡æ¨¡æ¿åŒå½“å‰é‡‡é›†çš„æŒ‡çº¹æ¯”å¯¹å¾—åˆ†å¤§äºæœ€é«˜é˜€å€¼ï¼Œ
+	 * å¹¶ä¸”ç›®æ ‡æ¨¡æ¿ä¸ºä¸å®Œæ•´ç‰¹å¾åˆ™ä»¥é‡‡é›†çš„ç‰¹å¾æ›´æ–°ç›®æ ‡æ¨¡æ¿çš„ç©ºç™½åŒºåŸŸã€‚ è¿”å›å‚æ•°ï¼š ç¡®è®¤ç ï¼Œé¡µç ï¼ˆç›¸é…æŒ‡çº¹æ¨¡æ¿ï¼‰
+	 *
+	 * @return ç¡®è®¤ç =00H è¡¨ç¤ºæœç´¢åˆ°ï¼› ç¡®è®¤ç =01H è¡¨ç¤ºæ”¶åŒ…æœ‰é”™ï¼› ç¡®è®¤ç =09H è¡¨ç¤ºæ²¡æœç´¢åˆ°ï¼›æ­¤æ—¶é¡µç ä¸å¾—åˆ†ä¸º0 ç¡®è®¤ç =ffH
+	 *         è¡¨ç¤ºæ— å“åº” Function Description: Automatic fingerprint in the
 	 *         fingerprint database search target template and return to search
 	 *         results. If the target template with the current collection of
 	 *         fingerprint matching score greater than the highest threshold,
@@ -454,7 +454,7 @@ public class FingerprintAPI {
 	 *         parameters: Confirmation code, page number (matching fingerprint
 	 *         template)
 	 * @return Confirmation code=00H Indicates that the search to; Confirmation
-	 *         code=01H An indication that the package is wrong£» Confirmation
+	 *         code=01H An indication that the package is wrongï¼› Confirmation
 	 *         code=09H Said they were not searched; this time with a score of 0
 	 *         page Confirmation code=ffH Indicates no response
 	 */
@@ -477,11 +477,11 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * É¾³ıÄ£°å É¾³ıflash Êı¾İ¿âÖĞÖ¸¶¨ID ºÅ¿ªÊ¼µÄN ¸öÖ¸ÎÆÄ£°å ÊäÈë²ÎÊı£ºPageID(Ö¸ÎÆ¿âÄ£°åºÅ)£¬N É¾³ıµÄÄ£°å¸öÊı¡£
-	 * 
+	 * åˆ é™¤æ¨¡æ¿ åˆ é™¤flash æ•°æ®åº“ä¸­æŒ‡å®šID å·å¼€å§‹çš„N ä¸ªæŒ‡çº¹æ¨¡æ¿ è¾“å…¥å‚æ•°ï¼šPageID(æŒ‡çº¹åº“æ¨¡æ¿å·)ï¼ŒN åˆ é™¤çš„æ¨¡æ¿ä¸ªæ•°ã€‚
+	 *
 	 * @param pageIDStart
 	 * @param delNum
-	 * @return È·ÈÏÂë=00H ±íÊ¾É¾³ıÄ£°å³É¹¦£» È·ÈÏÂë=01H ±íÊ¾ÊÕ°üÓĞ´í£» È·ÈÏÂë=10H ±íÊ¾É¾³ıÄ£°åÊ§°Ü£» È·ÈÏÂë=ffH ±íÊ¾ÎŞÏìÓ¦
+	 * @return ç¡®è®¤ç =00H è¡¨ç¤ºåˆ é™¤æ¨¡æ¿æˆåŠŸï¼› ç¡®è®¤ç =01H è¡¨ç¤ºæ”¶åŒ…æœ‰é”™ï¼› ç¡®è®¤ç =10H è¡¨ç¤ºåˆ é™¤æ¨¡æ¿å¤±è´¥ï¼› ç¡®è®¤ç =ffH è¡¨ç¤ºæ— å“åº”
 	 *         Function Description: Delete Template Delete a flash ID number
 	 *         specified in the database Start the N fingerprint templates Input
 	 *         parameters: PageID (fingerprint database template number), N the
@@ -489,7 +489,7 @@ public class FingerprintAPI {
 	 * @param pageIDStart
 	 * @param delNum
 	 * @return Confirmation code=00H Success means to delete the template;
-	 *         Confirmation code=01H An indication that the package is wrong£»
+	 *         Confirmation code=01H An indication that the package is wrongï¼›
 	 *         Confirmation code=10H Means to delete the template failed;
 	 *         Confirmation code=ffH Indicates no response
 	 */
@@ -515,12 +515,12 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ¹¦ÄÜËµÃ÷£º É¾³ıflash Êı¾İ¿âÖĞËùÓĞÖ¸ÎÆÄ£°å
-	 * 
-	 * @return È·ÈÏÂë=00H ±íÊ¾Çå¿Õ³É¹¦£» È·ÈÏÂë=01H ±íÊ¾ÊÕ°üÓĞ´í£» È·ÈÏÂë=11H ±íÊ¾Çå¿ÕÊ§°Ü£» È·ÈÏÂë=ffH ±íÊ¾ÎŞÏìÓ¦
+	 * åŠŸèƒ½è¯´æ˜ï¼š åˆ é™¤flash æ•°æ®åº“ä¸­æ‰€æœ‰æŒ‡çº¹æ¨¡æ¿
+	 *
+	 * @return ç¡®è®¤ç =00H è¡¨ç¤ºæ¸…ç©ºæˆåŠŸï¼› ç¡®è®¤ç =01H è¡¨ç¤ºæ”¶åŒ…æœ‰é”™ï¼› ç¡®è®¤ç =11H è¡¨ç¤ºæ¸…ç©ºå¤±è´¥ï¼› ç¡®è®¤ç =ffH è¡¨ç¤ºæ— å“åº”
 	 *         Function: Delete all fingerprint template flash database
 	 * @return Confirmation code=00H Empty successful representation;
-	 *         Confirmation code=01H An indication that the package is wrong£»
+	 *         Confirmation code=01H An indication that the package is wrongï¼›
 	 *         Confirmation code=11H Represents clear failure; Confirmation
 	 *         code=ffH Indicates no response
 	 */
@@ -538,11 +538,11 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ½«ÌØÕ÷»º³åÇøÖĞµÄÌØÕ÷ÎÄ¼şÉÏ´«¸øÉÏÎ»»ú Function Description: The characteristic features of
+	 * å°†ç‰¹å¾ç¼“å†²åŒºä¸­çš„ç‰¹å¾æ–‡ä»¶ä¸Šä¼ ç»™ä¸Šä½æœº Function Description: The characteristic features of
 	 * the buffer file uploads to the host computer (the default feature buffer
 	 * charbuffer1)
-	 * 
-	 * @return byte[]£º³¤¶ÈÎª512×Ö½Ú³É¹¦ ·ñÔòÊ§°Ü null:ÉÏ´«ÌØÕ÷ÎÄ¼şÊ§°Ü byte[]£ºLength success is 512
+	 *
+	 * @return byte[]ï¼šé•¿åº¦ä¸º512å­—èŠ‚æˆåŠŸ å¦åˆ™å¤±è´¥ null:ä¸Šä¼ ç‰¹å¾æ–‡ä»¶å¤±è´¥ byte[]ï¼šLength success is 512
 	 *         bytes null:Characteristics file failed upload
 	 */
 	public synchronized byte[] PSUpChar(int bufferId) {
@@ -553,9 +553,9 @@ public class FingerprintAPI {
 		sendCommand(command);
 		int length = chatService.read(buffer, 4000, 300);
 		printlog("PSUpChar", 12);
-		// ÏìÓ¦Îª12×Ö½Ú£¬¹²4¸öÊı¾İ°ü£¬Ã¿¸ö°üÎª139×Ö½Ú£¬ËùÒÔ·µ»ØµÄ×Ü×Ö½ÚÊıÎª568×Ö½Ú
+		// å“åº”ä¸º12å­—èŠ‚ï¼Œå…±4ä¸ªæ•°æ®åŒ…ï¼Œæ¯ä¸ªåŒ…ä¸º139å­—èŠ‚ï¼Œæ‰€ä»¥è¿”å›çš„æ€»å­—èŠ‚æ•°ä¸º568å­—èŠ‚
 		if (length == 568) {
-			index = 12;// Êı¾İ°üµÄÆğÊ¼ÏÂ±ê
+			index = 12;// æ•°æ®åŒ…çš„èµ·å§‹ä¸‹æ ‡
 			packetNum = 0;
 			byte[] packets = new byte[568];
 			System.arraycopy(buffer, 0, packets, 0, 568);
@@ -566,19 +566,19 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ÉÏÎ»»úÏÂÔØÌØÕ÷ÎÄ¼şµ½Ä£¿éµÄÌØÕ÷»º³åÇø
-	 * 
+	 * ä¸Šä½æœºä¸‹è½½ç‰¹å¾æ–‡ä»¶åˆ°æ¨¡å—çš„ç‰¹å¾ç¼“å†²åŒº
+	 *
 	 * @param model
-	 *            :Ö¸ÎÆµÄÌØÕ÷ÎÄ¼ş
-	 * @return ·µ»ØÖµÎªÈ·ÈÏÂë È·ÈÏÂë=00H ±íÊ¾¿ÉÒÔ½ÓÊÕºóĞøÊı¾İ°ü£» È·ÈÏÂë=01H ±íÊ¾ÊÕ°üÓĞ´í£» È·ÈÏÂë=0eH ±íÊ¾²»ÄÜ½ÓÊÕºóĞøÊı¾İ°ü£»
-	 *         È·ÈÏÂë=ffH ±íÊ¾ÎŞÏìÓ¦ Function Description: download the signature file
+	 *            :æŒ‡çº¹çš„ç‰¹å¾æ–‡ä»¶
+	 * @return è¿”å›å€¼ä¸ºç¡®è®¤ç  ç¡®è®¤ç =00H è¡¨ç¤ºå¯ä»¥æ¥æ”¶åç»­æ•°æ®åŒ…ï¼› ç¡®è®¤ç =01H è¡¨ç¤ºæ”¶åŒ…æœ‰é”™ï¼› ç¡®è®¤ç =0eH è¡¨ç¤ºä¸èƒ½æ¥æ”¶åç»­æ•°æ®åŒ…ï¼›
+	 *         ç¡®è®¤ç =ffH è¡¨ç¤ºæ— å“åº” Function Description: download the signature file
 	 *         to the module characteristics buffer
-	 * 
+	 *
 	 * @param model
 	 *            :Fingerprint template
 	 * @return Confirmation code Confirmation code=00H Means that subsequent
 	 *         packets can be received; Confirmation code=01H An indication that
-	 *         the package is wrong£» Confirmation code=0eH That they can not
+	 *         the package is wrongï¼› Confirmation code=0eH That they can not
 	 *         receive subsequent data packets; Confirmation code=ffH Indicates
 	 *         no response
 	 */
@@ -597,9 +597,9 @@ public class FingerprintAPI {
 		}
 		return NO_RESPONSE;
 	}
-	
+
 	/**
-	 * Ğ£×¼
+	 * æ ¡å‡†
 	 */
 	public synchronized int PSCalibration() {
 		byte[] command = { (byte) 0xef, (byte) 0x01, (byte) 0xff, (byte) 0xff,
@@ -615,9 +615,9 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ¹¦ÄÜËµÃ÷£º¶ÁÈ¡Â¼ÈëÄ£°æµÄË÷Òı±í¡£ ÊäÈë²ÎÊı£º Ë÷Òı±íÒ³Âë, Ò³Âë0,1,2,3 ·Ö±ğ¶ÔÓ¦Ä£°æ´Ó0-256£¬256-512£¬
-	 * 512-768£¬768-1024 µÄË÷Òı£¬Ã¿1 Î»´ú±íÒ»¸öÄ£°æ£¬1 ±íÊ¾¶ÔÓ¦´æ´¢ÇøÓò µÄÄ£°æÒÑ¾­Â¼Èë£¬0 ±íÊ¾Ã»Â¼Èë¡£
-	 * 
+	 * åŠŸèƒ½è¯´æ˜ï¼šè¯»å–å½•å…¥æ¨¡ç‰ˆçš„ç´¢å¼•è¡¨ã€‚ è¾“å…¥å‚æ•°ï¼š ç´¢å¼•è¡¨é¡µç , é¡µç 0,1,2,3 åˆ†åˆ«å¯¹åº”æ¨¡ç‰ˆä»0-256ï¼Œ256-512ï¼Œ
+	 * 512-768ï¼Œ768-1024 çš„ç´¢å¼•ï¼Œæ¯1 ä½ä»£è¡¨ä¸€ä¸ªæ¨¡ç‰ˆï¼Œ1 è¡¨ç¤ºå¯¹åº”å­˜å‚¨åŒºåŸŸ çš„æ¨¡ç‰ˆå·²ç»å½•å…¥ï¼Œ0 è¡¨ç¤ºæ²¡å½•å…¥ã€‚
+	 *
 	 * @param pageId
 	 * @return
 	 */
@@ -644,7 +644,7 @@ public class FingerprintAPI {
 
 	/**
 	 * Function Description: Get a can store fingerprint model ID(0~1010)
-	 * 
+	 *
 	 * @return If it returns -1, which means that the fingerprint database is
 	 *         full.
 	 */
@@ -674,10 +674,10 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ½«Í¼Ïñ»º³åÇøµÄÊı¾İÉÏ´«¸øÉÏÎ»»ú Function Description: Upload the image buffer data to the
+	 * å°†å›¾åƒç¼“å†²åŒºçš„æ•°æ®ä¸Šä¼ ç»™ä¸Šä½æœº Function Description: Upload the image buffer data to the
 	 * host computer;
-	 * 
-	 * @return ·µ»ØÖµÎªbmp¸ñÊ½µÄÖ¸ÎÆÍ¼Ïñ£¬Èç¹ûÎªnullÉÏ´«Ê§°Ü
+	 *
+	 * @return è¿”å›å€¼ä¸ºbmpæ ¼å¼çš„æŒ‡çº¹å›¾åƒï¼Œå¦‚æœä¸ºnullä¸Šä¼ å¤±è´¥
 	 * @return Return value bmp format image of the fingerprint, if null upload
 	 *         failed
 	 */
@@ -747,18 +747,18 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ·¢ËÍÖ¸ÎÆÄ£°åÊı¾İ°ü512×Ö½Ú,·ÖÎª4´Î·¢ËÍ£¬3´ÎÊı¾İ°ü£¬Ò»´Î½áÊø°ü
-	 * 
+	 * å‘é€æŒ‡çº¹æ¨¡æ¿æ•°æ®åŒ…512å­—èŠ‚,åˆ†ä¸º4æ¬¡å‘é€ï¼Œ3æ¬¡æ•°æ®åŒ…ï¼Œä¸€æ¬¡ç»“æŸåŒ…
+	 *
 	 * @param data
 	 */
 	private void sendData(byte[] data) {
 //		int dataPacektLength = 0x12;
-		 int dataPacektLength = 0x82;
-		// Êı¾İ°üÖ¸ÁîÍ·
+		int dataPacektLength = 0x82;
+		// æ•°æ®åŒ…æŒ‡ä»¤å¤´
 		byte[] dataPrefix = { (byte) 0xef, (byte) 0x01, (byte) 0xff,
 				(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0x02,
 				(byte) 0x00, (byte) dataPacektLength };
-		// ½áÊø°üÖ¸ÁîÍ·
+		// ç»“æŸåŒ…æŒ‡ä»¤å¤´
 		byte[] endPrefix = { (byte) 0xef, (byte) 0x01, (byte) 0xff,
 				(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0x08,
 				(byte) 0x00, (byte) dataPacektLength };
@@ -779,7 +779,7 @@ public class FingerprintAPI {
 			byte[] size = short2byte(sum);
 			command[command.length - 2] = size[0];
 			command[command.length - 1] = size[1];
-			
+
 
 			Log.i("whw", "data command length=" + command.length);
 //			Log.i("whw", "data command hex=" + DataUtils.toHexString(command));
@@ -788,11 +788,11 @@ public class FingerprintAPI {
 		}
 
 	}
-	
 
 
-	private int index;// Êı¾İ°üµÄÆğÊ¼ÏÂ±ê
-	private int packetNum;// Êı¾İ°üµÄ¸öÊı
+
+	private int index;// æ•°æ®åŒ…çš„èµ·å§‹ä¸‹æ ‡
+	private int packetNum;// æ•°æ®åŒ…çš„ä¸ªæ•°
 
 	private byte[] parsePacketData(byte[] packet) {
 		int dstPos = 0;
@@ -801,7 +801,7 @@ public class FingerprintAPI {
 		do {
 			packageLength = getShort(packet[index + 7], packet[index + 8]);
 			System.arraycopy(packet, index + 9, data, dstPos, packageLength - 2);
-			dstPos += packageLength - 2;// 2ÊÇĞ£ÑéºÍ
+			dstPos += packageLength - 2;// 2æ˜¯æ ¡éªŒå’Œ
 			packetNum++;
 			size += packageLength - 2;
 		} while (moveToNext(index + 6, packageLength, packet));
@@ -838,67 +838,67 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ½«Êı¾İ´«ÈëÄÚ´æ
+	 * å°†æ•°æ®ä¼ å…¥å†…å­˜
 	 */
 	private byte[] toBmpByte(int width, int height, byte[] data) {
 		byte[] buffer = null;
 		try {
-			// // ´´½¨Êä³öÁ÷ÎÄ¼ş¶ÔÏó
+			// // åˆ›å»ºè¾“å‡ºæµæ–‡ä»¶å¯¹è±¡
 			// java.io.FileOutputStream fos = new
 			// java.io.FileOutputStream(path);
-			// // ´´½¨Ô­Ê¼Êı¾İÊä³öÁ÷¶ÔÏó
+			// // åˆ›å»ºåŸå§‹æ•°æ®è¾“å‡ºæµå¯¹è±¡
 			// java.io.DataOutputStream dos = new java.io.DataOutputStream(fos);
 
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			DataOutputStream dos = new DataOutputStream(baos);
 
-			// ¸øÎÄ¼şÍ·µÄ±äÁ¿¸³Öµ
-			int bfType = 0x424d; // Î»Í¼ÎÄ¼şÀàĞÍ£¨0¡ª1×Ö½Ú£©
-			int bfSize = 54 + 1024 + width * height;// bmpÎÄ¼şµÄ´óĞ¡£¨2¡ª5×Ö½Ú£©
-			int bfReserved1 = 0;// Î»Í¼ÎÄ¼ş±£Áô×Ö£¬±ØĞëÎª0£¨6-7×Ö½Ú£©
-			int bfReserved2 = 0;// Î»Í¼ÎÄ¼ş±£Áô×Ö£¬±ØĞëÎª0£¨8-9×Ö½Ú£©
-			int bfOffBits = 54 + 1024;// ÎÄ¼şÍ·¿ªÊ¼µ½Î»Í¼Êµ¼ÊÊı¾İÖ®¼äµÄ×Ö½ÚµÄÆ«ÒÆÁ¿£¨10-13×Ö½Ú£©
+			// ç»™æ–‡ä»¶å¤´çš„å˜é‡èµ‹å€¼
+			int bfType = 0x424d; // ä½å›¾æ–‡ä»¶ç±»å‹ï¼ˆ0â€”1å­—èŠ‚ï¼‰
+			int bfSize = 54 + 1024 + width * height;// bmpæ–‡ä»¶çš„å¤§å°ï¼ˆ2â€”5å­—èŠ‚ï¼‰
+			int bfReserved1 = 0;// ä½å›¾æ–‡ä»¶ä¿ç•™å­—ï¼Œå¿…é¡»ä¸º0ï¼ˆ6-7å­—èŠ‚ï¼‰
+			int bfReserved2 = 0;// ä½å›¾æ–‡ä»¶ä¿ç•™å­—ï¼Œå¿…é¡»ä¸º0ï¼ˆ8-9å­—èŠ‚ï¼‰
+			int bfOffBits = 54 + 1024;// æ–‡ä»¶å¤´å¼€å§‹åˆ°ä½å›¾å®é™…æ•°æ®ä¹‹é—´çš„å­—èŠ‚çš„åç§»é‡ï¼ˆ10-13å­—èŠ‚ï¼‰
 
-			// ÊäÈëÊı¾İµÄÊ±ºòÒª×¢ÒâÊäÈëµÄÊı¾İÔÚÄÚ´æÖĞÒªÕ¼¼¸¸ö×Ö½Ú£¬
-			// È»ºóÔÙÑ¡ÔñÏàÓ¦µÄĞ´Èë·½·¨£¬¶ø²»ÊÇËü×Ô¼º±¾ÉíµÄÊı¾İÀàĞÍ
-			// ÊäÈëÎÄ¼şÍ·Êı¾İ
-			dos.writeShort(bfType); // ÊäÈëÎ»Í¼ÎÄ¼şÀàĞÍ'BM'
-			dos.write(changeByte(bfSize), 0, 4); // ÊäÈëÎ»Í¼ÎÄ¼ş´óĞ¡
-			dos.write(changeByte(bfReserved1), 0, 2);// ÊäÈëÎ»Í¼ÎÄ¼ş±£Áô×Ö
-			dos.write(changeByte(bfReserved2), 0, 2);// ÊäÈëÎ»Í¼ÎÄ¼ş±£Áô×Ö
-			dos.write(changeByte(bfOffBits), 0, 4);// ÊäÈëÎ»Í¼ÎÄ¼şÆ«ÒÆÁ¿
+			// è¾“å…¥æ•°æ®çš„æ—¶å€™è¦æ³¨æ„è¾“å…¥çš„æ•°æ®åœ¨å†…å­˜ä¸­è¦å å‡ ä¸ªå­—èŠ‚ï¼Œ
+			// ç„¶åå†é€‰æ‹©ç›¸åº”çš„å†™å…¥æ–¹æ³•ï¼Œè€Œä¸æ˜¯å®ƒè‡ªå·±æœ¬èº«çš„æ•°æ®ç±»å‹
+			// è¾“å…¥æ–‡ä»¶å¤´æ•°æ®
+			dos.writeShort(bfType); // è¾“å…¥ä½å›¾æ–‡ä»¶ç±»å‹'BM'
+			dos.write(changeByte(bfSize), 0, 4); // è¾“å…¥ä½å›¾æ–‡ä»¶å¤§å°
+			dos.write(changeByte(bfReserved1), 0, 2);// è¾“å…¥ä½å›¾æ–‡ä»¶ä¿ç•™å­—
+			dos.write(changeByte(bfReserved2), 0, 2);// è¾“å…¥ä½å›¾æ–‡ä»¶ä¿ç•™å­—
+			dos.write(changeByte(bfOffBits), 0, 4);// è¾“å…¥ä½å›¾æ–‡ä»¶åç§»é‡
 
-			// ¸øĞÅÏ¢Í·µÄ±äÁ¿¸³Öµ
-			int biSize = 40;// ĞÅÏ¢Í·ËùĞèµÄ×Ö½ÚÊı£¨14-17×Ö½Ú£©
-			int biWidth = width;// Î»Í¼µÄ¿í£¨18-21×Ö½Ú£©
-			int biHeight = height;// Î»Í¼µÄ¸ß£¨22-25×Ö½Ú£©
-			int biPlanes = 1; // Ä¿±êÉè±¸µÄ¼¶±ğ£¬±ØĞëÊÇ1£¨26-27×Ö½Ú£©
-			int biBitcount = 8;// Ã¿¸öÏñËØËùĞèµÄÎ»Êı£¨28-29×Ö½Ú£©£¬±ØĞëÊÇ1Î»£¨Ë«É«£©¡¢4Î»£¨16É«£©¡¢8Î»£¨256É«£©»òÕß24Î»£¨Õæ²ÊÉ«£©Ö®Ò»¡£
-			int biCompression = 0;// Î»Í¼Ñ¹ËõÀàĞÍ£¬±ØĞëÊÇ0£¨²»Ñ¹Ëõ£©£¨30-33×Ö½Ú£©¡¢1£¨BI_RLEBÑ¹ËõÀàĞÍ£©»ò2£¨BI_RLE4Ñ¹ËõÀàĞÍ£©Ö®Ò»¡£
-			int biSizeImage = width * height;// Êµ¼ÊÎ»Í¼Í¼ÏñµÄ´óĞ¡£¬¼´Õû¸öÊµ¼Ê»æÖÆµÄÍ¼Ïñ´óĞ¡£¨34-37×Ö½Ú£©
-			int biXPelsPerMeter = 0;// Î»Í¼Ë®Æ½·Ö±æÂÊ£¬Ã¿Ã×ÏñËØÊı£¨38-41×Ö½Ú£©Õâ¸öÊıÊÇÏµÍ³Ä¬ÈÏÖµ
-			int biYPelsPerMeter = 0;// Î»Í¼´¹Ö±·Ö±æÂÊ£¬Ã¿Ã×ÏñËØÊı£¨42-45×Ö½Ú£©Õâ¸öÊıÊÇÏµÍ³Ä¬ÈÏÖµ
-			int biClrUsed = 256;// Î»Í¼Êµ¼ÊÊ¹ÓÃµÄÑÕÉ«±íÖĞµÄÑÕÉ«Êı£¨46-49×Ö½Ú£©£¬Èç¹ûÎª0µÄ»°£¬ËµÃ÷È«²¿Ê¹ÓÃÁË
-			int biClrImportant = 0;// Î»Í¼ÏÔÊ¾¹ı³ÌÖĞÖØÒªµÄÑÕÉ«Êı(50-53×Ö½Ú)£¬Èç¹ûÎª0µÄ»°£¬ËµÃ÷È«²¿ÖØÒª
+			// ç»™ä¿¡æ¯å¤´çš„å˜é‡èµ‹å€¼
+			int biSize = 40;// ä¿¡æ¯å¤´æ‰€éœ€çš„å­—èŠ‚æ•°ï¼ˆ14-17å­—èŠ‚ï¼‰
+			int biWidth = width;// ä½å›¾çš„å®½ï¼ˆ18-21å­—èŠ‚ï¼‰
+			int biHeight = height;// ä½å›¾çš„é«˜ï¼ˆ22-25å­—èŠ‚ï¼‰
+			int biPlanes = 1; // ç›®æ ‡è®¾å¤‡çš„çº§åˆ«ï¼Œå¿…é¡»æ˜¯1ï¼ˆ26-27å­—èŠ‚ï¼‰
+			int biBitcount = 8;// æ¯ä¸ªåƒç´ æ‰€éœ€çš„ä½æ•°ï¼ˆ28-29å­—èŠ‚ï¼‰ï¼Œå¿…é¡»æ˜¯1ä½ï¼ˆåŒè‰²ï¼‰ã€4ä½ï¼ˆ16è‰²ï¼‰ã€8ä½ï¼ˆ256è‰²ï¼‰æˆ–è€…24ä½ï¼ˆçœŸå½©è‰²ï¼‰ä¹‹ä¸€ã€‚
+			int biCompression = 0;// ä½å›¾å‹ç¼©ç±»å‹ï¼Œå¿…é¡»æ˜¯0ï¼ˆä¸å‹ç¼©ï¼‰ï¼ˆ30-33å­—èŠ‚ï¼‰ã€1ï¼ˆBI_RLEBå‹ç¼©ç±»å‹ï¼‰æˆ–2ï¼ˆBI_RLE4å‹ç¼©ç±»å‹ï¼‰ä¹‹ä¸€ã€‚
+			int biSizeImage = width * height;// å®é™…ä½å›¾å›¾åƒçš„å¤§å°ï¼Œå³æ•´ä¸ªå®é™…ç»˜åˆ¶çš„å›¾åƒå¤§å°ï¼ˆ34-37å­—èŠ‚ï¼‰
+			int biXPelsPerMeter = 0;// ä½å›¾æ°´å¹³åˆ†è¾¨ç‡ï¼Œæ¯ç±³åƒç´ æ•°ï¼ˆ38-41å­—èŠ‚ï¼‰è¿™ä¸ªæ•°æ˜¯ç³»ç»Ÿé»˜è®¤å€¼
+			int biYPelsPerMeter = 0;// ä½å›¾å‚ç›´åˆ†è¾¨ç‡ï¼Œæ¯ç±³åƒç´ æ•°ï¼ˆ42-45å­—èŠ‚ï¼‰è¿™ä¸ªæ•°æ˜¯ç³»ç»Ÿé»˜è®¤å€¼
+			int biClrUsed = 256;// ä½å›¾å®é™…ä½¿ç”¨çš„é¢œè‰²è¡¨ä¸­çš„é¢œè‰²æ•°ï¼ˆ46-49å­—èŠ‚ï¼‰ï¼Œå¦‚æœä¸º0çš„è¯ï¼Œè¯´æ˜å…¨éƒ¨ä½¿ç”¨äº†
+			int biClrImportant = 0;// ä½å›¾æ˜¾ç¤ºè¿‡ç¨‹ä¸­é‡è¦çš„é¢œè‰²æ•°(50-53å­—èŠ‚)ï¼Œå¦‚æœä¸º0çš„è¯ï¼Œè¯´æ˜å…¨éƒ¨é‡è¦
 
-			// ÒòÎªjavaÊÇ´ó¶Ë´æ´¢£¬ÄÇÃ´Ò²¾ÍÊÇËµÍ¬Ñù»á´ó¶ËÊä³ö¡£
-			// µ«¼ÆËã»úÊÇ°´Ğ¡¶Ë¶ÁÈ¡£¬Èç¹ûÎÒÃÇ²»¸Ä±ä¶à×Ö½ÚÊı¾İµÄË³ĞòµÄ»°£¬ÄÇÃ´»úÆ÷¾Í²»ÄÜÕı³£¶ÁÈ¡¡£
-			// ËùÒÔÊ×ÏÈµ÷ÓÃ·½·¨½«intÊı¾İ×ª±äÎª¶à¸öbyteÊı¾İ£¬²¢ÇÒ°´Ğ¡¶Ë´æ´¢µÄË³Ğò¡£
+			// å› ä¸ºjavaæ˜¯å¤§ç«¯å­˜å‚¨ï¼Œé‚£ä¹ˆä¹Ÿå°±æ˜¯è¯´åŒæ ·ä¼šå¤§ç«¯è¾“å‡ºã€‚
+			// ä½†è®¡ç®—æœºæ˜¯æŒ‰å°ç«¯è¯»å–ï¼Œå¦‚æœæˆ‘ä»¬ä¸æ”¹å˜å¤šå­—èŠ‚æ•°æ®çš„é¡ºåºçš„è¯ï¼Œé‚£ä¹ˆæœºå™¨å°±ä¸èƒ½æ­£å¸¸è¯»å–ã€‚
+			// æ‰€ä»¥é¦–å…ˆè°ƒç”¨æ–¹æ³•å°†intæ•°æ®è½¬å˜ä¸ºå¤šä¸ªbyteæ•°æ®ï¼Œå¹¶ä¸”æŒ‰å°ç«¯å­˜å‚¨çš„é¡ºåºã€‚
 
-			// ÊäÈëĞÅÏ¢Í·Êı¾İ
-			dos.write(changeByte(biSize), 0, 4);// ÊäÈëĞÅÏ¢Í·Êı¾İµÄ×Ü×Ö½ÚÊı
-			dos.write(changeByte(biWidth), 0, 4);// ÊäÈëÎ»Í¼µÄ¿í
-			dos.write(changeByte(biHeight), 0, 4);// ÊäÈëÎ»Í¼µÄ¸ß
-			dos.write(changeByte(biPlanes), 0, 2);// ÊäÈëÎ»Í¼µÄÄ¿±êÉè±¸¼¶±ğ
-			dos.write(changeByte(biBitcount), 0, 2);// ÊäÈëÃ¿¸öÏñËØÕ¼¾İµÄ×Ö½ÚÊı
-			dos.write(changeByte(biCompression), 0, 4);// ÊäÈëÎ»Í¼µÄÑ¹ËõÀàĞÍ
-			dos.write(changeByte(biSizeImage), 0, 4);// ÊäÈëÎ»Í¼µÄÊµ¼Ê´óĞ¡
-			dos.write(changeByte(biXPelsPerMeter), 0, 4);// ÊäÈëÎ»Í¼µÄË®Æ½·Ö±æÂÊ
-			dos.write(changeByte(biYPelsPerMeter), 0, 4);// ÊäÈëÎ»Í¼µÄ´¹Ö±·Ö±æÂÊ
-			dos.write(changeByte(biClrUsed), 0, 4);// ÊäÈëÎ»Í¼Ê¹ÓÃµÄ×ÜÑÕÉ«Êı
-			dos.write(changeByte(biClrImportant), 0, 4);// ÊäÈëÎ»Í¼Ê¹ÓÃ¹ı³ÌÖĞÖØÒªµÄÑÕÉ«Êı
+			// è¾“å…¥ä¿¡æ¯å¤´æ•°æ®
+			dos.write(changeByte(biSize), 0, 4);// è¾“å…¥ä¿¡æ¯å¤´æ•°æ®çš„æ€»å­—èŠ‚æ•°
+			dos.write(changeByte(biWidth), 0, 4);// è¾“å…¥ä½å›¾çš„å®½
+			dos.write(changeByte(biHeight), 0, 4);// è¾“å…¥ä½å›¾çš„é«˜
+			dos.write(changeByte(biPlanes), 0, 2);// è¾“å…¥ä½å›¾çš„ç›®æ ‡è®¾å¤‡çº§åˆ«
+			dos.write(changeByte(biBitcount), 0, 2);// è¾“å…¥æ¯ä¸ªåƒç´ å æ®çš„å­—èŠ‚æ•°
+			dos.write(changeByte(biCompression), 0, 4);// è¾“å…¥ä½å›¾çš„å‹ç¼©ç±»å‹
+			dos.write(changeByte(biSizeImage), 0, 4);// è¾“å…¥ä½å›¾çš„å®é™…å¤§å°
+			dos.write(changeByte(biXPelsPerMeter), 0, 4);// è¾“å…¥ä½å›¾çš„æ°´å¹³åˆ†è¾¨ç‡
+			dos.write(changeByte(biYPelsPerMeter), 0, 4);// è¾“å…¥ä½å›¾çš„å‚ç›´åˆ†è¾¨ç‡
+			dos.write(changeByte(biClrUsed), 0, 4);// è¾“å…¥ä½å›¾ä½¿ç”¨çš„æ€»é¢œè‰²æ•°
+			dos.write(changeByte(biClrImportant), 0, 4);// è¾“å…¥ä½å›¾ä½¿ç”¨è¿‡ç¨‹ä¸­é‡è¦çš„é¢œè‰²æ•°
 
-			// ¹¹Ôìµ÷É«°åÊı¾İ
+			// æ„é€ è°ƒè‰²æ¿æ•°æ®
 			byte[] palatte = new byte[1024];
 			for (int i = 0; i < 256; i++) {
 				palatte[i * 4] = (byte) i;
@@ -909,7 +909,7 @@ public class FingerprintAPI {
 			dos.write(palatte);
 
 			dos.write(data);
-			// ¹Ø±ÕÊı¾İµÄ´«Êä
+			// å…³é—­æ•°æ®çš„ä¼ è¾“
 			dos.flush();
 			buffer = baos.toByteArray();
 			dos.close();
@@ -922,11 +922,11 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * ½«Ò»¸öintÊı¾İ×ªÎª°´Ğ¡¶ËË³ĞòÅÅÁĞµÄ×Ö½ÚÊı×é
-	 * 
+	 * å°†ä¸€ä¸ªintæ•°æ®è½¬ä¸ºæŒ‰å°ç«¯é¡ºåºæ’åˆ—çš„å­—èŠ‚æ•°ç»„
+	 *
 	 * @param data
-	 *            intÊı¾İ
-	 * @return °´Ğ¡¶ËË³ĞòÅÅÁĞµÄ×Ö½ÚÊı×é
+	 *            intæ•°æ®
+	 * @return æŒ‰å°ç«¯é¡ºåºæ’åˆ—çš„å­—èŠ‚æ•°ç»„
 	 */
 	private byte[] changeByte(int data) {
 		byte b4 = (byte) ((data) >> 24);
@@ -953,8 +953,8 @@ public class FingerprintAPI {
 	}
 
 	/**
-	 * Ö¸ÎÆµÃ·Ö±È¶Ô,>=50·Ö·µ»Øtrue£º±È¶Ô³É¹¦
-	 * 
+	 * æŒ‡çº¹å¾—åˆ†æ¯”å¯¹,>=50åˆ†è¿”å›trueï¼šæ¯”å¯¹æˆåŠŸ
+	 *
 	 * @return
 	 */
 	private boolean score(byte b1, byte b2) {
@@ -967,36 +967,36 @@ public class FingerprintAPI {
 	}
 
 	private void sendCommand(byte[] commandBytes) {
-		
-		
-	final int seg_bytes = 20 ;
-		
+
+
+		final int seg_bytes = 20 ;
+
 		int seglen =  commandBytes.length/seg_bytes ;
-		   int remain =  commandBytes.length%seg_bytes ;	
-		   
-		   if(seglen > 0)
-		   {   
-			    byte[] command = new byte[seg_bytes];
-		   
-				for(int i = 0 ; i < seglen ; i++)
-				{
-					System.arraycopy(commandBytes, seg_bytes*i, command, 0,  seg_bytes); 
-					chatService.write(command);
-				}
-			
-		   }
-		
-		   if(remain > 0)
-		   {   
-			   byte[] command = new byte[remain];
-		   
-			   System.arraycopy(commandBytes, seg_bytes*seglen,command, 0, remain);
-			   
-			   chatService.write(command);
-		   }
-		
-	//	chatService.write(commandBytes);
-		   SystemClock.sleep(80);   
+		int remain =  commandBytes.length%seg_bytes ;
+
+		if(seglen > 0)
+		{
+			byte[] command = new byte[seg_bytes];
+
+			for(int i = 0 ; i < seglen ; i++)
+			{
+				System.arraycopy(commandBytes, seg_bytes*i, command, 0,  seg_bytes);
+				chatService.write(command);
+			}
+
+		}
+
+		if(remain > 0)
+		{
+			byte[] command = new byte[remain];
+
+			System.arraycopy(commandBytes, seg_bytes*seglen,command, 0, remain);
+
+			chatService.write(command);
+		}
+
+		//	chatService.write(commandBytes);
+		SystemClock.sleep(80);
 		BluetoothChatService.switchRFID = false;
 
 	}
@@ -1009,15 +1009,15 @@ public class FingerprintAPI {
 
 	public class Result {
 		/**
-		 * È·ÈÏÂë
+		 * ç¡®è®¤ç 
 		 */
 		public int code;
 		/**
-		 * Ò³Âë
+		 * é¡µç 
 		 */
 		public int pageId;
 		/**
-		 * µÃ·Ö
+		 * å¾—åˆ†
 		 */
 		public int matchScore;
 	}

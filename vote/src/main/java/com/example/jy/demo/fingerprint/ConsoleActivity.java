@@ -42,14 +42,14 @@ public class ConsoleActivity extends SerialPortActivity {
 	EditText mReception, Emission, Emission_Parser;
 
 	private Button mButton_clean, mButton_back;// ,mButton_regi;
-//	WriteThread mWriteThread;
+	//	WriteThread mWriteThread;
 	byte[] mBuffer;
 	private TextView passprot_name1,passprot_name2, passprot_sex,
-					 passprot_nationality, passprot_date_of_birth,
-					 passprot_discretionary, passprot_discretionary2,
-					 passprot_place_of_issue, passprot_date_of_expiry,
-					 passprot_type, passprot_country_code, passprot_passport_no,
-					 passprot_mrz_code1, passprot_mrz_code2;// ,mButton_regi;
+			passprot_nationality, passprot_date_of_birth,
+			passprot_discretionary, passprot_discretionary2,
+			passprot_place_of_issue, passprot_date_of_expiry,
+			passprot_type, passprot_country_code, passprot_passport_no,
+			passprot_mrz_code1, passprot_mrz_code2;// ,mButton_regi;
 
 	String String2 = "";
 
@@ -85,16 +85,16 @@ public class ConsoleActivity extends SerialPortActivity {
 		mReception = (EditText) findViewById(R.id.EditTextReception);
 		Emission = (EditText) findViewById(R.id.EditTextEmission);
 //		Emission_ext = (EditText) findViewById(R.id.EditTextEmission_ext);
-		
+
 		//Emission_Parser = (EditText) findViewById(R.id.EditTextEmission_Parser); huangmin del
-		
-		
+
+
 
 		mButton_back = (Button) this.findViewById(R.id.button_back);
 		mButton_clean = (Button) this.findViewById(R.id.button_clean);
 
 		passprot_name1 = (TextView)this.findViewById(R.id.content_name1);
-		
+
 		passprot_name2 = (TextView)this.findViewById(R.id.content_name2);
 		passprot_sex = (TextView)this.findViewById(R.id.content_sex);
 		passprot_nationality = (TextView)this.findViewById(R.id.content_nationality);
@@ -110,7 +110,7 @@ public class ConsoleActivity extends SerialPortActivity {
 		passprot_mrz_code1= (TextView)this.findViewById(R.id.content_mrz_code1);
 		passprot_mrz_code2 = (TextView)this.findViewById(R.id.content_mrz_code2);
 
-		
+
 		mButton_back.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -128,7 +128,7 @@ public class ConsoleActivity extends SerialPortActivity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				passprot_name1.setText("");
-				
+
 				passprot_name2.setText("");
 				passprot_sex.setText("");
 				passprot_nationality.setText("");
@@ -137,7 +137,7 @@ public class ConsoleActivity extends SerialPortActivity {
 				passprot_discretionary2.setText("");
 				//passprot_place_of_issue.setText("passprot_place_of_issue");
 				passprot_date_of_expiry.setText("");
-				
+
 				passprot_type.setText("");
 				passprot_country_code.setText("");
 				passprot_passport_no.setText("");
@@ -160,20 +160,20 @@ public class ConsoleActivity extends SerialPortActivity {
 //			mWriteThread = new WriteThread();
 //			mWriteThread.start();
 		//		mSerialPort.ocr315powerswitch(1);
-				// william power on
-	//	}
+		// william power on
+		//	}
 //		// william end
 	}
 
-	public static String asciiToString(String value)  
-	{  
-	    StringBuffer sbu = new StringBuffer();  
-	    String[] chars = value.split(",");  
-	    for (int i = 0; i < chars.length; i++) {  
-	        sbu.append((char) Integer.parseInt(chars[i]));  
-	    }  
-	    return sbu.toString();  
-	} 
+	public static String asciiToString(String value)
+	{
+		StringBuffer sbu = new StringBuffer();
+		String[] chars = value.split(",");
+		for (int i = 0; i < chars.length; i++) {
+			sbu.append((char) Integer.parseInt(chars[i]));
+		}
+		return sbu.toString();
+	}
 
 
 	@Override
@@ -183,28 +183,28 @@ public class ConsoleActivity extends SerialPortActivity {
 		if (mSerialPort != null) {
 //			mWriteThread = new WriteThread();
 //			mWriteThread.start();
-				
-			   mSerialPort.ocr315powerswitch(1);
-				Toast.makeText(ConsoleActivity.this, R.string.device_open,
-						Toast.LENGTH_SHORT).show();
 
-				// william power on
+			mSerialPort.ocr315powerswitch(1);
+			Toast.makeText(ConsoleActivity.this, R.string.device_open,
+					Toast.LENGTH_SHORT).show();
+
+			// william power on
 		}
 	}
 	@Override
 	protected void onDataReceived(final byte[] buffer, final int size) {
-		runOnUiThread(new Runnable() { 
+		runOnUiThread(new Runnable() {
 			@SuppressLint("NewApi")
-			
+
 			public void run() {
 				String String3 = null;
 				String String4 = null;
 				String resultString_ext = "";
-				if((buffer[0] == 28)){//ÆðÊ¼Î»
+				if((buffer[0] == 28)){//èµ·å§‹ä½
 					mReception.setText("");
 					Emission.setText("");
 					passprot_name1.setText("");
-					
+
 					stringBuffer.setLength(0);
 					passprot_name2.setText("");
 					passprot_sex.setText("");
@@ -214,54 +214,54 @@ public class ConsoleActivity extends SerialPortActivity {
 					passprot_discretionary2.setText("");
 					//passprot_place_of_issue.setText("passprot_place_of_issue");
 					passprot_date_of_expiry.setText("");
-					
+
 					passprot_type.setText("");
 					passprot_country_code.setText("");
 					passprot_passport_no.setText("");
-					
+
 					passprot_mrz_code1.setText("");
 					passprot_mrz_code2.setText("");
 					//Emission_Parser.setText("");huangmin del
 				}
 				//if (mReception != null) {
-				
-	 				String regex = "[^\\p{Graph}\\s]";
-	 				String string1 = new String(buffer, 0, size);
-	 				string1 = string1.replaceAll(regex,"");
-					stringBuffer.append(string1);
-					String[] temp = null;
-	 				//mReception.append(string1);
-						
 
-					if(buffer[size - 1] == 29){//½áÊøÎ»
-					
-						String string_enter = asciiToString("13");//»Ø³µµÄasciiÂë×ª×Ö·û´®
-						temp = stringBuffer.toString().split(string_enter);
-						if(temp.length > 1){
-							String3 = temp[0];
-							String4 = temp[1];
-						}
-						if(String3 != null){
-							passprot_mrz_code1.setText(String3);
-						}
-						
-						if(String4 != null){
-							passprot_mrz_code2.setText(String4);
-						}
-						
-						stringBuffer.setLength(0);
-						
+				String regex = "[^\\p{Graph}\\s]";
+				String string1 = new String(buffer, 0, size);
+				string1 = string1.replaceAll(regex,"");
+				stringBuffer.append(string1);
+				String[] temp = null;
+				//mReception.append(string1);
+
+
+				if(buffer[size - 1] == 29){//ç»“æŸä½
+
+					String string_enter = asciiToString("13");//å›žè½¦çš„asciiç è½¬å­—ç¬¦ä¸²
+					temp = stringBuffer.toString().split(string_enter);
+					if(temp.length > 1){
+						String3 = temp[0];
+						String4 = temp[1];
 					}
-				
+					if(String3 != null){
+						passprot_mrz_code1.setText(String3);
+					}
+
+					if(String4 != null){
+						passprot_mrz_code2.setText(String4);
+					}
+
+					stringBuffer.setLength(0);
+
+				}
+
 				if(String3 != null && String4 != null){
 					String resultString = "";
 					String[] token = null;
 					try {
 						resultString = accessParserNDKInterface.AccessHIDParseOCR(String3, String4, "", true);
-						
-	
+
+
 						token = resultString.split("\n");		// Don't split on /r as all lines must exist
-						
+
 						dob = token[0];
 						expiry = token[1];
 						issuer = token[2];
@@ -273,12 +273,12 @@ public class ConsoleActivity extends SerialPortActivity {
 						discretionary2 = token[8];
 						passport_num = token[9];
 						sex = token[10];
-						
-						
+
+
 						try {
 							ap.PlayTone(ToneGenerator.TONE_PROP_BEEP, 500);
 						} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
+							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (SecurityException e) {
 							// TODO Auto-generated catch block
@@ -290,13 +290,13 @@ public class ConsoleActivity extends SerialPortActivity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
-						
+
+
 					}
 					catch (Exception ex)
 					{
 						stringBuffer.setLength(0);
-						
+
 						VibratorUtil.Vibrate(ConsoleActivity.this, 100);
 						Toast.makeText(ConsoleActivity.this, R.string.AccessDataOCRLinesRx_fail,
 								Toast.LENGTH_SHORT).show();
@@ -323,7 +323,7 @@ public class ConsoleActivity extends SerialPortActivity {
 					}
 					*/
 					passprot_name1.setText(firstname);
-					
+
 					passprot_name2.setText(lastname);
 					passprot_sex.setText(sex);
 					passprot_nationality.setText(nationality);
@@ -332,13 +332,13 @@ public class ConsoleActivity extends SerialPortActivity {
 					passprot_discretionary2.setText(discretionary2);
 					//passprot_place_of_issue.setText("passprot_place_of_issue");
 					passprot_date_of_expiry.setText(expiry);
-					
+
 					passprot_type.setText(Passport_type);
 					passprot_country_code.setText(issuer);
 					passprot_passport_no.setText(passport_num);
-					
-					
-					
+
+
+
 				}
 				if (Emission != null) {
 					if(String4 != null){
@@ -363,12 +363,12 @@ public class ConsoleActivity extends SerialPortActivity {
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		
+
 		if (mSerialPort != null) {
 
 			mSerialPort.ocr315powerswitch(0);
 			mSerialPort.close();
-			mSerialPort = null; 
+			mSerialPort = null;
 			// william power off
 
 		}

@@ -38,17 +38,17 @@ public class AdminMainActivity extends Activity {
 
 	// dialog view
 	private AlertDialog dlg,DexttextDlg;
-	private Button dialog_bt_cancel, dialog_bt_ok; 
+	private Button dialog_bt_cancel, dialog_bt_ok;
 	private TextView dialog_title, dialog_tv;
 	private EditText dialog_et;
- 
+
 	private VoteVin_DBHelper mVoteDB;
 	private Cursor mCursor;
 	private String VIN_TABLE_NAME;
 
 	private Vote_DBHelper mVoteDB_log;
-	
-	public  String filePath = "/databases/Vote.db"; 
+
+	public  String filePath = "/databases/Vote.db";
 	private int ENTRY_NAME_NUM;
 	private String ET, pucode;
 	@Override
@@ -58,8 +58,8 @@ public class AdminMainActivity extends Activity {
 
 		mVoteDB_log = new Vote_DBHelper(this);
 		ENTRY_NAME_NUM = mVoteDB_log.ENTRY_NAME_NUM;
-		
-		
+
+
 		mVoteDB = new VoteVin_DBHelper(this);
 		mCursor = mVoteDB.Query_Vin_table();
 		VIN_TABLE_NAME = mVoteDB.VIN_TABLE_NAME;
@@ -71,19 +71,19 @@ public class AdminMainActivity extends Activity {
 		mAdminbutton_about = (Button) findViewById(R.id.button_adminabout);
 		mAdminbutton_Exit = (Button) findViewById(R.id.button_adminExit);
 		mAdminbutton_LockVote = (Button) findViewById(R.id.button_adminLockVote);
-		
+
 		preferences = this.getSharedPreferences(getResources().getString(R.string.SystemConfig_sp),MODE_PRIVATE);
-		
+
 		ET = preferences.getString("CURRENT_ELECTION_TYPE", "President");
 		pucode = preferences.getString("PU_CODE", "37-06-01-007");
-		
+
 		mAdminbutton_about.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 //				Intent it = new Intent(AdminMainActivity.this,SystemAbout.class);
-				Intent it = new Intent(AdminMainActivity.this,Submain.class); 
+				Intent it = new Intent(AdminMainActivity.this,Submain.class);
 				startActivity(it);
 			}
 		});
@@ -94,12 +94,12 @@ public class AdminMainActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				
+
 				//lockVoteDialogView();
 			}
 		});
-		
-		
+
+
 		mAdminbutton_reset.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -115,39 +115,39 @@ public class AdminMainActivity extends Activity {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						
+
 						if(dlg != null)
 							dlg.dismiss();
-						
+
 						initEdittextDialogView();
 						dialog_et.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_VARIATION_PASSWORD);
 						dialog_tv.setText(R.string.adminmain_dialog_title);
 						dialog_bt_ok.setOnClickListener(new OnClickListener() {
 							@Override
 							public void onClick(View v) {
-								
-								
+
+
 //								if (dialog_et.getText().length() > 0) {
 
-									if(queryAdminPwd(dialog_et.getText().toString())){
-										
-										try {
-											dismissEditTextDialogView();
-											deleteDate();
-											finish();
-											Toast.makeText(AdminMainActivity.this,getResources().getString(R.string.adminmain_text_reset_success),Toast.LENGTH_SHORT).show();
-										} catch (Exception e) {
-											// TODO: handle exception
-											Toast.makeText(AdminMainActivity.this,getResources().getString(R.string.adminmain_text_reset_fail),Toast.LENGTH_SHORT).show();
-										}
-										
-									}else{
-										dialog_et.setText("");
-										Toast.makeText(AdminMainActivity.this,getResources().getString(R.string.adminmain_dialog_pwd_error),Toast.LENGTH_SHORT).show();
-										
+								if(queryAdminPwd(dialog_et.getText().toString())){
+
+									try {
+										dismissEditTextDialogView();
+										deleteDate();
+										finish();
+										Toast.makeText(AdminMainActivity.this,getResources().getString(R.string.adminmain_text_reset_success),Toast.LENGTH_SHORT).show();
+									} catch (Exception e) {
+										// TODO: handle exception
+										Toast.makeText(AdminMainActivity.this,getResources().getString(R.string.adminmain_text_reset_fail),Toast.LENGTH_SHORT).show();
 									}
-									
-								
+
+								}else{
+									dialog_et.setText("");
+									Toast.makeText(AdminMainActivity.this,getResources().getString(R.string.adminmain_dialog_pwd_error),Toast.LENGTH_SHORT).show();
+
+								}
+
+
 //								}else{
 //									
 //									Toast.makeText(AdminMainActivity.this,getResources().getString(R.string.adminmain_dialog_title),Toast.LENGTH_SHORT).show();
@@ -159,7 +159,7 @@ public class AdminMainActivity extends Activity {
 			}
 		});
 
-		mAdminbutton_User.setOnClickListener(new OnClickListener() { 
+		mAdminbutton_User.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -213,25 +213,25 @@ public class AdminMainActivity extends Activity {
 		});
 
 	}
-	
-	// ÅĞ¶ÏAdminÃÜÂë
+
+	// åˆ¤æ–­Adminå¯†ç 
 	private boolean queryAdminPwd(String pwd) {
-		
+
 		mCursor = mVoteDB_log.query(mVoteDB_log.USER_TABLE_NAME, null, mVoteDB_log.USER_NAME+"=?",
-				new String[] {mVoteDB_log.ADMIN_USER_NAME}, null, null, null); 
-	
+				new String[] {mVoteDB_log.ADMIN_USER_NAME}, null, null, null);
+
 		if (mCursor != null)
 			mCursor.moveToFirst();
-		
+
 		if (pwd.equals(mCursor.getString(2))) {
-			
+
 			return true;
 		}
-		
+
 		return false;
-		
+
 	}
-	
+
 	private void initEdittextDialogView() {
 
 		DexttextDlg = new AlertDialog.Builder(AdminMainActivity.this).create();
@@ -248,7 +248,7 @@ public class AdminMainActivity extends Activity {
 		dialog_et.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-					int arg3) {
+									  int arg3) {
 				// TODO Auto-generated method stub
 				if (arg0.length() >= ENTRY_NAME_NUM) {
 					Toast.makeText(
@@ -262,7 +262,7 @@ public class AdminMainActivity extends Activity {
 
 			@Override
 			public void beforeTextChanged(CharSequence arg0, int arg1,
-					int arg2, int arg3) {
+										  int arg2, int arg3) {
 				// TODO Auto-generated method stub
 			}
 
@@ -270,22 +270,22 @@ public class AdminMainActivity extends Activity {
 			public void afterTextChanged(Editable arg0) {
 				// TODO Auto-generated method stub
 				try {
-					 String temp = arg0.toString();
-					        String tem = temp.substring(temp.length()-1, temp.length());
+					String temp = arg0.toString();
+					String tem = temp.substring(temp.length()-1, temp.length());
 					char[] temC = tem.toCharArray();
 					int mid = temC[0];
-					
-					if(mid>=48&&mid<=57){//Êı×Ö
-					return;
+
+					if(mid>=48&&mid<=57){//æ•°å­—
+						return;
 					}
-					if(mid>=65&&mid<=90){//´óĞ´×ÖÄ¸
-					return;
+					if(mid>=65&&mid<=90){//å¤§å†™å­—æ¯
+						return;
 					}
-					if(mid>=97&&mid<=122){//Ğ¡Ğ´×ÖÄ¸
-					return;
+					if(mid>=97&&mid<=122){//å°å†™å­—æ¯
+						return;
 					}
 					arg0.delete(temp.length()-1, temp.length());
-					} catch (Exception e) {
+				} catch (Exception e) {
 					// TODO: handle exception
 				}
 
@@ -313,14 +313,14 @@ public class AdminMainActivity extends Activity {
 		});
 
 	}
-	
+
 	private void dismissEditTextDialogView() {
-		
+
 		if(DexttextDlg != null)
 			DexttextDlg.dismiss();
-		
+
 	}
-	
+
 
 	private void initDialogView() {
 
@@ -354,77 +354,77 @@ public class AdminMainActivity extends Activity {
 		super.onResume();
 		is_LockVoteStatus();
 	}
-	
+
 	private void is_LockVoteStatus() {
-		
+
 		Boolean is_login = preferences.getBoolean("is_lockVote", false);
-		
+
 		if(is_login){
 			mAdminbutton_LockVote.setBackgroundResource(R.drawable.mainbutton_voteclose);
 		}else{
 			mAdminbutton_LockVote.setBackgroundResource(R.drawable.mainbutton_voteopen);
 		}
 	}
-	
+
 	private void LockVoteStatus(boolean status) {
-		
+
 		Editor editor = preferences.edit();
 		editor.putBoolean("is_lockVote", status);
-		// Ìá½»¸ü¸Ä
+		// æäº¤æ›´æ”¹
 		editor.commit();
-		
+
 	}
-	
+
 	private void lockVoteDialogView() {
 
 		initDialogView();
 
 		try {
 
-			dialog_title.setText(R.string.screen_mainmenu_dialog_title); 
-			
+			dialog_title.setText(R.string.screen_mainmenu_dialog_title);
+
 			Boolean is_login = preferences.getBoolean("is_lockVote", false);
-			
+
 			if(is_login){
-				
+
 				dialog_tv.setText(R.string.screen_login_LockVote_dialog_open);
-				
+
 				dialog_bt_ok.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						
+
 						mAdminbutton_LockVote.setBackgroundResource(R.drawable.mainbutton_voteopen);
-						
+
 						LockVoteStatus(false);
-						
+
 						if(dlg != null)
 							dlg.dismiss();
 					}
 				});
-				
+
 			}else{
 				dialog_tv.setText(R.string.screen_login_LockVote_dialog_close);
-				
+
 				dialog_bt_ok.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
 						mAdminbutton_LockVote.setBackgroundResource(R.drawable.mainbutton_voteclose);
-						
+
 						LockVoteStatus(true);
-						
+
 						if(dlg != null)
 							dlg.dismiss();
 					}
 				});
 			}
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
-	
+
 	private void exitDialogView() {
 
 		initDialogView();
@@ -461,7 +461,7 @@ public class AdminMainActivity extends Activity {
 //			mCursor.close();
 
 //			dialog_title.setText(R.string.screen_login_exit_dialog);
-			dialog_title.setText(R.string.screen_mainmenu_dialog_title); 
+			dialog_title.setText(R.string.screen_mainmenu_dialog_title);
 
 //			String aa = (getResources().getString(
 //					R.string.screen_login_exit_text)
@@ -485,21 +485,21 @@ public class AdminMainActivity extends Activity {
 					finish();
 					Editor editor = preferences.edit();
 					editor.putBoolean("is_login", false);
-					// Ìá½»¸ü¸Ä
+					// æäº¤æ›´æ”¹
 					editor.commit();
-					
+
 					// backups
 					if(Environment.isExternalStorageRemovable()){
-						
+
 						Databackups();
-						
+
 						Databackups_intern();
 					}else{
-						
+
 						Databackups();
 					}
-					
-					//ÏµÍ³ ÈÕÖ¾ µÇ³ö
+
+					//ç³»ç»Ÿ æ—¥å¿— ç™»å‡º
 					mVoteDB_log.insert_syslogtable(preferences.getString("last_login_username","Admin"),getResources().getString(R.string.System_Log_event_logout));
 
 				}
@@ -514,7 +514,7 @@ public class AdminMainActivity extends Activity {
 		}
 	}
 
-	//×Ö½ÚÁ÷¼Ó½âÃÜ
+	//å­—èŠ‚æµåŠ è§£å¯†
 	public static int dataEncDec(byte[] b, int v) {
 		int nRet = 0;
 		for (int i = 0; i < b.length; i++) {
@@ -524,12 +524,12 @@ public class AdminMainActivity extends Activity {
 		}
 		return nRet;
 	}
-	
+
 	// backups to neizhi
 	private void Databackups_intern() {
 		try {
 			File oldfile = new File("/storage/sdcard1/Vote");
-			
+
 			if (!oldfile.exists()) {
 				oldfile.mkdirs();
 			}
@@ -538,18 +538,18 @@ public class AdminMainActivity extends Activity {
 					.getParent().toString() + filePath);
 
 			String newPath =  "/storage/sdcard1/Vote/"
-					  + pucode + "_" + ET + "_" 
-					  + "Vote.db";
-			
+					+ pucode + "_" + ET + "_"
+					+ "Vote.db";
+
 
 			FileOutputStream fs = new FileOutputStream(newPath);
 			byte[] buffer = new byte[1024];
 			int bytesum = 0;
 			int byteread = 0;
 			while ((byteread = mInputStream.read(buffer)) != -1) {
-				
+
 				dataEncDec(buffer, 3);
-				bytesum += byteread; // ×Ö½ÚÊı ÎÄ¼ş´óĞ¡
+				bytesum += byteread; // å­—èŠ‚æ•° æ–‡ä»¶å¤§å°
 				System.out.println(bytesum);
 				fs.write(buffer, 0, byteread);
 			}
@@ -570,7 +570,7 @@ public class AdminMainActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// backups
 	private void Databackups() {
 		try {
@@ -593,15 +593,15 @@ public class AdminMainActivity extends Activity {
 					+ "/"
 					+ pucode + "_" + ET + "_"
 					+ getResources().getString(R.string.app_name) + ".db";
-			
+
 			FileOutputStream fs = new FileOutputStream(newPath);
 			byte[] buffer = new byte[1024];
 			int bytesum = 0;
 			int byteread = 0;
 			while ((byteread = mInputStream.read(buffer)) != -1) {
-				
+
 				dataEncDec(buffer, 3);
-				bytesum += byteread; // ×Ö½ÚÊı ÎÄ¼ş´óĞ¡
+				bytesum += byteread; // å­—èŠ‚æ•° æ–‡ä»¶å¤§å°
 				System.out.println(bytesum);
 				fs.write(buffer, 0, byteread);
 			}
@@ -624,35 +624,35 @@ public class AdminMainActivity extends Activity {
 	}
 
 	private void deleteDate() {
-		String Path1 = getFilesDir().getParent().toString(); 
+		String Path1 = getFilesDir().getParent().toString();
 		File oldfile2 = new File(Path1);
 		delete(oldfile2);
 		Log.v("crjlog", "oldfile2 = " + oldfile2);
-		
+
 		Editor editor = preferences.edit();
 		editor.clear();
 		editor.commit();
-		
-		
+
+
 		if(Environment.isExternalStorageRemovable()){
-			
+
 			String fileName = Environment.getExternalStorageDirectory().toString() + "/" + getResources().getString(R.string.app_name);
 			File fileText = new File(fileName);
 			delete(fileText);
-			
+
 			String fileName2 = "/storage/sdcard1/Vote";
 			File fileText2 = new File(fileName2);
 			delete(fileText2);
-			
-			
+
+
 		}else{
-			
+
 			String fileName = Environment.getExternalStorageDirectory().toString() + "/" + getResources().getString(R.string.app_name);
 			File fileText = new File(fileName);
 			delete(fileText);
-			
+
 		}
-		
+
 	}
 
 	public void delete(File file) {
@@ -686,11 +686,11 @@ public class AdminMainActivity extends Activity {
 
 		if (dlg != null)
 			dlg.dismiss();
-		
+
 		if(mCursor != null)
 			mCursor.close();
-		
+
 
 	}
-	
+
 }

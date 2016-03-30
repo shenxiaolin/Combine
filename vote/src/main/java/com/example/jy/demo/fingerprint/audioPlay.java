@@ -14,46 +14,46 @@ import android.util.Log;
 public class audioPlay {
 	//ToneGenerator.MAX_VOLUME = 100
 	private static final String TAG = "audioPlay";
-    private static ToneGenerator mToneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
-    private static MediaPlayer   mp  =   new MediaPlayer();
-    private Object mLock = new Object();//¼àÊÓÆ÷¶ÔÏóËø
+	private static ToneGenerator mToneGenerator = new ToneGenerator(AudioManager.STREAM_SYSTEM, ToneGenerator.MAX_VOLUME);
+	private static MediaPlayer   mp  =   new MediaPlayer();
+	private Object mLock = new Object();//ç›‘è§†å™¨å¯¹è±¡é”
 
 
-    //²¥·ÅÏµÍ³ÉùÒô (ToneGenerator.TONE_PROP_BEEP2, 100)
-    public int PlayTone(int toneType, int durationMs) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
+	//æ’­æ”¾ç³»ç»Ÿå£°éŸ³ (ToneGenerator.TONE_PROP_BEEP2, 100)
+	public int PlayTone(int toneType, int durationMs) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
 
 		synchronized(mLock) {
 			if (mToneGenerator == null) {
-			Log.e(TAG, "playTone: mToneGenerator == null");
-			return	0;
+				Log.e(TAG, "playTone: mToneGenerator == null");
+				return	0;
 			}
-			
+
 			if (mp == null) {
-			Log.e(TAG, "mp == null");
-			return	0;
+				Log.e(TAG, "mp == null");
+				return	0;
 			}
-			
+
 		}
 
-    		if (mToneGenerator != null) {
+		if (mToneGenerator != null) {
 			//(Tone, TONE_LENGTH_MS)	ToneGenerator.TONE_PROP_BEEP, ToneGenerator.TONE_PROP_PROMPT
 			mToneGenerator.startTone(toneType, durationMs);
-			
+
 		}
 		else
 		{
 			Log.e(TAG, "mToneGenerator Invalid !");
 			return	-1;
 		}
-	    return	0;
+		return	0;
 	}
 
-    //²¥·ÅÎÄ¼şÏµÍ³µÄ mp3 ÉùÒô
+	//æ’­æ”¾æ–‡ä»¶ç³»ç»Ÿçš„ mp3 å£°éŸ³
 	public int PlayFile(String filewithpath) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
 //	    String  path   =  "/sdcard/1.mp3";
 		if (mp != null){
 
-            mp.reset();	// ÖØÖÃ MediaPlayer
+			mp.reset();	// é‡ç½® MediaPlayer
 			mp.setDataSource(filewithpath);
 			mp.prepare();
 			mp.start();
@@ -65,116 +65,116 @@ public class audioPlay {
 		}
 		return	0;
 	}
-	
-	
+
+
 	public void PlayAsset(int key , AssetManager am) throws IllegalArgumentException, SecurityException, IllegalStateException, IOException {
 //	    String  path   =  "/sdcard/1.mp3";
-		
-		
+
+
 		switch (key) {
-		
-		case 1:	//PLAY_SOUND_PUCODE_ERROR
-			
-			Log.v("crjlog","1");
-			if (mp != null){
-				AssetFileDescriptor afd =  am.openFd("finger_scan_fail.wav");
-	            mp.reset();	// ÖØÖÃ MediaPlayer
-	            mp.setDataSource(afd.getFileDescriptor(),
-	            		afd.getStartOffset(),
-	            		afd.getLength());
-				mp.prepare();
-				mp.start();
-			}
-			else
-			{
-				Log.e(TAG, "MediaPlayer Invalid !"); 
-			}
-			
-			break;
-			
-		case 2:
-			
-			Log.v("crjlog","2");
-			if (mp != null){
-				AssetFileDescriptor afd =  am.openFd("put_finger.wav");
-	            mp.reset();	// ÖØÖÃ MediaPlayer
-	            mp.setDataSource(afd.getFileDescriptor(),
-	            		afd.getStartOffset(),
-	            		afd.getLength());
-				mp.prepare();
-				mp.start();
-			}
-			else
-			{
-				Log.e(TAG, "MediaPlayer Invalid !");
-			}
-			
-			break;
-			
-		case 3:
-			
-			break;
-			
-		case 4:	//fail
-			
-			if (mp != null){
+
+			case 1:	//PLAY_SOUND_PUCODE_ERROR
+
+				Log.v("crjlog","1");
+				if (mp != null){
+					AssetFileDescriptor afd =  am.openFd("finger_scan_fail.wav");
+					mp.reset();	// é‡ç½® MediaPlayer
+					mp.setDataSource(afd.getFileDescriptor(),
+							afd.getStartOffset(),
+							afd.getLength());
+					mp.prepare();
+					mp.start();
+				}
+				else
+				{
+					Log.e(TAG, "MediaPlayer Invalid !");
+				}
+
+				break;
+
+			case 2:
+
+				Log.v("crjlog","2");
+				if (mp != null){
+					AssetFileDescriptor afd =  am.openFd("put_finger.wav");
+					mp.reset();	// é‡ç½® MediaPlayer
+					mp.setDataSource(afd.getFileDescriptor(),
+							afd.getStartOffset(),
+							afd.getLength());
+					mp.prepare();
+					mp.start();
+				}
+				else
+				{
+					Log.e(TAG, "MediaPlayer Invalid !");
+				}
+
+				break;
+
+			case 3:
+
+				break;
+
+			case 4:	//fail
+
+				if (mp != null){
 //				AssetFileDescriptor afd =  am.openFd("finger_authentication_fail.mp3");
-				AssetFileDescriptor afd =  am.openFd("verification_fail.wav");
-	            mp.reset();	// ÖØÖÃ MediaPlayer
-	            mp.setDataSource(afd.getFileDescriptor(),
-	            		afd.getStartOffset(),
-	            		afd.getLength());
-				mp.prepare();
-				mp.start();
-			}
-			else
-			{
-				Log.e(TAG, "MediaPlayer Invalid !");
-			}
-			
-			
-			break;
-			
-		case 5:	//success
-			
-			if (mp != null){
+					AssetFileDescriptor afd =  am.openFd("verification_fail.wav");
+					mp.reset();	// é‡ç½® MediaPlayer
+					mp.setDataSource(afd.getFileDescriptor(),
+							afd.getStartOffset(),
+							afd.getLength());
+					mp.prepare();
+					mp.start();
+				}
+				else
+				{
+					Log.e(TAG, "MediaPlayer Invalid !");
+				}
+
+
+				break;
+
+			case 5:	//success
+
+				if (mp != null){
 //				AssetFileDescriptor afd =  am.openFd("finger_verification.mp3");
-				AssetFileDescriptor afd =  am.openFd("verification_passed.wav");
-	            mp.reset();	// ÖØÖÃ MediaPlayer
-	            mp.setDataSource(afd.getFileDescriptor(),
-	            		afd.getStartOffset(),
-	            		afd.getLength());
-				mp.prepare();
-				mp.start();
-			}
-			else
-			{
-				Log.e(TAG, "MediaPlayer Invalid !");
-			}
-			
-			break;
+					AssetFileDescriptor afd =  am.openFd("verification_passed.wav");
+					mp.reset();	// é‡ç½® MediaPlayer
+					mp.setDataSource(afd.getFileDescriptor(),
+							afd.getStartOffset(),
+							afd.getLength());
+					mp.prepare();
+					mp.start();
+				}
+				else
+				{
+					Log.e(TAG, "MediaPlayer Invalid !");
+				}
+
+				break;
 
 		}
-		
-		
+
+
 
 	}
 
-	//ÊÍ·Å ²¥·ÅÆ÷×ÊÔ´
+	//é‡Šæ”¾ æ’­æ”¾å™¨èµ„æº
 	public int PlayRelease(){
-		
+
 		if (mToneGenerator != null){
-			//yjh 2014.03.13  ÆÁ±ÎÔ­Òò: esc¼üÍË³öÓ¦ÓÃÒÔºó,ÔÙ´Î½øÈë¶Á¿¨²¥·ÅÏµÍ³ Tone Ó¦ÓÃ³ÌĞò±ÀÀ£ÍË³ö, ´íÎóÌáÊ¾: mToneGenerator µ÷ÓÃÒÑÊÍ·Å½Ó¿Ú
+			//yjh 2014.03.13  å±è”½åŸå› : escé”®é€€å‡ºåº”ç”¨ä»¥å,å†æ¬¡è¿›å…¥è¯»å¡æ’­æ”¾ç³»ç»Ÿ Tone åº”ç”¨ç¨‹åºå´©æºƒé€€å‡º, é”™è¯¯æç¤º: mToneGenerator è°ƒç”¨å·²é‡Šæ”¾æ¥å£
 //			mToneGenerator.release();
 		}
 
-        if (mp != null) {
-        	//yjh 2014.03.13  add stop()
-        	mp.stop();
-            mp.reset();
-            //yjh 2014.03.13  ÆÁ±ÎÔ­Òò: ·´¸´½ø³ö person ½çÃæ¶Á¿¨ºóÓ¦ÓÃ³ÌĞò±ÀÀ£ÍË³ö, ´íÎóÌáÊ¾:Caused by: java.lang.IllegalStateException
+		if (mp != null) {
+			//yjh 2014.03.13  add stop()
+			mp.stop();
+			mp.reset();
+			//yjh 2014.03.13  å±è”½åŸå› : åå¤è¿›å‡º person ç•Œé¢è¯»å¡ååº”ç”¨ç¨‹åºå´©æºƒé€€å‡º, é”™è¯¯æç¤º:Caused by: java.lang.IllegalStateException
 //            mp.release();
-        }
+		}
 		return	0;
 	}
 

@@ -65,24 +65,24 @@ public class fprint extends Activity {
 
 		if (resultCode == Activity.RESULT_OK) {
 
-			String sdStatus = Environment.getExternalStorageState();// »ñÈ¡sd¿¨Â·¾¶
-			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // ¼ì²âsdÊÇ·ñ¿ÉÓÃ
+			String sdStatus = Environment.getExternalStorageState();// è·å–sdå¡è·¯å¾„
+			if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // æ£€æµ‹sdæ˜¯å¦å¯ç”¨
 				Log.v("crjlog", "SD card is not avaiable/writeable right now.");
 				return;
 			}
 
 			Bundle bundle = data.getExtras();
-			Bitmap bitmap = (Bitmap) bundle.get("data");// »ñÈ¡Ïà»ú·µ»ØµÄÊı¾İ£¬²¢×ª»»ÎªBitmapÍ¼Æ¬¸ñÊ½
+			Bitmap bitmap = (Bitmap) bundle.get("data");// è·å–ç›¸æœºè¿”å›çš„æ•°æ®ï¼Œå¹¶è½¬æ¢ä¸ºBitmapå›¾ç‰‡æ ¼å¼
 			FileOutputStream outStream = null;
-			File file = new File("/sdcard/myImage/");// ´´½¨ÕÕÆ¬´æ·ÅµÄÎ»ÖÃ
+			File file = new File("/sdcard/myImage/");// åˆ›å»ºç…§ç‰‡å­˜æ”¾çš„ä½ç½®
 			if (!file.exists()) {
-				file.mkdirs();// ´´½¨ÎÄ¼ş¼Ğ
+				file.mkdirs();// åˆ›å»ºæ–‡ä»¶å¤¹
 			}
-			String fileName = "/sdcard/myImage/33333.bmp";// ´´½¨ÎÄ¼şÃû³Æ
+			String fileName = "/sdcard/myImage/33333.bmp";// åˆ›å»ºæ–‡ä»¶åç§°
 
 			try {
-				outStream = new FileOutputStream(fileName);// ´´½¨Â·¾¶ÎÄ¼şµÄÊä³öÁ÷
-				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);// °ÑÊı¾İĞ´ÈëÎÄ¼ş
+				outStream = new FileOutputStream(fileName);// åˆ›å»ºè·¯å¾„æ–‡ä»¶çš„è¾“å‡ºæµ
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);// æŠŠæ•°æ®å†™å…¥æ–‡ä»¶
 
 				Log.v("crjlog", "onActivityResult");
 
@@ -97,7 +97,7 @@ public class fprint extends Activity {
 				}
 			}
 
-			logoview.setImageBitmap(bitmap);// ½«Í¼Æ¬ÏÔÊ¾ÔÚImageViewÀï
+			logoview.setImageBitmap(bitmap);// å°†å›¾ç‰‡æ˜¾ç¤ºåœ¨ImageViewé‡Œ
 
 		}
 

@@ -13,9 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView;  
-import android.widget.ArrayAdapter;  
-import android.widget.SimpleAdapter;  
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 
 import com.xd.rfid;
@@ -24,98 +24,98 @@ import com.xd.Converter;
 
 public class SimTestActivity extends Activity {
 	private final String TAG1 = "SimTestActivity";
-	//ÉùÃ÷spinner¶ÔÏó  
-    private Spinner spinner1,spinner2,spinner3;
-    private Button btn_reset, btn_apdu;
-    private byte st_slot = 0;
-    private int st_baut = 0;
-    private int st_volt = 0;
-    private int nRet = 0;
-    private TextView mTvRestEcho;
-    private TextView mTvCmdEcho;
-    private EditText mEtCmd;
+	//å£°æ˜spinnerå¯¹è±¡  
+	private Spinner spinner1,spinner2,spinner3;
+	private Button btn_reset, btn_apdu;
+	private byte st_slot = 0;
+	private int st_baut = 0;
+	private int st_volt = 0;
+	private int nRet = 0;
+	private TextView mTvRestEcho;
+	private TextView mTvCmdEcho;
+	private EditText mEtCmd;
 	byte[] bATR = new byte[64];
 	byte[] bATRlen = new byte[1];
 	String strOut;
 	long t0, t1;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.simtest);
-		
+
 		com.xd.rfid.samOpen(1);
-        //¸ù¾İid»ñÈ¡¶ÔÏó  
-        spinner1=(Spinner) findViewById(R.id.spinner_slot);  
-        spinner2=(Spinner) findViewById(R.id.spinner_baut);  
-        spinner3=(Spinner) findViewById(R.id.spinner_volt);
-        
-        //ÉèÖÃ»ñÈ¡½¹µã
-        spinner1.setFocusable(true);
-        spinner1.setFocusableInTouchMode(true);
-        spinner1.requestFocus();
-        spinner1.requestFocusFromTouch();
+		//æ ¹æ®idè·å–å¯¹è±¡
+		spinner1=(Spinner) findViewById(R.id.spinner_slot);
+		spinner2=(Spinner) findViewById(R.id.spinner_baut);
+		spinner3=(Spinner) findViewById(R.id.spinner_volt);
 
-        //ÏÔÊ¾µÄÊı×é  
-        final String arr1[]=new String[]{  
-                "1",  
-                "2",  
-                "3",  
-                "4" 
-        };
-        
-        final String arr2[]=new String[]{  
-                "9600",
-                "19200",
-                "38400",
-                "115200"
-         };
+		//è®¾ç½®è·å–ç„¦ç‚¹
+		spinner1.setFocusable(true);
+		spinner1.setFocusableInTouchMode(true);
+		spinner1.requestFocus();
+		spinner1.requestFocusFromTouch();
 
-        final String arr3[]=new String[]{  
-                "1.8v",
-                "3.3v",
-                "5.0v"
-         };
-        
-        //arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //ÉèÖÃÏÔÊ¾µÄÊı¾İ  
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, arr1);
-        spinner1.setAdapter(arrayAdapter);
-        
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, arr2);	//simple_spinner_item
-        spinner2.setAdapter(arrayAdapter);
-        
-        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, arr3);
-        spinner3.setAdapter(arrayAdapter);
+		//æ˜¾ç¤ºçš„æ•°ç»„
+		final String arr1[]=new String[]{
+				"1",
+				"2",
+				"3",
+				"4"
+		};
+
+		final String arr2[]=new String[]{
+				"9600",
+				"19200",
+				"38400",
+				"115200"
+		};
+
+		final String arr3[]=new String[]{
+				"1.8v",
+				"3.3v",
+				"5.0v"
+		};
+
+		//arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		//è®¾ç½®æ˜¾ç¤ºçš„æ•°æ®
+		ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, arr1);
+		spinner1.setAdapter(arrayAdapter);
+
+		arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, arr2);	//simple_spinner_item
+		spinner2.setAdapter(arrayAdapter);
+
+		arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_singlechoice, arr3);
+		spinner3.setAdapter(arrayAdapter);
 
 //      Toast.makeText(getApplicationContext(), "main Thread"+spinner1.getItemIdAtPosition(spinner1.getSelectedItemPosition()), Toast.LENGTH_LONG).show();  
-          
-        //ÏÂÀ­ÁĞ±í¿ò×¢²áÊÂ¼ş, µ±Ñ¡ÔñÏî±ä»¯Ê±, ½ÓÊÕÏûÏ¢´¦Àí  
-        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {  
-  
-            @Override  
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {  
-                Spinner spinner1=(Spinner) parent;  
-                //Toast.makeText(getApplicationContext(), "xxxx"+spinner1.getItemAtPosition(position), Toast.LENGTH_LONG).show();  
-            }  
-  
-            @Override  
-            public void onNothingSelected(AdapterView<?> parent) {  
-                //Toast.makeText(getApplicationContext(), "Ã»ÓĞ¸Ä±äµÄ´¦Àí", Toast.LENGTH_LONG).show();  
-            }  
-  
-        });
 
-        
-        //ÉèÖÃcos Ä¬ÈÏÃüÁî
-        mEtCmd = (EditText) findViewById(R.id.editText_cmd);
-        mEtCmd.setText("00A40000023F00");
-        //mEtCmd.setText("0084000004");	//get random num
-        
-        //°´Å¥´¦Àí
+		//ä¸‹æ‹‰åˆ—è¡¨æ¡†æ³¨å†Œäº‹ä»¶, å½“é€‰æ‹©é¡¹å˜åŒ–æ—¶, æ¥æ”¶æ¶ˆæ¯å¤„ç†
+		spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				Spinner spinner1=(Spinner) parent;
+				//Toast.makeText(getApplicationContext(), "xxxx"+spinner1.getItemAtPosition(position), Toast.LENGTH_LONG).show();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				//Toast.makeText(getApplicationContext(), "æ²¡æœ‰æ”¹å˜çš„å¤„ç†", Toast.LENGTH_LONG).show();
+			}
+
+		});
+
+
+		//è®¾ç½®cos é»˜è®¤å‘½ä»¤
+		mEtCmd = (EditText) findViewById(R.id.editText_cmd);
+		mEtCmd.setText("00A40000023F00");
+		//mEtCmd.setText("0084000004");	//get random num
+
+		//æŒ‰é’®å¤„ç†
 		btn_reset = (Button) this.findViewById(R.id.button_reset);
 		btn_apdu = (Button) this.findViewById(R.id.button_apdu);
-		
+
 		btn_reset.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -125,19 +125,19 @@ public class SimTestActivity extends Activity {
 				st_volt =        spinner3.getSelectedItemPosition() + 1;	//base from 0, so add 1
 				//Integer.parseInt(spinner2.getItemAtPosition(spinner2.getSelectedItemPosition()).toString())
 				Log.i(TAG1, "slot="+st_slot+" baut="+st_baut+" volt="+st_volt);
-				
-				
+
+
 				mTvRestEcho = (TextView) findViewById(R.id.textView_para);
-				mTvRestEcho.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);	//ÏÂ»®Ïß
+				mTvRestEcho.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);	//ä¸‹åˆ’çº¿
 				mTvRestEcho.setTextColor(Color.BLUE);
 //				mTvRestEcho.setText("Slot="+st_slot+" baut="+st_baut+ " volt="+st_volt);
-				
+
 				t0 = System.currentTimeMillis();
 				nRet = com.xd.rfid.samReset( st_slot, st_baut, st_volt, bATR, bATRlen);
 				t1 = System.currentTimeMillis();
 				if (nRet == 0)
 				{
-					strOut = "ATR=" + Converter.printHexLenString(bATR, bATRlen[0]) + 
+					strOut = "ATR=" + Converter.printHexLenString(bATR, bATRlen[0]) +
 							",  Len=" + bATRlen[0] + ", time=" + (t1-t0) + "(ms)";
 				}
 				else
@@ -146,28 +146,28 @@ public class SimTestActivity extends Activity {
 				}
 				mTvRestEcho.setText(strOut);
 			}
-		});	
-		
-		
+		});
+
+
 		btn_apdu.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				
+
 				mTvCmdEcho = (TextView) findViewById(R.id.textView_cmdEcho);
-				mTvCmdEcho.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);	//ÏÂ»®Ïß
+				mTvCmdEcho.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);	//ä¸‹åˆ’çº¿
 				mTvCmdEcho.setTextColor(Color.BLUE);
-				
+
 				byte[] bCmd = null;
 				byte[] cosResponse = new byte[255];
 				short[] cosResLenth = new short[1];
 				//short[] cosSW = new short[1];
 				byte[] bSW = new byte[2];
-				
+
 				//bCmd = mEtCmd.getText().toString().getBytes();	//just change "00A400" to 303041343030, not 00A400
 				//strOut = "slot="+st_slot+" cmd=" + mEtCmd.getText().toString() + " len=" + bCmd.length;
 				bCmd = Converter.hexStringToBytes(mEtCmd.getText().toString());		//change "00A400" to 00A400
-				
+
 				t0 = System.currentTimeMillis();
 				nRet = com.xd.rfid.samApdu(st_slot, bCmd, (short)bCmd.length, cosResponse, cosResLenth, bSW );
 				t1 = System.currentTimeMillis();
@@ -176,7 +176,7 @@ public class SimTestActivity extends Activity {
 					//bSW[0] = (byte)( cosSW[0] & 0xff00 >> 8);
 					//bSW[1] = (byte)( cosSW[0] & 0x00ff);
 //					strOut = "Apdu [" + mEtCmd.getText().toString() + "] success, sw=[" + Converter.printHexLenString(bSW, 2) + "] Cmd Echo=[" + Converter.printHexLenString(cosResponse, (int)cosResLenth[0]) + "]";
-					strOut = "sim Apdu OK, SW=" + Converter.printHexLenString(bSW, 2) + 
+					strOut = "sim Apdu OK, SW=" + Converter.printHexLenString(bSW, 2) +
 							",  EchoData=" + Converter.printHexLenString(cosResponse, (int)cosResLenth[0]) +
 							",  EchoLen=" + cosResLenth[0] + ", time=" + (t1-t0) + "(ms)";
 				}
@@ -185,21 +185,21 @@ public class SimTestActivity extends Activity {
 					strOut = "sim Apdu failed, nRet="+nRet;
 				}
 
-				mTvCmdEcho.setText(strOut);				
+				mTvCmdEcho.setText(strOut);
 			}
-		});        
-        
-        
+		});
+
+
 	}
 
-	
-	
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	
+
+
 }

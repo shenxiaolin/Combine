@@ -71,23 +71,23 @@ import android.widget.Toast;
 
 import com.example.jy.demo.fingerprint.R;
 
-//Ê¾ÀıÅÄÕÕ²¢µ÷ÓÃÊ¶±ğ½«½á¹ûÏÔÊ¾ÔÚÕâ¸ö³ÌĞò½á¹û½çÃæ
+//ç¤ºä¾‹æ‹ç…§å¹¶è°ƒç”¨è¯†åˆ«å°†ç»“æœæ˜¾ç¤ºåœ¨è¿™ä¸ªç¨‹åºç»“æœç•Œé¢
 public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	private static final String TAG = "CameraActivity";
 	public static final String PATH = Environment.getExternalStorageDirectory()
 			.toString() + "/wtimage/";
 	private String strCaptureFilePath = PATH + "/camera_snap.jpg";
 	public static final Uri IMAGE_URI = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-	// Ô¤ÀÀ³ß´ç Ä¬ÈÏÉèÖÃ
+	// é¢„è§ˆå°ºå¯¸ é»˜è®¤è®¾ç½®
 	public int WIDTH = 320;// 640;//1024;
 	public int HEIGHT = 480;// 480;//768;
-	// ÅÄÉã³ß´ç Ä¬ÈÏÉèÖÃ
+	// æ‹æ‘„å°ºå¯¸ é»˜è®¤è®¾ç½®
 	public int srcwidth = 2048;// 1600;//2048;final
 	public int srcheight = 1536;// 1200;//1536;final
-	// ²ÃÇĞ³ß´ç
+	// è£åˆ‡å°ºå¯¸
 	private int cutwidth = 1300;// 1845;//1100;
 	private int cutheight = 200;// 1155;//750;
-	// Ö¤¼şÀàĞÍ
+	// è¯ä»¶ç±»å‹
 	int nMainID = 0;
 	String imagename = "";
 	private ImageButton backbtn, confirmbtn, resetbtn, takepicbtn, lighton,
@@ -107,7 +107,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	private List<String> focusModes;
 	private String path = "";
 	public long fastClick = 0;
-	public int recogType = -1;// ×Ô¶¯Ê¶±ğ¡¢»®ÏßÊ¶±ğ
+	public int recogType = -1;// è‡ªåŠ¨è¯†åˆ«ã€åˆ’çº¿è¯†åˆ«
 	public boolean isVinRecog;
 	private int width, height;
 	private ImageView top_left, top_right, bottom_left, bottom_right, left_cut,
@@ -130,7 +130,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	public static final int KEYCODE_F2 = 132;
 	public static final int KEYCODE_F3 = 133;
 	private boolean isTakePic = false;
-	private boolean isAutoTakePic = false;// ÊÇ·ñÉèÖÃ×Ô¶¯ÅÄÕÕÊ¶±ğ¹¦ÄÜ
+	private boolean isAutoTakePic = false;// æ˜¯å¦è®¾ç½®è‡ªåŠ¨æ‹ç…§è¯†åˆ«åŠŸèƒ½
 	Handler handler = new Handler();
 	Runnable runnable = new Runnable() {
 		@Override
@@ -151,7 +151,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 		/*if (readPreferences("", "isAutoTakePic") == 1)
 			isAutoTakePic = true;
 		else if (readPreferences("", "isAutoTakePic") == 0)*/
-			isAutoTakePic = false;//ÅĞ¶ÏÊÇ·ñ×Ô¶¯ÅÄÕÕ£¬ÎÒ¸Ä³ÉÁËÊÖ¶¯ÅÄÕÕ ÔËĞĞÊÔÊÔ
+		isAutoTakePic = false;//åˆ¤æ–­æ˜¯å¦è‡ªåŠ¨æ‹ç…§ï¼Œæˆ‘æ”¹æˆäº†æ‰‹åŠ¨æ‹ç…§ è¿è¡Œè¯•è¯•
 		new Thread() {
 			public void run() {
 				try {
@@ -198,7 +198,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 				}
 			}
 		}
-		// ÉèÖÃÅÄÉã³ß´ç
+		// è®¾ç½®æ‹æ‘„å°ºå¯¸
 		Intent intentget = this.getIntent();
 		srcwidth = intentget.getIntExtra("srcwidth", 2048);
 		srcheight = intentget.getIntExtra("srcheight", 1536);
@@ -212,14 +212,14 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 		surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		mlist = new ArrayList<float[]>();
 		sManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		// ¼àÌı´«¸ĞÆ÷ÊÂ¼ş
+		// ç›‘å¬ä¼ æ„Ÿå™¨äº‹ä»¶
 		myListener = new SensorEventListener() {
 			public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
 			}
 
 			public void onSensorChanged(SensorEvent event) {
-				long now_Time = System.currentTimeMillis();// »ñÈ¡µ±Ç°Ê±¼ä
+				long now_Time = System.currentTimeMillis();// è·å–å½“å‰æ—¶é—´
 				long time_Difference = now_Time - last_Time;
 
 				if (time_Difference >= UPTATE_Difference_TIME) {
@@ -237,7 +237,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 					// {
 					// afterCount++;
 					// }
-					System.out.println("´ÎÊı:" + count );
+					System.out.println("æ¬¡æ•°:" + count );
 					if (isAutoTakePic) {
 						if (move_Difference <= MoveDifference
 								&& move_Difference >= MoveDifferencemin
@@ -245,7 +245,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
 							if (!noShakeBoolean) {
 								noShakeBoolean = true;
-								handler.postDelayed(runnable, 2000);// Ã¿Á½ÃëÃëÖ´ĞĞÒ»´Îrunnable.Æô¶¯³ÌĞò
+								handler.postDelayed(runnable, 2000);// æ¯ä¸¤ç§’ç§’æ‰§è¡Œä¸€æ¬¡runnable.å¯åŠ¨ç¨‹åº
 								takePicture();
 								// if(afterCount==4){
 								// camera.takePicture(shutterCallback, null,
@@ -257,7 +257,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 							afterCount = 0;
 							System.out.println("count:" + count);
 							noShakeBoolean = false;
-							handler.removeCallbacks(runnable);// Í£Ö¹¼ÆÊ±Æ÷£¬Ã¿µ±ÅÄÕÕ»òÍË³öÊ±¶¼ÒªÖ´ĞĞÕâ¶Î´úÂë¡£
+							handler.removeCallbacks(runnable);// åœæ­¢è®¡æ—¶å™¨ï¼Œæ¯å½“æ‹ç…§æˆ–é€€å‡ºæ—¶éƒ½è¦æ‰§è¡Œè¿™æ®µä»£ç ã€‚
 						}
 					}
 				}
@@ -454,46 +454,46 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	private class mClickListener implements OnClickListener {
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.backbtn:
-				finish();
-				break;
-			// ÅÄÕÕ
-			case R.id.takepic_btn:
-				// handler.removeCallbacks(runnable);// Í£Ö¹¼ÆÊ±Æ÷£¬Ã¿µ±ÅÄÕÕ»òÍË³öÊ±¶¼ÒªÖ´ĞĞÕâ¶Î´úÂë¡£
-				takepicbtn.setEnabled(false);
-				takePicture();
-				break;
-			case R.id.lighton:
-				lightoff.setVisibility(View.VISIBLE);
-				lighton.setVisibility(View.INVISIBLE);
-				light_text.setText(getString(R.string.light2_string));
-				// ¿ªÆôÉÁ¹âµÆ
-				Camera.Parameters parameters = camera.getParameters();
-				parameters.set("flash-mode", "on");
-				camera.setParameters(parameters);
-				break;
-			case R.id.lightoff:
-				lighton.setVisibility(View.VISIBLE);
-				lightoff.setVisibility(View.INVISIBLE);
-				light_text.setText(getString(R.string.light1_string));
-				// ¹Ø±ÕÉÁ¹âµÆ
-				Camera.Parameters parameters2 = camera.getParameters();
-				parameters2.set("flash-mode", "off");
-				camera.setParameters(parameters2);
-				break;
-			case R.id.cuton:
-				cuton.setVisibility(View.INVISIBLE);
-				cutoff.setVisibility(View.VISIBLE);
-				cut_text.setText(getString(R.string.ClosedCutting));
-				cut = true;
-				break;
+				case R.id.backbtn:
+					finish();
+					break;
+				// æ‹ç…§
+				case R.id.takepic_btn:
+					// handler.removeCallbacks(runnable);// åœæ­¢è®¡æ—¶å™¨ï¼Œæ¯å½“æ‹ç…§æˆ–é€€å‡ºæ—¶éƒ½è¦æ‰§è¡Œè¿™æ®µä»£ç ã€‚
+					takepicbtn.setEnabled(false);
+					takePicture();
+					break;
+				case R.id.lighton:
+					lightoff.setVisibility(View.VISIBLE);
+					lighton.setVisibility(View.INVISIBLE);
+					light_text.setText(getString(R.string.light2_string));
+					// å¼€å¯é—ªå…‰ç¯
+					Camera.Parameters parameters = camera.getParameters();
+					parameters.set("flash-mode", "on");
+					camera.setParameters(parameters);
+					break;
+				case R.id.lightoff:
+					lighton.setVisibility(View.VISIBLE);
+					lightoff.setVisibility(View.INVISIBLE);
+					light_text.setText(getString(R.string.light1_string));
+					// å…³é—­é—ªå…‰ç¯
+					Camera.Parameters parameters2 = camera.getParameters();
+					parameters2.set("flash-mode", "off");
+					camera.setParameters(parameters2);
+					break;
+				case R.id.cuton:
+					cuton.setVisibility(View.INVISIBLE);
+					cutoff.setVisibility(View.VISIBLE);
+					cut_text.setText(getString(R.string.ClosedCutting));
+					cut = true;
+					break;
 
-			case R.id.cutoff:
-				cuton.setVisibility(View.VISIBLE);
-				cutoff.setVisibility(View.INVISIBLE);
-				cut_text.setText(getString(R.string.OpenedCutting));
-				cut = false;
-				break;
+				case R.id.cutoff:
+					cuton.setVisibility(View.VISIBLE);
+					cutoff.setVisibility(View.INVISIBLE);
+					cut_text.setText(getString(R.string.OpenedCutting));
+					cut = false;
+					break;
 			}
 
 		}
@@ -507,13 +507,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 		return result;
 	}
 
-	// ¶ÁÈ¡ÅäÖÃÎÄ¼ş
+	// è¯»å–é…ç½®æ–‡ä»¶
 	public String readtxt() throws IOException {
 		File sdDir = null;
 		boolean sdCardExist = Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED); // ÅĞ¶Ïsd¿¨ÊÇ·ñ´æÔÚ
+				android.os.Environment.MEDIA_MOUNTED); // åˆ¤æ–­sdå¡æ˜¯å¦å­˜åœ¨
 		if (sdCardExist) {
-			sdDir = Environment.getExternalStorageDirectory();// »ñÈ¡¸úÄ¿Â¼
+			sdDir = Environment.getExternalStorageDirectory();// è·å–è·Ÿç›®å½•
 		}
 		String paths = sdDir.toString();
 		if (paths.equals("") || paths == null) {
@@ -546,19 +546,19 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 		return false;
 	}
 
-	/* ´¦Àíµã»÷ÊÂ¼ş */
+	/* å¤„ç†ç‚¹å‡»äº‹ä»¶ */
 	public void click(View v) {
 		switch (v.getId()) {
 
 		}
 	}
 
-	/* ÅÄÕÕ¶Ô½¹ */
-	/* ÅÄÕÕ */
+	/* æ‹ç…§å¯¹ç„¦ */
+	/* æ‹ç…§ */
 	public void takePicture() {
 		if (camera != null) {
 			try {
-				
+
 				camera.cancelAutoFocus();
 				top_left.setBackgroundResource(R.drawable.top_left);
 				bottom_left.setBackgroundResource(R.drawable.bottom_left);
@@ -567,7 +567,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 				showFourImageView();
 				if (camera.getParameters().getSupportedFocusModes() != null
 						&& camera.getParameters().getSupportedFocusModes()
-								.contains(Camera.Parameters.FOCUS_MODE_AUTO)) 
+						.contains(Camera.Parameters.FOCUS_MODE_AUTO))
 				{
 					camera.autoFocus(new AutoFocusCallback() {
 						public void onAutoFocus(boolean success, Camera camera) {
@@ -579,13 +579,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 								top_right.setBackgroundResource(R.drawable.top_right_s);
 								bottom_right.setBackgroundResource(R.drawable.bottom_right_s);
 								showFourImageView();
-									camera.takePicture(shutterCallback, null,
-											PictureCallback);
+								camera.takePicture(shutterCallback, null,
+										PictureCallback);
 								//}
 							} else {
 								/*if (count == 5) {*/
-									//camera.takePicture(shutterCallback, null,
-									//		PictureCallback);
+								//camera.takePicture(shutterCallback, null,
+								//		PictureCallback);
 								//}
 								top_left.setBackgroundResource(R.drawable.top_left);
 								bottom_left.setBackgroundResource(R.drawable.bottom_left);
@@ -597,7 +597,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 						}
 					});
 				} else {
-				//	camera.takePicture(shutterCallback, null, PictureCallback);
+					//	camera.takePicture(shutterCallback, null, PictureCallback);
 					Toast.makeText(getBaseContext(),
 							getString(R.string.unsupport_auto_focus),
 							Toast.LENGTH_LONG).show();
@@ -616,35 +616,35 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 		}
 	}
 
-	// ¿ìÃÅ°´ÏÂµÄÊ±ºòonShutter()±»»Øµ÷ÅÄÕÕÉùÒô
+	// å¿«é—¨æŒ‰ä¸‹çš„æ—¶å€™onShutter()è¢«å›è°ƒæ‹ç…§å£°éŸ³
 	private ShutterCallback shutterCallback = new ShutterCallback() {
 		public void onShutter() {
 			if (tone == null)
-				// ·¢³öÌáÊ¾ÓÃ»§µÄÉùÒô
+				// å‘å‡ºæç¤ºç”¨æˆ·çš„å£°éŸ³
 				tone = new ToneGenerator(1,// AudioManager.AUDIOFOCUS_REQUEST_GRANTED
 						ToneGenerator.MIN_VOLUME);
 			tone.startTone(ToneGenerator.TONE_PROP_BEEP);
 		}
 	};
 
-	/* ÅÄÕÕºó»ØÏÔ */
+	/* æ‹ç…§åå›æ˜¾ */
 	private PictureCallback PictureCallback = new PictureCallback() {
 		public void onPictureTaken(byte[] data, Camera camera) {
 			count = 0;
 			afterCount = 0;
 			Log.i(TAG, "onPictureTaken");
 			BitmapFactory.Options opts = new BitmapFactory.Options();
-			// ÉèÖÃ³ÉÁËtrue,²»Õ¼ÓÃÄÚ´æ£¬Ö»»ñÈ¡bitmap¿í¸ß
+			// è®¾ç½®æˆäº†true,ä¸å ç”¨å†…å­˜ï¼Œåªè·å–bitmapå®½é«˜
 			opts.inJustDecodeBounds = true;
-			// ¸ù¾İÄÚ´æ´óĞ¡ÉèÖÃ²ÉÑùÂÊ
-			// ĞèÒª²âÊÔ£¡
+			// æ ¹æ®å†…å­˜å¤§å°è®¾ç½®é‡‡æ ·ç‡
+			// éœ€è¦æµ‹è¯•ï¼
 			int SampleSize = computeSampleSize(opts, -1, 2048 * 1536);
 			opts.inSampleSize = SampleSize;
 			opts.inJustDecodeBounds = false;
 			opts.inPurgeable = true;
 			opts.inInputShareable = true;
 			// opts.inNativeAlloc = true;
-			// //ÊôĞÔÉèÖÃÎªtrue£¬¿ÉÒÔ²»°ÑÊ¹ÓÃµÄÄÚ´æËãµ½VMÀï¡£SDKÄ¬ÈÏ²»¿ÉÉèÖÃÕâ¸ö±äÁ¿£¬Ö»ÄÜÓÃ·´ÉäÉèÖÃ¡£
+			// //å±æ€§è®¾ç½®ä¸ºtrueï¼Œå¯ä»¥ä¸æŠŠä½¿ç”¨çš„å†…å­˜ç®—åˆ°VMé‡Œã€‚SDKé»˜è®¤ä¸å¯è®¾ç½®è¿™ä¸ªå˜é‡ï¼Œåªèƒ½ç”¨åå°„è®¾ç½®ã€‚
 			try {
 				Field field = BitmapFactory.Options.class
 						.getDeclaredField("inNativeAlloc");
@@ -666,7 +666,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 						bitmap.getHeight(), matrix, true);
 			}
 			imagedata = data;
-			/* ´´½¨ÎÄ¼ş */
+			/* åˆ›å»ºæ–‡ä»¶ */
 			File dir = new File(PATH);
 			if (!dir.exists()) {
 				dir.mkdirs();
@@ -675,13 +675,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 			try {
 				BufferedOutputStream bos = new BufferedOutputStream(
 						new FileOutputStream(myCaptureFile));
-				/* ²ÉÓÃÑ¹Ëõ×ªµµ·½·¨ */
+				/* é‡‡ç”¨å‹ç¼©è½¬æ¡£æ–¹æ³• */
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-				/* µ÷ÓÃflush()·½·¨£¬¸üĞÂBufferStream */
+				/* è°ƒç”¨flush()æ–¹æ³•ï¼Œæ›´æ–°BufferStream */
 				bos.flush();
-				/* ½áÊøOutputStream */
+				/* ç»“æŸOutputStream */
 				bos.close();
-				// Òş²Ø½¹µãÍ¼Æ¬ºÍĞĞÊ»Ö¤Íâ¿ò
+				// éšè—ç„¦ç‚¹å›¾ç‰‡å’Œè¡Œé©¶è¯å¤–æ¡†
 
 				if (nMainID == 1100 || nMainID == 1101) {
 					hideTwoCutImageView();
@@ -689,7 +689,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 					hideFourImageView();
 				}
 
-				/* ½«ÅÄÕÕÏÂÀ´ÇÒ±£´æÍê±ÏµÄÍ¼ÎÄ¼ş£¬ÏÔÊ¾³öÀ´ */
+				/* å°†æ‹ç…§ä¸‹æ¥ä¸”ä¿å­˜å®Œæ¯•çš„å›¾æ–‡ä»¶ï¼Œæ˜¾ç¤ºå‡ºæ¥ */
 				imageView.setImageBitmap(bitmap);
 				// takepicbtn.setVisibility(View.INVISIBLE);
 				// backbtn.setVisibility(View.INVISIBLE);
@@ -701,7 +701,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 				savephoto();
 				if (isAutoTakePic) {
 
-					handler.removeCallbacks(runnable);// Í£Ö¹¼ÆÊ±Æ÷£¬Ã¿µ±ÅÄÕÕ»òÍË³öÊ±¶¼ÒªÖ´ĞĞÕâ¶Î´úÂë¡£
+					handler.removeCallbacks(runnable);// åœæ­¢è®¡æ—¶å™¨ï¼Œæ¯å½“æ‹ç…§æˆ–é€€å‡ºæ—¶éƒ½è¦æ‰§è¡Œè¿™æ®µä»£ç ã€‚
 				}
 				resetCamera();
 
@@ -712,22 +712,22 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
 	};
 
-	/* ±£´æÍ¼Æ¬²¢ËÍÊ¶±ğ */
+	/* ä¿å­˜å›¾ç‰‡å¹¶é€è¯†åˆ« */
 	private void savephoto() {
 
-		// ÏµÍ³Ê±¼ä
+		// ç³»ç»Ÿæ—¶é—´
 		long datetime = System.currentTimeMillis();
-		// Í¼ÏñÃû³Æ
+		// å›¾åƒåç§°
 		Date date = new Date();
 		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMddhhmmss");
 		String sysDatetime = fmt.format(date.getTime());
 		// String name = "idcard" + date.getTime() + ".jpg";
 		String name = "idcard_" + sysDatetime + ".jpg";
-		// ´æ´¢Í¼Ïñ£¨PATHÄ¿Â¼£©
+		// å­˜å‚¨å›¾åƒï¼ˆPATHç›®å½•ï¼‰
 		Uri uri = insertImage(getContentResolver(), name, datetime, PATH, name,
 				bitmap, imagedata);// bm bitmap
 
-		// ²ÃÇĞ
+		// è£åˆ‡
 		if ((nMainID == 1100 || nMainID == 1101) && recogType == 1) {
 //			if (srcwidth == 1280 || srcwidth == 960) {
 //				cutwidth = 750;
@@ -755,7 +755,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 //			Intent intent = new Intent(CameraActivity.this,
 //					RecognizeActivity.class);
 //			intent.putExtra("selectPath", path);
-//			// ÉèÖÃÊ¶±ğ×Ô¶¯²ÃÇĞ
+//			// è®¾ç½®è¯†åˆ«è‡ªåŠ¨è£åˆ‡
 //			intent.putExtra("iscut", true);
 //			intent.putExtra("recogType", recogType);
 //			intent.putExtra("nMainID", nMainID);
@@ -764,16 +764,16 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 			Intent intent = new Intent(CameraActivity.this, IdcardRunner.class);
 			intent.putExtra("path", path);
 			intent.putExtra("cut", cut);
-			// ÉèÖÃÊ¶±ğ×Ô¶¯²ÃÇĞ
+			// è®¾ç½®è¯†åˆ«è‡ªåŠ¨è£åˆ‡
 			intent.putExtra("iscut", true);
-			intent.putExtra("nMainID", nMainID);//»¤ÕÕ
+			intent.putExtra("nMainID", nMainID);//æŠ¤ç…§
 			startActivity(intent);
 		}
 	}
 
-	// ´æ´¢Í¼Ïñ²¢½«ĞÅÏ¢Ìí¼ÓÈëÃ½ÌåÊı¾İ¿â
+	// å­˜å‚¨å›¾åƒå¹¶å°†ä¿¡æ¯æ·»åŠ å…¥åª’ä½“æ•°æ®åº“
 	private Uri insertImage(ContentResolver cr, String name, long dateTaken,
-			String directory, String filename, Bitmap source, byte[] jpegData) {
+							String directory, String filename, Bitmap source, byte[] jpegData) {
 
 		OutputStream outputStream = null;
 		String filePath = directory + filename;
@@ -786,7 +786,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 			if (file.createNewFile()) {
 				outputStream = new FileOutputStream(file);
 				if (source != null) {
-					// Èç¹ûÖ¤¼şÀàĞÍÎªÉí·İÖ¤ºÅÂëÊ¶±ğÔò½«Í¼Æ¬Ğı×ª90¶È
+					// å¦‚æœè¯ä»¶ç±»å‹ä¸ºèº«ä»½è¯å·ç è¯†åˆ«åˆ™å°†å›¾ç‰‡æ—‹è½¬90åº¦
 					if (nMainID == 1102) {
 						Matrix matrix = new Matrix();
 						matrix.reset();
@@ -822,8 +822,8 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 		return cr.insert(IMAGE_URI, values);
 	}
 
-	public void surfaceChanged(SurfaceHolder holder, int format, int width, 
-			int height) {
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,
+							   int height) {
 		if (camera != null) {
 			try {
 				Camera.Parameters parameters = camera.getParameters();
@@ -833,7 +833,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 				parameters.setPreviewSize(WIDTH, HEIGHT);
 				parameters.setPictureSize(srcwidth, srcheight);
 				parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-				camera.setParameters(parameters);    
+				camera.setParameters(parameters);
 				camera.setPreviewDisplay(holder);
 				camera.startPreview();
 				focusModes = parameters.getSupportedFocusModes();
@@ -845,10 +845,10 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 		}
 	}
 
-	// ÔÚsurface´´½¨Ê±¼¤·¢
+	// åœ¨surfaceåˆ›å»ºæ—¶æ¿€å‘
 	public void surfaceCreated(SurfaceHolder holder) {
 		Log.i(TAG, "surfaceCreated");
-		// »ñµÃCamera¶ÔÏó
+		// è·å¾—Cameraå¯¹è±¡
 		takepicbtn.setEnabled(true);
 		if (null == camera) {
 			camera = Camera.open();
@@ -867,7 +867,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 		finish();
 	}
 
-	/* Ïà»úÖØÖÃ */
+	/* ç›¸æœºé‡ç½® */
 	private void resetCamera() {
 		if (camera != null) {
 			camera.stopPreview();
@@ -876,7 +876,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	}
 
 	public static int computeSampleSize(BitmapFactory.Options options,
-			int minSideLength, int maxNumOfPixels) {
+										int minSideLength, int maxNumOfPixels) {
 		int initialSize = computeInitialSampleSize(options, minSideLength,
 				maxNumOfPixels);
 		int roundedSize;
@@ -892,7 +892,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	}
 
 	private static int computeInitialSampleSize(BitmapFactory.Options options,
-			int minSideLength, int maxNumOfPixels) {
+												int minSideLength, int maxNumOfPixels) {
 		double w = options.outWidth;
 		double h = options.outHeight;
 		int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math
@@ -921,17 +921,17 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 				Bundle bundle = new Bundle();
 				int nSubID[] = null;// {0x0001};
 				// bundle.putString("cls", "checkauto.com.IdcardRunner");
-				bundle.putInt("nTypeInitIDCard", 0); // ±£Áô£¬´«0¼´¿É
-				bundle.putString("lpFileName", path);// Ö¸¶¨µÄÍ¼ÏñÂ·¾¶
-				bundle.putInt("nTypeLoadImageToMemory", 0);// 0²»È·¶¨ÊÇÄÄÖÖÍ¼Ïñ£¬1¿É¼û¹âÍ¼£¬2ºìÍâ¹âÍ¼£¬4×ÏÍâ¹âÍ¼
+				bundle.putInt("nTypeInitIDCard", 0); // ä¿ç•™ï¼Œä¼ 0å³å¯
+				bundle.putString("lpFileName", path);// æŒ‡å®šçš„å›¾åƒè·¯å¾„
+				bundle.putInt("nTypeLoadImageToMemory", 0);// 0ä¸ç¡®å®šæ˜¯å“ªç§å›¾åƒï¼Œ1å¯è§å…‰å›¾ï¼Œ2çº¢å¤–å…‰å›¾ï¼Œ4ç´«å¤–å…‰å›¾
 
-				bundle.putInt("nMainID", nMainID); // Ö¤¼şµÄÖ÷ÀàĞÍ¡£6ÊÇĞĞÊ»Ö¤£¬2ÊÇ¶ş´úÖ¤£¬ÕâÀïÖ»¿ÉÒÔ´«Ò»ÖÖÖ¤¼şÖ÷ÀàĞÍ¡£Ã¿ÖÖÖ¤¼ş¶¼ÓĞÒ»¸öÎ¨Ò»µÄIDºÅ£¬¿ÉÈ¡Öµ¼ûÖ¤¼şÖ÷ÀàĞÍËµÃ÷
-				bundle.putIntArray("nSubID", nSubID); // ±£´æÒªÊ¶±ğµÄÖ¤¼şµÄ×ÓID£¬Ã¿¸öÖ¤¼şÏÂÃæ°üº¬µÄ×ÓÀàĞÍ¼ûÖ¤¼ş×ÓÀàĞÍËµÃ÷¡£nSubID[0]=null£¬±íÊ¾ÉèÖÃÖ÷ÀàĞÍÎªnMainIDµÄËùÓĞÖ¤¼ş¡£
-				// bundle.putBoolean("GetSubID", true); //GetSubIDµÃµ½Ê¶±ğÍ¼ÏñµÄ×ÓÀàĞÍid
+				bundle.putInt("nMainID", nMainID); // è¯ä»¶çš„ä¸»ç±»å‹ã€‚6æ˜¯è¡Œé©¶è¯ï¼Œ2æ˜¯äºŒä»£è¯ï¼Œè¿™é‡Œåªå¯ä»¥ä¼ ä¸€ç§è¯ä»¶ä¸»ç±»å‹ã€‚æ¯ç§è¯ä»¶éƒ½æœ‰ä¸€ä¸ªå”¯ä¸€çš„IDå·ï¼Œå¯å–å€¼è§è¯ä»¶ä¸»ç±»å‹è¯´æ˜
+				bundle.putIntArray("nSubID", nSubID); // ä¿å­˜è¦è¯†åˆ«çš„è¯ä»¶çš„å­IDï¼Œæ¯ä¸ªè¯ä»¶ä¸‹é¢åŒ…å«çš„å­ç±»å‹è§è¯ä»¶å­ç±»å‹è¯´æ˜ã€‚nSubID[0]=nullï¼Œè¡¨ç¤ºè®¾ç½®ä¸»ç±»å‹ä¸ºnMainIDçš„æ‰€æœ‰è¯ä»¶ã€‚
+				// bundle.putBoolean("GetSubID", true); //GetSubIDå¾—åˆ°è¯†åˆ«å›¾åƒçš„å­ç±»å‹id
 				// bundle.putString("lpHeadFileName",
-				// "/mnt/sdcard/head.jpg");//±£´æÂ·¾¶Ãû£¬ºó×ºÖ»ÄÜÎªjpg¡¢bmp¡¢tif
-				// bundle.putBoolean("GetVersionInfo", true); //»ñÈ¡¿ª·¢°üµÄ°æ±¾ĞÅÏ¢
-				// ¶ÁÉèÖÃµ½ÎÄ¼şÀïµÄsn
+				// "/mnt/sdcard/head.jpg");//ä¿å­˜è·¯å¾„åï¼Œåç¼€åªèƒ½ä¸ºjpgã€bmpã€tif
+				// bundle.putBoolean("GetVersionInfo", true); //è·å–å¼€å‘åŒ…çš„ç‰ˆæœ¬ä¿¡æ¯
+				// è¯»è®¾ç½®åˆ°æ–‡ä»¶é‡Œçš„sn
 				File file = new File(PATH);
 				String snString = null;
 				if (file.exists()) {
@@ -954,14 +954,14 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 					bundle.putString("sn", "");
 				}
 
-				bundle.putString("sn", ""); // ĞòÁĞºÅ¼¤»î·½Ê½,XS4XAYRWEFRY248YY4LHYY178ÒÑÊ¹ÓÃ
-				bundle.putString("authfile", ""); // ÎÄ¼ş¼¤»î·½Ê½
-				bundle.putString("logo", logopath); // logoÂ·¾¶£¬logoÏÔÊ¾ÔÚÊ¶±ğµÈ´ıÒ³ÃæÓÒÉÏ½Ç
-				bundle.putBoolean("isCut", cut); // Èç²»ÉèÖÃ´ËÏîÄ¬ÈÏ×Ô¶¯²ÃÇĞ
-				bundle.putString("returntype", "withvalue");// ·µ»ØÖµ´«µİ·½Ê½withvalue´ø²ÎÊıµÄ´«Öµ·½Ê½£¨ĞÂ´«Öµ·½Ê½£©
+				bundle.putString("sn", ""); // åºåˆ—å·æ¿€æ´»æ–¹å¼,XS4XAYRWEFRY248YY4LHYY178å·²ä½¿ç”¨
+				bundle.putString("authfile", ""); // æ–‡ä»¶æ¿€æ´»æ–¹å¼
+				bundle.putString("logo", logopath); // logoè·¯å¾„ï¼Œlogoæ˜¾ç¤ºåœ¨è¯†åˆ«ç­‰å¾…é¡µé¢å³ä¸Šè§’
+				bundle.putBoolean("isCut", cut); // å¦‚ä¸è®¾ç½®æ­¤é¡¹é»˜è®¤è‡ªåŠ¨è£åˆ‡
+				bundle.putString("returntype", "withvalue");// è¿”å›å€¼ä¼ é€’æ–¹å¼withvalueå¸¦å‚æ•°çš„ä¼ å€¼æ–¹å¼ï¼ˆæ–°ä¼ å€¼æ–¹å¼ï¼‰
 				intent.putExtras(bundle);
 				startActivityForResult(intent, 10);
-				overridePendingTransition(R.anim.zoomin, R.anim.zoomout);//¶¯»­¸´ÖÆ½øÀ´
+				overridePendingTransition(R.anim.zoomin, R.anim.zoomout);//åŠ¨ç”»å¤åˆ¶è¿›æ¥
 			} catch (Exception e) {
 				Toast.makeText(getApplicationContext(),
 						getString(R.string.noFoundProgram) + "wintone.idcard",
@@ -999,13 +999,13 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 10 && resultCode == RESULT_OK) {
-			int ReturnAuthority = data.getIntExtra("ReturnAuthority", -100000);// È¡¼¤»î×´Ì¬
+			int ReturnAuthority = data.getIntExtra("ReturnAuthority", -100000);// å–æ¿€æ´»çŠ¶æ€
 			int ReturnInitIDCard = data
-					.getIntExtra("ReturnInitIDCard", -100000);// È¡³õÊ¼»¯·µ»ØÖµ
+					.getIntExtra("ReturnInitIDCard", -100000);// å–åˆå§‹åŒ–è¿”å›å€¼
 			int ReturnLoadImageToMemory = data.getIntExtra(
-					"ReturnLoadImageToMemory", -100000);// È¡¶ÁÍ¼ÏñµÄ·µ»ØÖµ
+					"ReturnLoadImageToMemory", -100000);// å–è¯»å›¾åƒçš„è¿”å›å€¼
 			int ReturnRecogIDCard = data.getIntExtra("ReturnRecogIDCard",
-					-100000);// È¡Ê¶±ğµÄ·µ»ØÖµ
+					-100000);// å–è¯†åˆ«çš„è¿”å›å€¼
 			if (ReturnAuthority == 0 && ReturnInitIDCard == 0
 					&& ReturnLoadImageToMemory == 0 && ReturnRecogIDCard > 0) {
 				String result = "";
@@ -1068,109 +1068,109 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		switch (keyCode) {
-		case 249:
-		case 250:
-		case 251:
-		case 252:
-			takepicbtn.setEnabled(false); 
-			takePicture();
-		break;
-		case KEYCODE_F1:
-			if (back_reset_text.getText().toString()
-					.equals(getString(R.string.returnbutlog))) {
-				finish();
-				isTakePic = false;
-			} else if (back_reset_text.getText().toString()
-					.equals(getString(R.string.reset_btn_string))) {
-				isTakePic = false;
-				if (nMainID == 1100 || nMainID == 1101) {
-					showTwoCutImageView();
-				} else {
-					showFourImageView();
-				}
-
-				takepicbtn.setVisibility(View.VISIBLE);
-				take_recog_text.setText(R.string.takepic_btn_string);
-				backbtn.setVisibility(View.VISIBLE);
-				back_reset_text.setText(R.string.backbtn_string);
-				imageView.setImageDrawable(null);
-				resetbtn.setVisibility(View.INVISIBLE);
-				confirmbtn.setVisibility(View.INVISIBLE);
-				takepicbtn.setEnabled(true);
-				if (null != bitmap) {
-					bitmap.recycle();
-					bitmap = null;
-				}
-				camera.startPreview();
-			}
-
-			break;
-
-		case KEYCODE_F2:
-			if (light_text.getText().toString()
-					.equals(getString(R.string.light1_string))) {
-				lightoff.setVisibility(View.VISIBLE);
-				lighton.setVisibility(View.INVISIBLE);
-				light_text.setText(R.string.light2_string);
-				// ¿ªÆôÉÁ¹âµÆ
-				Camera.Parameters parameters = camera.getParameters();
-				parameters.set("flash-mode", "on");
-				camera.setParameters(parameters);
-			} else if (light_text.getText().toString()
-					.equals(getString(R.string.light2_string))) {
-
-				lighton.setVisibility(View.VISIBLE);
-				lightoff.setVisibility(View.INVISIBLE);
-				light_text.setText(R.string.light1_string);
-				// ¹Ø±ÕÉÁ¹âµÆ
-				Camera.Parameters parameters2 = camera.getParameters();
-				parameters2.set("flash-mode", "off");
-				camera.setParameters(parameters2);
-			}
-
-			break;
-
-		case KEYCODE_F3:
-			if (cut_text.getText().toString()
-					.equals(getString(R.string.OpenedCutting))) {
-				cuton.setVisibility(View.INVISIBLE);
-				cutoff.setVisibility(View.VISIBLE);
-				cut_text.setText(R.string.ClosedCutting);
-				cut = true;
-			} else if (cut_text.getText().toString()
-					.equals(getString(R.string.ClosedCutting))) {
-				cuton.setVisibility(View.VISIBLE);
-				cutoff.setVisibility(View.INVISIBLE);
-				cut_text.setText(R.string.OpenedCutting);
-				cut = false;
-			}
-			break;
-
-		case KEYCODE_T:
-			if (take_recog_text.getText().toString()
-					.equals(getString(R.string.takepic_btn_string))
-					&& !isTakePic) {
-				isTakePic = true;
+			case 249:
+			case 250:
+			case 251:
+			case 252:
 				takepicbtn.setEnabled(false);
 				takePicture();
-			} else if (take_recog_text.getText().toString()
-					.equals(getString(R.string.confirm_btn_string))
-					&& isEffectClick()) {
-				isTakePic = false;
-				confirmbtn.setEnabled(false);
-				if (nMainID == 1100 || nMainID == 1101) {
-					hideTwoCutImageView();
-				} else {
-					hideFourImageView();
+				break;
+			case KEYCODE_F1:
+				if (back_reset_text.getText().toString()
+						.equals(getString(R.string.returnbutlog))) {
+					finish();
+					isTakePic = false;
+				} else if (back_reset_text.getText().toString()
+						.equals(getString(R.string.reset_btn_string))) {
+					isTakePic = false;
+					if (nMainID == 1100 || nMainID == 1101) {
+						showTwoCutImageView();
+					} else {
+						showFourImageView();
+					}
+
+					takepicbtn.setVisibility(View.VISIBLE);
+					take_recog_text.setText(R.string.takepic_btn_string);
+					backbtn.setVisibility(View.VISIBLE);
+					back_reset_text.setText(R.string.backbtn_string);
+					imageView.setImageDrawable(null);
+					resetbtn.setVisibility(View.INVISIBLE);
+					confirmbtn.setVisibility(View.INVISIBLE);
+					takepicbtn.setEnabled(true);
+					if (null != bitmap) {
+						bitmap.recycle();
+						bitmap = null;
+					}
+					camera.startPreview();
 				}
-				takepicbtn.setVisibility(View.VISIBLE);
-				backbtn.setVisibility(View.VISIBLE);
-				resetbtn.setVisibility(View.INVISIBLE);
-				confirmbtn.setVisibility(View.INVISIBLE);
-				imageView.setImageDrawable(null);
-				savephoto();
-			}
-			break;
+
+				break;
+
+			case KEYCODE_F2:
+				if (light_text.getText().toString()
+						.equals(getString(R.string.light1_string))) {
+					lightoff.setVisibility(View.VISIBLE);
+					lighton.setVisibility(View.INVISIBLE);
+					light_text.setText(R.string.light2_string);
+					// å¼€å¯é—ªå…‰ç¯
+					Camera.Parameters parameters = camera.getParameters();
+					parameters.set("flash-mode", "on");
+					camera.setParameters(parameters);
+				} else if (light_text.getText().toString()
+						.equals(getString(R.string.light2_string))) {
+
+					lighton.setVisibility(View.VISIBLE);
+					lightoff.setVisibility(View.INVISIBLE);
+					light_text.setText(R.string.light1_string);
+					// å…³é—­é—ªå…‰ç¯
+					Camera.Parameters parameters2 = camera.getParameters();
+					parameters2.set("flash-mode", "off");
+					camera.setParameters(parameters2);
+				}
+
+				break;
+
+			case KEYCODE_F3:
+				if (cut_text.getText().toString()
+						.equals(getString(R.string.OpenedCutting))) {
+					cuton.setVisibility(View.INVISIBLE);
+					cutoff.setVisibility(View.VISIBLE);
+					cut_text.setText(R.string.ClosedCutting);
+					cut = true;
+				} else if (cut_text.getText().toString()
+						.equals(getString(R.string.ClosedCutting))) {
+					cuton.setVisibility(View.VISIBLE);
+					cutoff.setVisibility(View.INVISIBLE);
+					cut_text.setText(R.string.OpenedCutting);
+					cut = false;
+				}
+				break;
+
+			case KEYCODE_T:
+				if (take_recog_text.getText().toString()
+						.equals(getString(R.string.takepic_btn_string))
+						&& !isTakePic) {
+					isTakePic = true;
+					takepicbtn.setEnabled(false);
+					takePicture();
+				} else if (take_recog_text.getText().toString()
+						.equals(getString(R.string.confirm_btn_string))
+						&& isEffectClick()) {
+					isTakePic = false;
+					confirmbtn.setEnabled(false);
+					if (nMainID == 1100 || nMainID == 1101) {
+						hideTwoCutImageView();
+					} else {
+						hideFourImageView();
+					}
+					takepicbtn.setVisibility(View.VISIBLE);
+					backbtn.setVisibility(View.VISIBLE);
+					resetbtn.setVisibility(View.INVISIBLE);
+					confirmbtn.setVisibility(View.INVISIBLE);
+					imageView.setImageDrawable(null);
+					savephoto();
+				}
+				break;
 		}
 
 		return super.onKeyDown(keyCode, event);
@@ -1215,7 +1215,7 @@ public class CameraActivity extends Activity implements SurfaceHolder.Callback {
 			try {
 				if (camera.getParameters().getSupportedFocusModes() != null
 						&& camera.getParameters().getSupportedFocusModes()
-								.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+						.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
 					camera.autoFocus(new AutoFocusCallback() {
 						public void onAutoFocus(boolean success, Camera camera) {
 							if (success) {

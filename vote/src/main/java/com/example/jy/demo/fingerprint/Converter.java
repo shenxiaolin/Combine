@@ -29,13 +29,13 @@ import android.util.Log;
 //13SEP2011  James Shen                 	         Initial Creation
 ////////////////////////////////////////////////////////////////////////////////
 /**
-* Convert help class.
-* <hr>
-* <b>&copy; Copyright 2011 Guidebee, Inc. All Rights Reserved.</b>
-* 
-* @version 1.00, 13/09/11
-* @author Guidebee Pty Ltd.
-*/
+ * Convert help class.
+ * <hr>
+ * <b>&copy; Copyright 2011 Guidebee, Inc. All Rights Reserved.</b>
+ *
+ * @version 1.00, 13/09/11
+ * @author Guidebee Pty Ltd.
+ */
 public class Converter {
 
 	// Hex help
@@ -79,7 +79,7 @@ public class Converter {
 	 * @param raw Asc byte arrary
 	 * @param len lenght of the arrary.
 	 * @return hex byte arrary.
-	 */ 
+	 */
 	public static int AscToHex(int raw) {
 		int value = 0;
 
@@ -97,7 +97,7 @@ public class Converter {
 			Log.i("AscToHex", "**** asc num illegal ****");
 		}
 		value = v << 4;
-		
+
 		v = (raw & 0x00FF);
 		if (v >= '0' && v<= '9')
 		{
@@ -109,61 +109,61 @@ public class Converter {
 		}
 		value |= v;
 		return (value);
-	}	
-	
+	}
+
 	/**
-	  * ½«intÀàĞÍµÄÊı¾İ×ª»»ÎªbyteÊı×é
-	  * @param n intÊı¾İ
-	  * @return Éú³ÉµÄbyteÊı×é
-	  */
-	 public static byte[] intToBytes(int n){
-	  String s = String.valueOf(n);
-	  return s.getBytes(); 
-	 }
-	 
-	 /**
-	  * ½«byteÊı×é×ª»»ÎªintÊı¾İ
-	  * @param b ×Ö½ÚÊı×é
-	  * @return Éú³ÉµÄintÊı¾İ
-	  */
-	 public static int bytesToInt(byte[] b){
-	  String s = new String(b);
-	  return Integer.parseInt(s); 
-	 }
-	 
-	 /**
-	  * ½«intÀàĞÍµÄÊı¾İ×ª»»ÎªbyteÊı×é
-	  * Ô­Àí£º½«intÊı¾İÖĞµÄËÄ¸öbyteÈ¡³ö£¬·Ö±ğ´æ´¢
-	  * @param n intÊı¾İ
-	  * @return Éú³ÉµÄbyteÊı×é
-	  */
-	 public static byte[] intToBytes2(int n){
-	  byte[] b = new byte[4];
-	  for(int i = 0;i < 4;i++){
-	   b[i] = (byte)(n >> (24 - i * 8)); 
-	  }
-	  return b;
-	 }
-	 
-	 /**
-	  * ½«byteÊı×é×ª»»ÎªintÊı¾İ
-	  * @param b ×Ö½ÚÊı×é
-	  * @return Éú³ÉµÄintÊı¾İ
-	  */
-	 public static int byteToInt2(byte[] b){
+	 * å°†intç±»å‹çš„æ•°æ®è½¬æ¢ä¸ºbyteæ•°ç»„
+	 * @param n intæ•°æ®
+	 * @return ç”Ÿæˆçš„byteæ•°ç»„
+	 */
+	public static byte[] intToBytes(int n){
+		String s = String.valueOf(n);
+		return s.getBytes();
+	}
+
+	/**
+	 * å°†byteæ•°ç»„è½¬æ¢ä¸ºintæ•°æ®
+	 * @param b å­—èŠ‚æ•°ç»„
+	 * @return ç”Ÿæˆçš„intæ•°æ®
+	 */
+	public static int bytesToInt(byte[] b){
+		String s = new String(b);
+		return Integer.parseInt(s);
+	}
+
+	/**
+	 * å°†intç±»å‹çš„æ•°æ®è½¬æ¢ä¸ºbyteæ•°ç»„
+	 * åŸç†ï¼šå°†intæ•°æ®ä¸­çš„å››ä¸ªbyteå–å‡ºï¼Œåˆ†åˆ«å­˜å‚¨
+	 * @param n intæ•°æ®
+	 * @return ç”Ÿæˆçš„byteæ•°ç»„
+	 */
+	public static byte[] intToBytes2(int n){
+		byte[] b = new byte[4];
+		for(int i = 0;i < 4;i++){
+			b[i] = (byte)(n >> (24 - i * 8));
+		}
+		return b;
+	}
+
+	/**
+	 * å°†byteæ•°ç»„è½¬æ¢ä¸ºintæ•°æ®
+	 * @param b å­—èŠ‚æ•°ç»„
+	 * @return ç”Ÿæˆçš„intæ•°æ®
+	 */
+	public static int byteToInt2(byte[] b){
 //	  return (((int)b[0]) << 24) + (((int)b[1]) << 16) + (((int)b[2]) << 8) + b[3];
 //	  return (( (int)b[0]) << 8) + b[1];
-		 int n = (int)b[0];
-		 Log.i("Converter", "n=" + n);
+		int n = (int)b[0];
+		Log.i("Converter", "n=" + n);
 //	  return ((int)b[0]);
-	  return ((int)b[0]);
-	 }
+		return ((int)b[0]);
+	}
 
 //	static public void sprintf (StringBuffer result, String format, String...replace)
 //	{
 //		result.append(String.format(format, replace));
 //	}
-	
+
 	////////////////////////////////////////////////////////////////////////////
 	//--------------------------------- REVISIONS ------------------------------
 	// Date       Name                 Tracking #         Description
@@ -184,83 +184,83 @@ public class Converter {
 		return digest;
 	}
 
-	
 
-	// char[] ×ª byte[]
+
+	// char[] è½¬ byte[]
 	public byte[] getBytes (char[] chars) {
-	   Charset cs = Charset.forName ("UTF-8");
-	   CharBuffer cb = CharBuffer.allocate (chars.length);
-	   //´æÈëÊı¾İ
-	   cb.put (chars);
-	   //»º³åÇøµÄÎ»ÖÃ ¡°µ¹´ø¡±
-	   cb.flip();
-	   ByteBuffer bb = cs.encode (cb);
-	   return bb.array();
+		Charset cs = Charset.forName ("UTF-8");
+		CharBuffer cb = CharBuffer.allocate (chars.length);
+		//å­˜å…¥æ•°æ®
+		cb.put (chars);
+		//ç¼“å†²åŒºçš„ä½ç½® â€œå€’å¸¦â€
+		cb.flip();
+		ByteBuffer bb = cs.encode (cb);
+		return bb.array();
 	}
 
-	// byte[] ×ª char[]
+	// byte[] è½¬ char[]
 	public char[] getChars (byte[] bytes) {
-	   Charset cs = Charset.forName ("UTF-8");
-	   ByteBuffer bb = ByteBuffer.allocate (bytes.length);
-	   bb.put (bytes);
-	   bb.flip();
-	   CharBuffer cb = cs.decode (bb);
-	   return cb.array();
+		Charset cs = Charset.forName ("UTF-8");
+		ByteBuffer bb = ByteBuffer.allocate (bytes.length);
+		bb.put (bytes);
+		bb.flip();
+		CharBuffer cb = cs.decode (bb);
+		return cb.array();
 	}
-	
-	//byte[] Êı×é×ª 16½øÖÆ×Ö·û´®
-	public static String printHexString( byte[] b) { 
+
+	//byte[] æ•°ç»„è½¬ 16è¿›åˆ¶å­—ç¬¦ä¸²
+	public static String printHexString( byte[] b) {
 		String result = "";
 
-		for (int i = 0; i < b.length; i++) { 
-			String hex = Integer.toHexString(b[i] & 0xFF); 
+		for (int i = 0; i < b.length; i++) {
+			String hex = Integer.toHexString(b[i] & 0xFF);
 			if (hex.length() == 1) {
-				//°ë×Ö½ÚµÄÇéĞÎÇ°Ãæ²¹ "0"
-				hex = '0' + hex; 
-			} 
-			result = result + hex.toUpperCase(); 
-		} 
+				//åŠå­—èŠ‚çš„æƒ…å½¢å‰é¢è¡¥ "0"
+				hex = '0' + hex;
+			}
+			result = result + hex.toUpperCase();
+		}
 		return result;
 	}
-	
-	//char ×ª byte
-	private static byte charToByte(char c) { 
-		return (byte) "0123456789ABCDEF".indexOf(c); 
+
+	//char è½¬ byte
+	private static byte charToByte(char c) {
+		return (byte) "0123456789ABCDEF".indexOf(c);
 	}
 
-	//16½øÖÆ×Ö·û´®×ª byte[] Êı×é
-	public static byte[] hexStringToBytes(String hexString) { 
-		if (hexString == null || hexString.equals("")) { 
-			return null; 
-		} 
-		hexString = hexString.toUpperCase(); 
+	//16è¿›åˆ¶å­—ç¬¦ä¸²è½¬ byte[] æ•°ç»„
+	public static byte[] hexStringToBytes(String hexString) {
+		if (hexString == null || hexString.equals("")) {
+			return null;
+		}
+		hexString = hexString.toUpperCase();
 		int length = hexString.length() / 2;
 		if ( (hexString.length()%2) != 0)
-		{//ÆæÊı¸ö×Ö·û, ÓÒ²¹"0" ´Õ³ÉÅ¼Êı×Ö½Ú
+		{//å¥‡æ•°ä¸ªå­—ç¬¦, å³è¡¥"0" å‡‘æˆå¶æ•°å­—èŠ‚
 			length += 1;
 			hexString = hexString + "0";
 		}
 		Log.i("CommonFunc", "CommonFunc lenth=" + length);
-		//×Ö·û´®×ª char[] Êı×é
-		char[] hexChars = hexString.toCharArray(); 
+		//å­—ç¬¦ä¸²è½¬ char[] æ•°ç»„
+		char[] hexChars = hexString.toCharArray();
 		byte[] d = new byte[length];
 		int i, pos;
 		for (i = 0; i < length; i++) {
 			pos = i * 2;
 			Log.i("CommonFunc", "CommonFunc i=" + i + " pos=" + pos );
-			d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1])); 
-		} 
-		return d; 
-	} 
+			d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+		}
+		return d;
+	}
 
-	public static int dataEncDec( byte[] b, int v) { 
+	public static int dataEncDec( byte[] b, int v) {
 		int nRet = 0;
 		for (int i = 0; i < b.length; i++) {
 			if ( b[i] != 0 && b[i] != (byte)v)
 			{
 				b[i] ^= v;
 			}
-		} 
+		}
 		return nRet;
-	}	
+	}
 }

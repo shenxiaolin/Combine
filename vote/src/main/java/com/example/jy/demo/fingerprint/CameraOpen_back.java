@@ -60,12 +60,12 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 	private String filePath;
 	private boolean is_camaeraperview = false;
 
-	Bundle bundle = null; 
-    SharedPreferences mSp;
-    
+	Bundle bundle = null;
+	SharedPreferences mSp;
+
 	ProgressDialog MyDialog;
 	String TAG = "crjlog";
-	
+
 	private static final String IMAGE_NAME = "Photo";
 	private SharedPreferences preferences;
 	private String gather_id, gather_name;
@@ -78,14 +78,14 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setContentView(R.layout.camera_test_main);
-		
+
 		preferences = this.getSharedPreferences(getResources().getString(R.string.SystemConfig_sp),MODE_PRIVATE);
 		//12.19
 //		io.IoOpen();
-		
-		
+
+
 //		filePath = getFilesDir().getParent().toString() + "/"+ getResources().getString(R.string.app_name) + ".bmp";
-		
+
 		mSurfaceView = (SurfaceView) findViewById(R.id.mSurfaceView);
 		holder = mSurfaceView.getHolder();
 		holder.addCallback(CameraOpen_back.this);
@@ -110,48 +110,48 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 		gather_name = preferences.getString("name", "card");
 	}
 	@SuppressLint("NewApi")
-	private int FindFrontCamera(){   
-        int cameraCount = 0;   
-        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();   
-        cameraCount = Camera.getNumberOfCameras(); // get cameras number   
-                 
-        for ( int camIdx = 0; camIdx < cameraCount;camIdx++ ) {   
-            Camera.getCameraInfo( camIdx, cameraInfo ); // get camerainfo   
-            if ( cameraInfo.facing ==Camera.CameraInfo.CAMERA_FACING_FRONT ) {    
-                // ´ú±íÉãÏñÍ·µÄ·½Î»£¬Ä¿Ç°ÓÐ¶¨ÒåÖµÁ½¸ö·Ö±ðÎªCAMERA_FACING_FRONTÇ°ÖÃºÍCAMERA_FACING_BACKºóÖÃ   
-               return camIdx;   
-            }   
-        }   
-        return -1;   
-    }   
+	private int FindFrontCamera(){
+		int cameraCount = 0;
+		Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+		cameraCount = Camera.getNumberOfCameras(); // get cameras number
+
+		for ( int camIdx = 0; camIdx < cameraCount;camIdx++ ) {
+			Camera.getCameraInfo( camIdx, cameraInfo ); // get camerainfo
+			if ( cameraInfo.facing ==Camera.CameraInfo.CAMERA_FACING_FRONT ) {
+				// ä»£è¡¨æ‘„åƒå¤´çš„æ–¹ä½ï¼Œç›®å‰æœ‰å®šä¹‰å€¼ä¸¤ä¸ªåˆ†åˆ«ä¸ºCAMERA_FACING_FRONTå‰ç½®å’ŒCAMERA_FACING_BACKåŽç½®
+				return camIdx;
+			}
+		}
+		return -1;
+	}
 
 	@SuppressLint("NewApi")
-	private int FindBackCamera(){   
-        int cameraCount = 0;   
-        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();   
-        cameraCount = Camera.getNumberOfCameras(); // get cameras number   
-                 
-        for ( int camIdx = 0; camIdx < cameraCount;camIdx++ ) {   
-            Camera.getCameraInfo( camIdx, cameraInfo ); // get camerainfo   
-            if ( cameraInfo.facing ==Camera.CameraInfo.CAMERA_FACING_BACK ) {    
-                // ´ú±íÉãÏñÍ·µÄ·½Î»£¬Ä¿Ç°ÓÐ¶¨ÒåÖµÁ½¸ö·Ö±ðÎªCAMERA_FACING_FRONTÇ°ÖÃºÍCAMERA_FACING_BACKºóÖÃ   
-               return camIdx;   
-            }   
-        }   
-        return -1;   
-    }   
+	private int FindBackCamera(){
+		int cameraCount = 0;
+		Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+		cameraCount = Camera.getNumberOfCameras(); // get cameras number
 
-	
+		for ( int camIdx = 0; camIdx < cameraCount;camIdx++ ) {
+			Camera.getCameraInfo( camIdx, cameraInfo ); // get camerainfo
+			if ( cameraInfo.facing ==Camera.CameraInfo.CAMERA_FACING_BACK ) {
+				// ä»£è¡¨æ‘„åƒå¤´çš„æ–¹ä½ï¼Œç›®å‰æœ‰å®šä¹‰å€¼ä¸¤ä¸ªåˆ†åˆ«ä¸ºCAMERA_FACING_FRONTå‰ç½®å’ŒCAMERA_FACING_BACKåŽç½®
+				return camIdx;
+			}
+		}
+		return -1;
+	}
+
+
 	@SuppressLint("NewApi")
 	public void surfaceCreated(SurfaceHolder surfaceholder) {
 		try {
 			//mCamera = mCamera.open();
-			
-			 	int CammeraIndex=FindBackCamera();   
-		        if(CammeraIndex==-1){   
-		            CammeraIndex=FindFrontCamera();   
-		        }   
-		        mCamera = Camera.open(CammeraIndex);   
+
+			int CammeraIndex=FindBackCamera();
+			if(CammeraIndex==-1){
+				CammeraIndex=FindFrontCamera();
+			}
+			mCamera = Camera.open(CammeraIndex);
 
 
 			if (mCamera != null)
@@ -169,16 +169,16 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 	}
 
 	public void surfaceChanged(SurfaceHolder surfaceholder, int format, int w,int h) {
-		
+
 		try {
 			initCamera();
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			finish();
 			Toast.makeText(CameraOpen_back.this, "Open Camera fail !",
 					Toast.LENGTH_SHORT).show();
-			
+
 			if(mCamera != null){
 				mCamera.release();
 				mCamera = null;
@@ -209,7 +209,7 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 		}
 	};
 
-	private PictureCallback rawCallback = new PictureCallback() { 
+	private PictureCallback rawCallback = new PictureCallback() {
 		public void onPictureTaken(byte[] _data, Camera _camera) {
 		}
 	};
@@ -218,9 +218,9 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 		public void onPictureTaken(byte[] _data, Camera _camera) {
 			try {
 
-				bundle = new Bundle();  
-                bundle.putByteArray("bytes", _data); //½«Í¼Æ¬×Ö½ÚÊý¾Ý±£´æÔÚbundleµ±ÖÐ£¬ÊµÏÖÊý¾Ý½»»»   
-                saveToSDCard(_data); // ±£´æÍ¼Æ¬µ½sd¿¨ÖÐ   
+				bundle = new Bundle();
+				bundle.putByteArray("bytes", _data); //å°†å›¾ç‰‡å­—èŠ‚æ•°æ®ä¿å­˜åœ¨bundleå½“ä¸­ï¼Œå®žçŽ°æ•°æ®äº¤æ¢
+				saveToSDCard(_data); // ä¿å­˜å›¾ç‰‡åˆ°sdå¡ä¸­
 
 				setResult(Activity.RESULT_OK);
 				setRequestedOrientation(1);
@@ -232,28 +232,28 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 		}
 	};
 
-//	 public static void saveToSDCard(byte[] data) throws IOException {  
+	//	 public static void saveToSDCard(byte[] data) throws IOException {
 //	        Date date = new Date();  
-//	        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss"); // ¸ñÊ½»¯Ê±¼ä   
+//	        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss"); // æ ¼å¼åŒ–æ—¶é—´   
 //	        String filename = format.format(date) + ".jpg";  
 //	        File fileFolder = new File(Environment.getExternalStorageDirectory()  
 //	                + "/Dcs/");  
-	 public void saveToSDCard(byte[] data) throws IOException {     
-       String filename = IMAGE_NAME + ".jpg";
-	   filePath3 = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/";
-       File fileFolder = new File(filePath3);  
-	        if (!fileFolder.exists()) { // Èç¹ûÄ¿Â¼²»´æÔÚ£¬Ôò´´½¨Ò»¸öÃûÎª"finger"µÄÄ¿Â¼   
-	            fileFolder.mkdir();  
-	        }  
-	        File jpgFile = new File(fileFolder, filename);  
-	        FileOutputStream outputStream = new FileOutputStream(jpgFile); // ÎÄ¼þÊä³öÁ÷   
-	        outputStream.write(data); // Ð´Èësd¿¨ÖÐ   
-	        outputStream.close(); // ¹Ø±ÕÊä³öÁ÷   
-	    }  
+	public void saveToSDCard(byte[] data) throws IOException {
+		String filename = IMAGE_NAME + ".jpg";
+		filePath3 = Environment.getExternalStorageDirectory() + "/" + getResources().getString(R.string.app_name) + "/" + gather_id + "/";
+		File fileFolder = new File(filePath3);
+		if (!fileFolder.exists()) { // å¦‚æžœç›®å½•ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºä¸€ä¸ªåä¸º"finger"çš„ç›®å½•
+			fileFolder.mkdir();
+		}
+		File jpgFile = new File(fileFolder, filename);
+		FileOutputStream outputStream = new FileOutputStream(jpgFile); // æ–‡ä»¶è¾“å‡ºæµ
+		outputStream.write(data); // å†™å…¥sdå¡ä¸­
+		outputStream.close(); // å…³é—­è¾“å‡ºæµ
+	}
 
-	
+
 	public final class AutoFocusCallback implements
-			android.hardware.Camera.AutoFocusCallback { 
+			android.hardware.Camera.AutoFocusCallback {
 		public void onAutoFocus(boolean focused, Camera camera) {
 			if (focused) {
 				takePicture();
@@ -262,19 +262,19 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 		}
 	};
 
-	@SuppressLint("NewApi") 
+	@SuppressLint("NewApi")
 	private void initCamera() {
 		if (mCamera != null) {
 			try {
 				Camera.Parameters parameters = mCamera.getParameters();
 //				parameters.setPictureFormat(PixelFormat.RGB_565);
 //
-				mCamera.setDisplayOrientation(90);  
+				mCamera.setDisplayOrientation(90);
 				parameters.setRotation(90);
 //
 //				parameters.setPictureSize(640, 480);
 //				parameters.setPreviewSize(640, 480);
-				
+
 				// parameters.set("rotation",180);
 				// parameters.setPictureSize(256, 360);
 				// parameters.setPreviewSize(256, 360);
@@ -300,25 +300,25 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if ((keyCode == 251 || keyCode == 252) && (event.getRepeatCount() == 0) && is_camaeraperview == false) {
-			
+
 			if(!is_camaeraperview){
-				
+
 				is_camaeraperview = true;
 				if(mCamera != null)
-				mCamera.autoFocus(mAutoFocusCallback);
+					mCamera.autoFocus(mAutoFocusCallback);
 				return true;
 			}
 		}
-		
+
 		return super.onKeyDown(keyCode, event);
 	}
-	
-	
+
+
 	//12.19
 	@Override
 	protected void onStop() {
@@ -326,5 +326,5 @@ public class CameraOpen_back extends Activity implements SurfaceHolder.Callback 
 		super.onStop();
 //		io.IoClose(); 
 	}
-	
+
 }

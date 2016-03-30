@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class nfc extends Activity {
 	NfcAdapter nfcAdapter;
 	TextView promt;
-	
+
 	private SharedPreferences preferences;
 
 	byte key_a[] = { (byte) 0x9B, (byte) 0x30, (byte) 0x45, (byte) 0xC1,
@@ -38,15 +38,15 @@ public class nfc extends Activity {
 		setContentView(R.layout.nfc_main);
 		promt = (TextView) findViewById(R.id.promt);
 		preferences = this.getSharedPreferences(getResources().getString(R.string.SystemConfig_sp),MODE_PRIVATE);
-		// »ñÈ¡Ä¬ÈÏµÄNFC¿ØÖÆÆ÷
+		// è·å–é»˜è®¤çš„NFCæ§åˆ¶å™¨
 		nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		if (nfcAdapter == null) {
-			promt.setText("Éè±¸²»Ö§³ÖNFC£¡");
+			promt.setText("è®¾å¤‡ä¸æ”¯æŒNFCï¼");
 			finish();
 			return;
 		}
 		if (!nfcAdapter.isEnabled()) {
-			promt.setText("ÇëÔÚÏµÍ³ÉèÖÃÖĞÏÈÆôÓÃNFC¹¦ÄÜ£¡");
+			promt.setText("è¯·åœ¨ç³»ç»Ÿè®¾ç½®ä¸­å…ˆå¯ç”¨NFCåŠŸèƒ½ï¼");
 			finish();
 			return;
 		}
@@ -55,20 +55,20 @@ public class nfc extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// µÃµ½ÊÇ·ñ¼ì²âµ½ACTION_TECH_DISCOVERED´¥·¢
+		// å¾—åˆ°æ˜¯å¦æ£€æµ‹åˆ°ACTION_TECH_DISCOVEREDè§¦å‘
 		if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
-			
-			//ÅĞ¶ÏÊÇ·ñÒÑµÇÂ¼
+
+			//åˆ¤æ–­æ˜¯å¦å·²ç™»å½•
 			Boolean is_login = preferences.getBoolean("is_login", false);
 			if(is_login){
-				// ´¦Àí¸Ãintent
-				processIntent(getIntent());				
+				// å¤„ç†è¯¥intent
+				processIntent(getIntent());
 			}else{
-				//Ã»µÇÂ¼Ìø×ªµ½µÇÂ¼½çÃæ
+				//æ²¡ç™»å½•è·³è½¬åˆ°ç™»å½•ç•Œé¢
 				Toast.makeText(getApplicationContext(),
 						R.string.login_first_toast, Toast.LENGTH_SHORT)
 						.show();
-				
+
 				Intent it = new Intent(nfc.this, login.class);
 				startActivity(it);
 				finish();
@@ -76,7 +76,7 @@ public class nfc extends Activity {
 		}
 	}
 
-	// ×Ö·ûĞòÁĞ×ª»»Îª16½øÖÆ×Ö·û´®
+	// å­—ç¬¦åºåˆ—è½¬æ¢ä¸º16è¿›åˆ¶å­—ç¬¦ä¸²
 	private String bytesToHexString(byte[] src) {
 		StringBuilder stringBuilder = new StringBuilder("0x");
 		if (src == null || src.length <= 0) {
@@ -108,7 +108,7 @@ public class nfc extends Activity {
 	}
 
 	private void processIntent(Intent intent) {
-		// È¡³ö·â×°ÔÚintentÖĞµÄTAG
+		// å–å‡ºå°è£…åœ¨intentä¸­çš„TAG
 		Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 		for (String tech : tagFromIntent.getTechList()) {
 			// System.out.println(tech);
@@ -122,7 +122,7 @@ public class nfc extends Activity {
 //		Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //		startActivityForResult(intent1, 1);
 
-		// ¶ÁÈ¡TAG
+		// è¯»å–TAG
 		MifareClassic mfc = MifareClassic.get(tagFromIntent);
 
 		Log.v("crjlog", "nfc mfc =" + mfc);
@@ -131,28 +131,28 @@ public class nfc extends Activity {
 			String metaInfo = "";
 			// Enable I/O operations to the tag from this TagTechnology object.
 			mfc.connect();
-			int type = mfc.getType();// »ñÈ¡TAGµÄÀàĞÍ
+			int type = mfc.getType();// è·å–TAGçš„ç±»å‹
 
 			Log.v("crjlog", "nkc type = " + type);
 
-			int sectorCount = mfc.getSectorCount();// »ñÈ¡TAGÖĞ°üº¬µÄÉÈÇøÊı
+			int sectorCount = mfc.getSectorCount();// è·å–TAGä¸­åŒ…å«çš„æ‰‡åŒºæ•°
 			String typeS = "";
 			switch (type) {
-			case MifareClassic.TYPE_CLASSIC:
-				typeS = "TYPE_CLASSIC";
-				break;
-			case MifareClassic.TYPE_PLUS:
-				typeS = "TYPE_PLUS";
-				break;
-			case MifareClassic.TYPE_PRO:
-				typeS = "TYPE_PRO";
-				break;
-			case MifareClassic.TYPE_UNKNOWN:
-				typeS = "TYPE_UNKNOWN";
-				break;
+				case MifareClassic.TYPE_CLASSIC:
+					typeS = "TYPE_CLASSIC";
+					break;
+				case MifareClassic.TYPE_PLUS:
+					typeS = "TYPE_PLUS";
+					break;
+				case MifareClassic.TYPE_PRO:
+					typeS = "TYPE_PRO";
+					break;
+				case MifareClassic.TYPE_UNKNOWN:
+					typeS = "TYPE_UNKNOWN";
+					break;
 			}
-			metaInfo += "¿¨Æ¬ÀàĞÍ£º" + typeS + "\n¹²" + sectorCount + "¸öÉÈÇø\n¹²"
-					+ mfc.getBlockCount() + "¸ö¿é\n´æ´¢¿Õ¼ä: " + mfc.getSize()
+			metaInfo += "å¡ç‰‡ç±»å‹ï¼š" + typeS + "\nå…±" + sectorCount + "ä¸ªæ‰‡åŒº\nå…±"
+					+ mfc.getBlockCount() + "ä¸ªå—\nå­˜å‚¨ç©ºé—´: " + mfc.getSize()
 					+ "B\n";
 			for (int j = 0; j < sectorCount; j++) {
 				// Authenticate a sector with key A.
@@ -180,11 +180,11 @@ public class nfc extends Activity {
 				int bCount;
 				int bIndex;
 				if (auth == true || auth2 == true) {
-					metaInfo += "Sector " + j + ":ÑéÖ¤³É¹¦\n"; 
-					// ¶ÁÈ¡ÉÈÇøÖĞµÄ¿é
+					metaInfo += "Sector " + j + ":éªŒè¯æˆåŠŸ\n";
+					// è¯»å–æ‰‡åŒºä¸­çš„å—
 					bCount = mfc.getBlockCountInSector(j);
 					bIndex = mfc.sectorToBlock(j);
-					
+
 					for (int i = 0; i < bCount; i++) {
 						byte[] data = mfc.readBlock(bIndex);
 						metaInfo += "Block " + bIndex + " : "
@@ -192,12 +192,12 @@ public class nfc extends Activity {
 						bIndex++;
 					}
 				} else {
-					metaInfo += "Sector " + j + ":ÑéÖ¤Ê§°Ü\n";
+					metaInfo += "Sector " + j + ":éªŒè¯å¤±è´¥\n";
 				}
 			}
 			promt.setText(metaInfo);
 
-			// File f = new File("/sdcard/nfc.txt");// ´´½¨ÎÄ¼ş
+			// File f = new File("/sdcard/nfc.txt");// åˆ›å»ºæ–‡ä»¶
 			// String mstring = Environment.getExternalStorageDirectory() +
 			// "/nfc.txt";
 			// String mstring = "/mnt/sdcard/nfc.txt";
@@ -207,9 +207,9 @@ public class nfc extends Activity {
 
 			Log.v("crjlog", "createNewFile f " + f);
 
-			// File f = new File("/system/nfc.txt");// ´´½¨ÎÄ¼ş
+			// File f = new File("/system/nfc.txt");// åˆ›å»ºæ–‡ä»¶
 
-			if (!f.exists()) {// ÎÄ¼ş²»´æÔÚ·µ»Øfalse
+			if (!f.exists()) {// æ–‡ä»¶ä¸å­˜åœ¨è¿”å›false
 				try {
 					Log.v("crjlog", "createNewFile");
 					f.createNewFile();

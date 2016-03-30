@@ -43,7 +43,7 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 	private Bitmap bmp2 = null;
 	private int count;
 	private String filePath,filePath2;
-	
+
 	private boolean is_camaeraperview = false;
 
 	@Override
@@ -51,20 +51,20 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 		super.onCreate(savedInstanceState);
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		/* Òş²Ø±êÌâÀ¸ */
+		/* éšè—æ ‡é¢˜æ  */
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		/* Éè¶¨ÆÁÄ»ÏÔÊ¾ÎªºáÏò */
+		/* è®¾å®šå±å¹•æ˜¾ç¤ºä¸ºæ¨ªå‘ */
 		// this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setContentView(R.layout.camera_test_main);
-		
+
 		mSurfaceView = (SurfaceView) findViewById(R.id.mSurfaceView);
 		mButton = (ImageButton) findViewById(R.id.myButton);
 
-		/* ÅÄÕÕButtonµÄÊÂ¼ş´¦Àí */
+		/* æ‹ç…§Buttonçš„äº‹ä»¶å¤„ç† */
 		mButton.setOnClickListener(new Button.OnClickListener() {
 			// @Override
 			public void onClick(View arg0) {
-				/* ¹Ø±ÕÉÁ¹âµÆ²¢ÅÄÕÕ */
+				/* å…³é—­é—ªå…‰ç¯å¹¶æ‹ç…§ */
 				if(!is_camaeraperview){
 					is_camaeraperview = true;
 					mCamera.autoFocus(mAutoFocusCallback);
@@ -72,24 +72,24 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 			}
 		});
 	}
-	
+
 	@SuppressLint("NewApi")
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
+
 		filePath = getFilesDir().getParent().toString() + "/"
 				+ getResources().getString(R.string.app_name) + ".bmp";
-		
+
 //		filePath2 = getFilesDir().getParent().toString() + "/"
 //				+ getResources().getString(R.string.app_name) + "2" + ".bmp"; 
-		
+
 		holder = mSurfaceView.getHolder();
 		holder.addCallback(CameraOpen.this);
 		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
-		/* ´ò¿ªÏà»ú */
+		/* æ‰“å¼€ç›¸æœº */
 		try {
 			mCamera = mCamera.open(1);
 		} catch (Exception e) {
@@ -98,14 +98,14 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 			Toast.makeText(CameraOpen.this, "Open Camera fail !",
 					Toast.LENGTH_SHORT).show();
 		}
-		
+
 		surfaceCreated(holder);
 		initCamera();
 	}
-	
+
 
 	public void surfaceCreated(SurfaceHolder surfaceholder) {
-		
+
 		try {
 
 			if (mCamera != null)
@@ -123,38 +123,38 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 	}
 
 	public void surfaceChanged(SurfaceHolder surfaceholder, int format, int w,int h) {
-		
+
 		try {
-			/* Ïà»ú³õÊ¼»¯ */
+			/* ç›¸æœºåˆå§‹åŒ– */
 			initCamera();
 			count++;
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			finish();
 			Toast.makeText(CameraOpen.this, "Open Camera fail !",
 					Toast.LENGTH_SHORT).show();
-			
+
 			if(mCamera != null){
 				mCamera.release();
 				mCamera = null;
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		
+
 		stopCamera();
-		
+
 		if (mCamera != null) {
-			
+
 			mCamera.stopPreview();
 			mCamera.release();
 			mCamera = null;
-			
+
 			surfaceDestroyed(holder);
 		}
 	}
@@ -176,19 +176,19 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 
 	private ShutterCallback shutterCallback = new ShutterCallback() {
 		public void onShutter() {
-			/* °´Ø£¿ìÃÅË²¼ä»áºô?ÕâÀïµÄ³ÌĞò */
+			/* æŒ‰å…€å¿«é—¨ç¬é—´ä¼šå‘¼?è¿™é‡Œçš„ç¨‹åº */
 		}
 	};
 
 	private PictureCallback rawCallback = new PictureCallback() {
 		public void onPictureTaken(byte[] _data, Camera _camera) {
-			/* Òª´¦Àíraw data?Ğ´?·ñ */
+			/* è¦å¤„ç†raw data?å†™?å¦ */
 		}
 	};
 
 	private PictureCallback jpegCallback = new PictureCallback() {
 		public void onPictureTaken(byte[] _data, Camera _camera) {
-			/* È¡µÃÏàÆ¬ */
+			/* å–å¾—ç›¸ç‰‡ */
 			try {
 
 				int w = _camera.getParameters().getPictureSize().width;
@@ -206,7 +206,7 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 				Log.v("crjlog", "resut = " + resut + "filePath = " + filePath);
 				setResult(Activity.RESULT_OK);
 				finish();
-				/* È¡µÃÏàÆ¬Bitmap¶ÔÏó */
+				/* å–å¾—ç›¸ç‰‡Bitmapå¯¹è±¡ */
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -216,7 +216,7 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 	public final class AutoFocusCallback implements
 			android.hardware.Camera.AutoFocusCallback {
 		public void onAutoFocus(boolean focused, Camera camera) {
-			/* ¶Ôµ½½¹µãÅÄÕÕ */
+			/* å¯¹åˆ°ç„¦ç‚¹æ‹ç…§ */
 			if (focused) {
 				takePicture();
 			} else
@@ -224,8 +224,8 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 		}
 	};
 
-	/* Ïà»ú³õÊ¼»¯µÄmethod */
-	@SuppressLint("NewApi") 
+	/* ç›¸æœºåˆå§‹åŒ–çš„method */
+	@SuppressLint("NewApi")
 	private void initCamera() {
 		if (mCamera != null) {
 			try {
@@ -253,12 +253,12 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 		}
 	}
 
-	/* Í£Ö¹Ïà»úµÄmethod */
+	/* åœæ­¢ç›¸æœºçš„method */
 	private void stopCamera() {
-		
+
 		if (mCamera != null) {
 			try {
-				/* Í£Ö¹Ô¤ÀÀ */
+				/* åœæ­¢é¢„è§ˆ */
 				mCamera.stopPreview();
 				is_camaeraperview = false;
 			} catch (Exception e) {
@@ -266,21 +266,21 @@ public class CameraOpen extends Activity implements SurfaceHolder.Callback {
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if ((keyCode == 251 || keyCode == 252) && (event.getRepeatCount() == 0) && is_camaeraperview == false) {
-			
+
 			if(!is_camaeraperview){
-				
+
 				is_camaeraperview = true;
 				if(mCamera != null)
-				mCamera.autoFocus(mAutoFocusCallback);
+					mCamera.autoFocus(mAutoFocusCallback);
 				return true;
 			}
 		}
-		
+
 		return super.onKeyDown(keyCode, event);
 	}
 

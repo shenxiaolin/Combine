@@ -17,10 +17,10 @@ public class DataParser{
 	public native static int GetJP2IMAGE(String jp2FileName);
 	public native static int GetFingerXYT(String xytFilePath);
 
-    //导入的lib名去掉前面的lib
-    static{
-        System.loadLibrary("parser");
-    }
+	//瀵煎叆鐨刲ib鍚嶅幓鎺夊墠闈㈢殑lib
+	static{
+		System.loadLibrary("parser");
+	}
 }
 
 //GetJP2IMAGE

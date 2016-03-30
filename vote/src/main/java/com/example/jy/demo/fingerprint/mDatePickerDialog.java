@@ -11,23 +11,23 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 /**
  * @author joker
- * ×Ô¶¨ÒåµÄÈÕÆÚ¿Ø¼ş£¬Ö»ÓĞÄêºÍÔÂ£¬Ã»ÓĞÈÕ
- * 2012-10-17 ÉÏÎç11:02:17 
+ * è‡ªå®šä¹‰çš„æ—¥æœŸæ§ä»¶ï¼Œåªæœ‰å¹´å’Œæœˆï¼Œæ²¡æœ‰æ—¥
+ * 2012-10-17 ä¸Šåˆ11:02:17 
  */
 public class mDatePickerDialog extends DatePickerDialog {
-	 public mDatePickerDialog(Context context,
-             OnDateSetListener callBack, int Month, int dayOfMonth) {
-         super(context, callBack, 2000, Month, dayOfMonth);
-//         this.setTitle(Month+1+"ÔÂ"+ dayOfMonth + "ÈÕ");
-         this.setTitle(R.string.System_Log_query_dialog_title);
-     }
+	public mDatePickerDialog(Context context,
+							 OnDateSetListener callBack, int Month, int dayOfMonth) {
+		super(context, callBack, 2000, Month, dayOfMonth);
+//         this.setTitle(Month+1+"æœˆ"+ dayOfMonth + "æ—¥");
+		this.setTitle(R.string.System_Log_query_dialog_title);
+	}
 
-     @Override
-     public void onDateChanged(DatePicker view, int year, int month, int day) {
-         super.onDateChanged(view, year, month, day); 
-//         this.setTitle(month+1+"ÔÂ"+ day + "ÈÕ" );
-         this.setTitle(R.string.System_Log_query_dialog_title);
-     }
+	@Override
+	public void onDateChanged(DatePicker view, int year, int month, int day) {
+		super.onDateChanged(view, year, month, day);
+//         this.setTitle(month+1+"æœˆ"+ day + "æ—¥" );
+		this.setTitle(R.string.System_Log_query_dialog_title);
+	}
 
 	/* (non-Javadoc)
 	 * @see android.app.DatePickerDialog#show()
@@ -36,54 +36,54 @@ public class mDatePickerDialog extends DatePickerDialog {
 	public void show() {
 		// TODO Auto-generated method stub
 		super.show();
-		 DatePicker dp = findDatePicker((ViewGroup) this.getWindow().getDecorView());
-	        if (dp != null) {
-	        	Class c=dp.getClass();
-	        	Field f;
-				try {
-					f = c.getDeclaredField("mYearSpinner");
-					f.setAccessible(true );  
-					LinearLayout l= (LinearLayout)f.get(dp);   
-					l.setVisibility(View.GONE);
-				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchFieldException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}  
-	        	
-	        } 
+		DatePicker dp = findDatePicker((ViewGroup) this.getWindow().getDecorView());
+		if (dp != null) {
+			Class c=dp.getClass();
+			Field f;
+			try {
+				f = c.getDeclaredField("mYearSpinner");
+				f.setAccessible(true );
+				LinearLayout l= (LinearLayout)f.get(dp);
+				l.setVisibility(View.GONE);
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
 	}
 	/**
-     * ´Óµ±Ç°DialogÖĞ²éÕÒDatePicker×Ó¿Ø¼ş
-     * 
-     * @param group
-     * @return
-     */
-    private DatePicker findDatePicker(ViewGroup group) {
-        if (group != null) {
-            for (int i = 0, j = group.getChildCount(); i < j; i++) {
-                View child = group.getChildAt(i);
-                if (child instanceof DatePicker) {
-                    return (DatePicker) child;
-                } else if (child instanceof ViewGroup) {
-                    DatePicker result = findDatePicker((ViewGroup) child);
-                    if (result != null)
-                        return result;
-                } 
-            }
-        }
-        return null;
+	 * ä»å½“å‰Dialogä¸­æŸ¥æ‰¾DatePickerå­æ§ä»¶
+	 *
+	 * @param group
+	 * @return
+	 */
+	private DatePicker findDatePicker(ViewGroup group) {
+		if (group != null) {
+			for (int i = 0, j = group.getChildCount(); i < j; i++) {
+				View child = group.getChildAt(i);
+				if (child instanceof DatePicker) {
+					return (DatePicker) child;
+				} else if (child instanceof ViewGroup) {
+					DatePicker result = findDatePicker((ViewGroup) child);
+					if (result != null)
+						return result;
+				}
+			}
+		}
+		return null;
 
-    }
-	
+	}
+
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		// TODO Auto-generated method stub

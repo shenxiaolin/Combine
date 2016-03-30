@@ -22,7 +22,7 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 	public final static String EVENT = "event";
 	public final static String ID_desc = "id desc";
 
-	public final static String USER_TABLE_NAME = "user_table"; 
+	public final static String USER_TABLE_NAME = "user_table";
 	public final static String ID_USER = "id";
 	public final static String USER_NAME = "user_name";
 	public final static String USER_PWD = "password";
@@ -35,14 +35,14 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 	public final static int ENTRY_ADDRESS_NUM = 20;
 
 	//gather
-	public final static String GATHER_USER_TABLE_NAME = "gatherinfo_table"; 
+	public final static String GATHER_USER_TABLE_NAME = "gatherinfo_table";
 	public final static String GATHER_ID_USER = "id";
 	public final static String GATHER_USER_NAME = "gather_name";
 	public final static String GATHER_GENDER = "gender";
 	public final static String GATHER_BIRTHDAY = "birthday";
 	public final static String GATHER_ADDRESS = "address";
-	
-	
+
+
 	// public final static String USER_TIME = "login_time";
 
 	public Vote_DBHelper(Context context) {
@@ -50,13 +50,13 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
-	// 创建table
+	// 鍒涘缓table
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		Create_Systemlog_table(db);
-		
+
 		Create_User_table(db);
-		
+
 		Create_Gather_table(db);
 	}
 
@@ -70,29 +70,29 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 	public void Create_Systemlog_table(SQLiteDatabase db) {
 
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + SYSLOG_TABLE_NAME + "(" + ID
-				+ " integer primary key autoincrement," 
+				+ " integer primary key autoincrement,"
 				+ NAME + " String,"
-				+ DATE + " text," 
-				+ TIME + " text," 
+				+ DATE + " text,"
+				+ TIME + " text,"
 				+ EVENT + " text" + ")");
 	}
 
 	public void Create_User_table(SQLiteDatabase db) {
 
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + USER_TABLE_NAME + "("
-				+ ID_USER + " integer primary key autoincrement," 
-				+ USER_NAME	+ " String," 
+				+ ID_USER + " integer primary key autoincrement,"
+				+ USER_NAME	+ " String,"
 				+ USER_PWD + " text,"
 				+ USER_TYPE + " integer" + ")");
 	}
-	
+
 	public void Create_Gather_table(SQLiteDatabase db) {
 
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + GATHER_USER_TABLE_NAME + "("
-				+ GATHER_ID_USER + " integer primary key autoincrement," 
-				+ GATHER_USER_NAME + " String," 
-				+ GATHER_GENDER + " String," 
-				+ GATHER_BIRTHDAY + " String," 
+				+ GATHER_ID_USER + " integer primary key autoincrement,"
+				+ GATHER_USER_NAME + " String,"
+				+ GATHER_GENDER + " String,"
+				+ GATHER_BIRTHDAY + " String,"
 				+ GATHER_ADDRESS + " text" + ")");
 	}
 
@@ -109,18 +109,18 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 				null);
 		return cursor;
 	}
-	
+
 	public Cursor Query_Gather_table() {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.query(GATHER_USER_TABLE_NAME, null, null, null, null, null,
 				null);
 		return cursor;
 	}
-	
+
 
 	public Cursor query(String table, String[] columns, String selection,
-			String[] selectionArgs, String groupBy, String having,
-			String orderBy) {
+						String[] selectionArgs, String groupBy, String having,
+						String orderBy) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.query(table, columns, selection, selectionArgs,
 				groupBy, having, orderBy);
@@ -128,11 +128,11 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 		return cursor;
 	}
 
-	// 增加操作
+	// 澧炲姞鎿嶄綔
 	// public long insert(Integer vin, String time, String status) {
 	public long insert_syslogtable(String name, String event) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		
+
 		SimpleDateFormat format = new SimpleDateFormat("MM-dd");
 		SimpleDateFormat format2 = new SimpleDateFormat("HH:mm");
 		String date = format.format(new Date());
@@ -160,7 +160,7 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 		return is_ok;
 	}
 
-	
+
 	public long insert_gathertable(String userName, String gender, String birthday, String address) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		/* ContentValues */
@@ -172,9 +172,9 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 		long is_ok = db.insert(GATHER_USER_TABLE_NAME, null, cv);
 		return is_ok;
 	}
-	
-	
-	// 删除操作
+
+
+	// 鍒犻櫎鎿嶄綔
 	public void delete(int id) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String where = NAME + " = ?";
@@ -189,7 +189,7 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 		db.delete(USER_TABLE_NAME, where, whereValue);
 	}
 
-	// 修改操作
+	// 淇敼鎿嶄綔
 	public void update(int id, String bookname, String author) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String where = NAME + " = ?";
@@ -200,7 +200,7 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 		cv.put(EVENT, author);
 		db.update(SYSLOG_TABLE_NAME, cv, where, whereValue);
 	}
-	
+
 	public void update_usertable(int id, String name_pwd, Boolean is_name) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String where = ID_USER + " = ?";
@@ -213,5 +213,5 @@ public class Vote_DBHelper extends SQLiteOpenHelper {
 		}
 		db.update(USER_TABLE_NAME, cv, where, whereValue);
 	}
-	
+
 }

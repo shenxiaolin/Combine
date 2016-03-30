@@ -42,19 +42,19 @@ public class DataEntryList extends Activity implements OnItemClickListener,
 		OnItemLongClickListener {
 
 	private ListView mListView;
-//	private TextView mPathView;
+	//	private TextView mPathView;
 	private FileListAdapter mFileAdpter;
 	private TextView mItemCount;
 	private String[] dataListarray;
-	
+
 	// dialog view
 	private AlertDialog listviewDlg,textviewDlg;
 	private Button dialog_bt_cancel,dialog_bt_ok;
 	private TextView dialog_title,dialog_tv;
-	
+
 	private Button dialog_listview_bt1,dialog_listview_bt2;
 	private Button mbuttonback;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,7 +71,7 @@ public class DataEntryList extends Activity implements OnItemClickListener,
 		mbuttonback = (Button) findViewById(R.id.file_list_button_back);
 
 		dataListarray = getResources().getStringArray(R.array.datalist_item);
-		
+
 		mbuttonback.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -79,19 +79,19 @@ public class DataEntryList extends Activity implements OnItemClickListener,
 				finish();
 			}
 		});
-		
+
 		initDataList();
 	}
 
 	private void initDataList(){
-		
+
 //		File folder = new File(Environment.getExternalStorageDirectory()
 //				.toString() + "/" + getResources().getString(R.string.app_name));
-		
+
 		File folder = this.getFilesDir();
-		initData(folder);		
+		initData(folder);
 	}
-	
+
 	private void initData(File folder) {
 //		mPathView.setText(folder.getAbsolutePath());
 		ArrayList<File> files = new ArrayList<File>();
@@ -181,7 +181,7 @@ public class DataEntryList extends Activity implements OnItemClickListener,
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
-			long id) {
+							long id) {
 		File file = (File) mFileAdpter.getItem(position);
 		if (file.isDirectory()) {
 			initData(file);
@@ -207,35 +207,35 @@ public class DataEntryList extends Activity implements OnItemClickListener,
 					Toast.LENGTH_SHORT).show();
 		}
 	}
-	
+
 	private void dismissDialoglistView() {
-		
+
 		if(listviewDlg != null)
 			listviewDlg.dismiss();
-		
+
 	}
-	
+
 	private void dismissDialogtextView() {
-		
+
 		if(textviewDlg != null)
 			textviewDlg.dismiss();
-		
+
 	}
-	
+
 	private void initDialogTextView() {
-		
+
 		textviewDlg = new AlertDialog.Builder(DataEntryList.this).create();
 		textviewDlg.show();
 		Window window = textviewDlg.getWindow();
 		window.setContentView(R.layout.theme_dialog_text);
 		window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-		
+
 		dialog_title = (TextView) window.findViewById(R.id.text_dialog_title);
 		dialog_tv = (TextView) window.findViewById(R.id.text_dialog_tv);
-		
+
 		dialog_bt_ok = (Button) window.findViewById(R.id.text_dialog_button_ok);
 		dialog_bt_cancel = (Button) window.findViewById(R.id.text_dialog_button_cancel);
-		
+
 		dialog_bt_cancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -244,21 +244,21 @@ public class DataEntryList extends Activity implements OnItemClickListener,
 			}
 		});
 	}
-	
+
 	private void initDialoglistView() {
-		
+
 		listviewDlg = new AlertDialog.Builder(DataEntryList.this).create();
 		listviewDlg.show();
 		Window window = listviewDlg.getWindow();
 		window.setContentView(R.layout.theme_dialog_listview);
 		window.clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-		
-		dialog_title = (TextView) window.findViewById(R.id.listview_dialog_title);		
+
+		dialog_title = (TextView) window.findViewById(R.id.listview_dialog_title);
 		dialog_listview_bt1 = (Button) window.findViewById(R.id.listview_dialog_listbutton1);
 		dialog_listview_bt2 = (Button) window.findViewById(R.id.listview_dialog_listbutton2);
 		dialog_listview_bt1.setText(dataListarray[0]);
-		dialog_listview_bt2.setText(dataListarray[1]);		
-		
+		dialog_listview_bt2.setText(dataListarray[1]);
+
 		dialog_bt_cancel = (Button) window.findViewById(R.id.listview_dialog_button_cancel);
 		dialog_bt_cancel.setOnClickListener(new OnClickListener() {
 			@Override
@@ -269,66 +269,66 @@ public class DataEntryList extends Activity implements OnItemClickListener,
 		});
 	}
 
-	
-	
-	
+
+
+
 	@Override
 	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
+								   long arg3) {
 		// TODO Auto-generated method stub
 		final File file = (File) mFileAdpter.getItem(arg2);
 		final String path = file.getAbsolutePath();
 		final String fileName = file.getName();
-		
+
 		initDialoglistView();
-		
-		dialog_title.setText(R.string.userlist_dialogtitle); 
-		
+
+		dialog_title.setText(R.string.userlist_dialogtitle);
+
 		dialog_listview_bt1.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 				String data = readFile(path);
-				
+
 				Intent it = new Intent(DataEntryList.this,DataEntry.class);
 				it.putExtra("dataInfo", data);
 //				it.putExtra("dataPath", path);
 				it.putExtra("dataPath", fileName);
 				startActivityForResult(it, 0);
-				
-				
+
+
 				Log.v("crjlog", " data  = " + data );
 				Log.v("crjlog", " fileName  = " + fileName );
-				
-				dismissDialoglistView(); 
+
+				dismissDialoglistView();
 			}
-		}); 
-		
-		
-		dialog_listview_bt2.setOnClickListener(new OnClickListener() { 
+		});
+
+
+		dialog_listview_bt2.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
+
 				dismissDialoglistView();
 				initDialogTextView();
-				
-				dialog_title.setText(R.string.screen_mainmenu_dialog_title);  
-				dialog_tv.setText(R.string.dataentry_filelist_delete_dialog); 
-				
+
+				dialog_title.setText(R.string.screen_mainmenu_dialog_title);
+				dialog_tv.setText(R.string.dataentry_filelist_delete_dialog);
+
 				dialog_bt_ok.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub 
-						
-						dataDeleteFile(file); 
+
+						dataDeleteFile(file);
 						initDataList();
 						dismissDialogtextView();
-						 
+
 					}
 				});
-				 
+
 			}
 		});
 
@@ -345,7 +345,7 @@ public class DataEntryList extends Activity implements OnItemClickListener,
 	private void dataDeleteFile(File file) {
 
 		try {
-			if (file.exists()) { // 判断文件是否存在
+			if (file.exists()) { // 鍒ゆ柇鏂囦欢鏄惁瀛樺湪
 				file.delete();
 				Toast.makeText(this, R.string.dataentry_filelist_delete_success,
 						Toast.LENGTH_SHORT).show();

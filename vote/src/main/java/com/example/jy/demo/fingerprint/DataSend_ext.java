@@ -20,9 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DataSend_ext extends Activity {
-	 public static final String IP_ADDR = "192.168.16.59";// ·şÎñÆ÷µØÖ·
-//	private static final String IP_ADDR = "10.0.2.2";// ·şÎñÆ÷µØÖ·
-	private static final int PORT = 6778;// ·şÎñÆ÷¶Ë¿ÚºÅ
+	public static final String IP_ADDR = "192.168.16.59";// æœåŠ¡å™¨åœ°å€
+	//	private static final String IP_ADDR = "10.0.2.2";// æœåŠ¡å™¨åœ°å€
+	private static final int PORT = 6778;// æœåŠ¡å™¨ç«¯å£å·
 	private Button mDataSendButton_Send, mDataSendButton_Back;
 	private TextView mStatus;
 	private String result;
@@ -57,86 +57,86 @@ public class DataSend_ext extends Activity {
 		public void run() {
 			// TODO Auto-generated method stub
 			Socket mSocket = null;
-			byte[] buffer = null; 
-			
+			byte[] buffer = null;
+
 			DataOutputStream mDataOutputStream = null;
-			DataInputStream mDataInputStream = null;  
+			DataInputStream mDataInputStream = null;
 			InputStream mInputStream = null;
 			OutputStream mOutputStream = null;
-			
+
 			try {
 				mSocket = new Socket();
 				mSocket.connect(new InetSocketAddress(IP_ADDR, PORT), 6778);
-				
-				mDataOutputStream = new DataOutputStream(mSocket.getOutputStream());    	
+
+				mDataOutputStream = new DataOutputStream(mSocket.getOutputStream());
 				mDataOutputStream.writeUTF("log.txt");
 				// InputStream inputStream = new FileInputStream(Environment.getExternalStorageDirectory().toString()+"/"+"nfc.txt");
 				// InputStream inputStream = new FileInputStream("system/vote.db");
 				mInputStream = new FileInputStream("system/log.txt");
-				mOutputStream = mSocket.getOutputStream(); 
-				
+				mOutputStream = mSocket.getOutputStream();
+
 				buffer = new byte[10 * 1028];
 				int temp = 0;
 				while ((temp = mInputStream.read(buffer)) != -1) {
 					mOutputStream.write(buffer, 0, temp);
 				}
-				
+
 				mOutputStream.flush();
-				
-				// Ò»¶¨Òª¼ÓÉÏÕâ¾ä£¬·ñÔòÊÕ²»µ½À´×Ô·şÎñÆ÷¶ËµÄÏûÏ¢·µ»Ø   
-				mSocket.shutdownOutput();  
-				
+
+				// ä¸€å®šè¦åŠ ä¸Šè¿™å¥ï¼Œå¦åˆ™æ”¶ä¸åˆ°æ¥è‡ªæœåŠ¡å™¨ç«¯çš„æ¶ˆæ¯è¿”å›   
+				mSocket.shutdownOutput();
+
 				mDataInputStream = new DataInputStream(mSocket.getInputStream());
-				
+
 				if(mDataInputStream != null){
 					String result = mDataInputStream.readUTF();
-					Log.v("crjlog", "result = " + result); 
+					Log.v("crjlog", "result = " + result);
 				}
-				
-				Log.v("crjlog", "sending complete!"); 
+
+				Log.v("crjlog", "sending complete!");
 			} catch (Exception e) {
 				// TODO: handle exception
-				
-				Log.v("crjlog", "Exception = " + e.toString()); 
+
+				Log.v("crjlog", "Exception = " + e.toString());
 				e.printStackTrace();
 			} finally {
-					
-					if(buffer != null)
+
+				if(buffer != null)
 					buffer = null;
-					
-					if(mOutputStream != null)
+
+				if(mOutputStream != null)
 					try {
 						mOutputStream.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						Log.v("crjlog", "111111111"); 
+						Log.v("crjlog", "111111111");
 						e.printStackTrace();
 					}
-					
-					if(mInputStream != null)
+
+				if(mInputStream != null)
 					try {
 						mInputStream.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block 
-						Log.v("crjlog", "2222222222"); 
+						Log.v("crjlog", "2222222222");
 						e.printStackTrace();
 					}
-					
-					if(mDataOutputStream != null)
+
+				if(mDataOutputStream != null)
 					try {
 						mDataOutputStream.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						Log.v("crjlog", "3333333333"); 
+						Log.v("crjlog", "3333333333");
 						e.printStackTrace();
 					}
-					
-					if(mSocket != null)
+
+				if(mSocket != null)
 					try {
 						mSocket.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						Log.v("crjlog", "4444444444"); 
+						Log.v("crjlog", "4444444444");
 						e.printStackTrace();
 					}
 			}

@@ -59,8 +59,8 @@ public class UserQuery extends Activity {
 	private Boolean is_Query = false;
 
 	private final List<Integer> mIdList = new ArrayList<Integer>();
-	
-    private String[] type = {"Collection User","Verification User"};
+
+	private String[] type = {"Collection User","Verification User"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,14 +93,14 @@ public class UserQuery extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1,
-					int position, long itemId) {
+									int position, long itemId) {
 				// TODO Auto-generated method stub
 
 				int id = (int) ((DBUserAdapter) mDBlist.getAdapter())
 						.getItemId(position);
-				
+
 				if(id != 1){
-					
+
 					CheckBox checkBox = (CheckBox) arg1
 							.findViewById(R.id.userlist_checkbox);
 
@@ -126,7 +126,7 @@ public class UserQuery extends Activity {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
+										   int arg2, long arg3) {
 				// TODO Auto-generated method stub
 				litemNem = arg2;
 
@@ -144,13 +144,13 @@ public class UserQuery extends Activity {
 						// TODO Auto-generated method stub
 
 						if(((DBUserAdapter) mDBlist.getAdapter()).getItemId(litemNem) == 1){
-							
+
 							Toast.makeText(UserQuery.this,getResources().getString(R.string.userlist_toast_changename_admin),Toast.LENGTH_SHORT).show();
 							dismissListDialogView();
 							return;
 						}
-						
-						
+
+
 						dismissListDialogView();
 
 						initEdittextDialogView();
@@ -162,42 +162,42 @@ public class UserQuery extends Activity {
 							public void onClick(View v) {
 
 								if (dialog_et.getText().length() > 0) {
-									
+
 									if(dialog_et.getText().toString().equals("imei") || dialog_et.getText().toString().equals("IMEI")
 											|| dialog_et.getText().toString().equals("INEC") ||dialog_et.getText().toString().equals("inec")){
-											
-											Toast.makeText(UserQuery.this,
-													R.string.add_user_s_fail_toast,
-													Toast.LENGTH_SHORT).show();
-											
-											dialog_et.setText("");
-											
-											return;
-									}									
-									
-									// ≈–∂œ–ﬁ∏ƒµƒ”√ªß√˚ «∑Ò¥Ê‘⁄
+
+										Toast.makeText(UserQuery.this,
+												R.string.add_user_s_fail_toast,
+												Toast.LENGTH_SHORT).show();
+
+										dialog_et.setText("");
+
+										return;
+									}
+
+									// Âà§Êñ≠‰øÆÊîπÁöÑÁî®Êà∑ÂêçÊòØÂê¶Â≠òÂú®
 									if (queryUser(dialog_et.getText().toString()) > 0) {
-										// ¥À”√ªß“—¥Ê‘⁄
+										// Ê≠§Áî®Êà∑Â∑≤Â≠òÂú®
 										Toast.makeText(UserQuery.this,
 												R.string.add_user_error_toast,
 												Toast.LENGTH_SHORT).show();
 
-									} else {										
-										
+									} else {
+
 										try {
 											if (is_Query) {
 												mQueryCursor
-												.moveToPosition(litemNem);
+														.moveToPosition(litemNem);
 												mVoteDB.update_usertable(
 														mQueryCursor.getInt(0),
 														dialog_et.getText()
-														.toString(), true);
+																.toString(), true);
 												Toast.makeText(
 														UserQuery.this,
 														R.string.userlist_success_modifyname,
 														Toast.LENGTH_SHORT).show();
 												updataAllList();
-												
+
 											} else {
 												mCursor = mVoteDB
 														.Query_User_table();
@@ -210,15 +210,15 @@ public class UserQuery extends Activity {
 														R.string.userlist_success_modifyname,
 														Toast.LENGTH_SHORT).show();
 												updataAllList();
-												
+
 											}
-											
-											// œµÕ≥»’÷æ –ﬁ∏ƒ”√ªß√˚
+
+											// Á≥ªÁªüÊó•Âøó ‰øÆÊîπÁî®Êà∑Âêç
 											mVoteDB.insert_syslogtable(
 													"Admin",
 													getResources()
-													.getString(
-															R.string.System_Log_event_changename));
+															.getString(
+																	R.string.System_Log_event_changename));
 										} catch (Exception e) {
 											// TODO: handle exception
 											Toast.makeText(
@@ -226,7 +226,7 @@ public class UserQuery extends Activity {
 													R.string.userlist_fail_modifyname,
 													Toast.LENGTH_SHORT).show();
 										}
-										
+
 									}
 
 								} else {
@@ -277,8 +277,8 @@ public class UserQuery extends Activity {
 													.Query_User_table();
 											mCursor.moveToPosition(litemNem);
 											mVoteDB.update_usertable(mCursor
-													.getInt(0), dialog_et
-													.getText().toString(),
+															.getInt(0), dialog_et
+															.getText().toString(),
 													false);
 											Toast.makeText(
 													UserQuery.this,
@@ -287,7 +287,7 @@ public class UserQuery extends Activity {
 											updataAllList();
 										}
 
-										// œµÕ≥»’÷æ –ﬁ∏ƒ”√ªß√‹¬Î
+										// Á≥ªÁªüÊó•Âøó ‰øÆÊîπÁî®Êà∑ÂØÜÁ†Å
 										mVoteDB.insert_syslogtable(
 												"Admin",
 												getResources()
@@ -369,11 +369,11 @@ public class UserQuery extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				
+
 				chooseUsertype();
-				
+
 				updataAllList();
-				// œµÕ≥»’÷æ –¬‘ˆ”√ªß
+				// Á≥ªÁªüÊó•Âøó Êñ∞Â¢ûÁî®Êà∑
 				mVoteDB.insert_syslogtable(
 						"Admin",
 						getResources().getString(
@@ -448,7 +448,7 @@ public class UserQuery extends Activity {
 									Toast.LENGTH_SHORT).show();
 							updataAllList();
 
-							// œµÕ≥»’÷æ …æ≥˝”√ªß
+							// Á≥ªÁªüÊó•Âøó Âà†Èô§Áî®Êà∑
 							mVoteDB.insert_syslogtable(
 									"Admin",
 									getResources()
@@ -568,7 +568,7 @@ public class UserQuery extends Activity {
 		dialog_et.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-					int arg3) {
+									  int arg3) {
 				// TODO Auto-generated method stub
 				if (arg0.length() >= ENTRY_NAME_NUM) {
 					Toast.makeText(
@@ -582,7 +582,7 @@ public class UserQuery extends Activity {
 
 			@Override
 			public void beforeTextChanged(CharSequence arg0, int arg1,
-					int arg2, int arg3) {
+										  int arg2, int arg3) {
 				// TODO Auto-generated method stub
 			}
 
@@ -661,24 +661,24 @@ public class UserQuery extends Activity {
 			@Override
 			public void onClick(View v) {
 
-				// ”√ªß√˚≤ªƒ‹Œ™ø’
+				// Áî®Êà∑Âêç‰∏çËÉΩ‰∏∫Á©∫
 				if (dialog_et.getText().length() > 0) {
-					
+
 					if(dialog_et.getText().toString().equals("imei") || dialog_et.getText().toString().equals("IMEI")
-						|| dialog_et.getText().toString().equals("INEC") ||dialog_et.getText().toString().equals("inec")){
-						
+							|| dialog_et.getText().toString().equals("INEC") ||dialog_et.getText().toString().equals("inec")){
+
 						Toast.makeText(UserQuery.this,
 								R.string.add_user_s_fail_toast,
 								Toast.LENGTH_SHORT).show();
-						
+
 						dialog_et.setText("");
-						
+
 						return;
 					}
-					
+
 
 					if (queryUser(dialog_et.getText().toString()) > 0) {
-						// ¥À”√ªß“—¥Ê‘⁄
+						// Ê≠§Áî®Êà∑Â∑≤Â≠òÂú®
 						Toast.makeText(UserQuery.this,
 								R.string.add_user_error_toast,
 								Toast.LENGTH_SHORT).show();
@@ -697,7 +697,7 @@ public class UserQuery extends Activity {
 
 							@Override
 							public void onClick(View v) {
-								// ”√ªß√˚≤ªƒ‹Œ™ø’
+								// Áî®Êà∑Âêç‰∏çËÉΩ‰∏∫Á©∫
 								if (dialog_et.getText().length() > 0) {
 									long is_ok = mVoteDB.insert_usertable(
 											insert_name, dialog_et.getText()
@@ -715,7 +715,7 @@ public class UserQuery extends Activity {
 									}
 
 								} else {
-									// ”√ªß√‹¬ÎŒ™ø’Ã· æ
+									// Áî®Êà∑ÂØÜÁ†Å‰∏∫Á©∫ÊèêÁ§∫
 									Toast.makeText(UserQuery.this,
 											R.string.add_userpwd_empty_toast,
 											Toast.LENGTH_SHORT).show();
@@ -726,7 +726,7 @@ public class UserQuery extends Activity {
 						});
 					}
 				} else {
-					// ”√ªß√˚Œ™ø’Ã· æ
+					// Áî®Êà∑Âêç‰∏∫Á©∫ÊèêÁ§∫
 					Toast.makeText(UserQuery.this,
 							R.string.add_username_empty_toast,
 							Toast.LENGTH_SHORT).show();
@@ -737,7 +737,7 @@ public class UserQuery extends Activity {
 	}
 
 	private int queryUser(String name) {
-		
+
 		mCursor = mVoteDB.query(USER_TABLE_NAME, null, "USER_NAME = '" + name
 				+ "'", null, null, null, null);
 		mCursor.moveToFirst();
@@ -789,7 +789,7 @@ public class UserQuery extends Activity {
 		}
 
 		public DBUserAdapter(Context context, Cursor cursor,
-				List<Integer> idList) {
+							 List<Integer> idList) {
 
 			mContext = context;
 			mCursor = cursor;
@@ -888,27 +888,27 @@ public class UserQuery extends Activity {
 
 		}
 	}
-	
+
 	private void chooseUsertype() {
-		
-		new AlertDialog.Builder(UserQuery.this) 
-		.setTitle(getResources().getString(R.string.wt_text_choose))
-		.setIcon(android.R.drawable.ic_dialog_info)                  
-		.setSingleChoiceItems(type, 0,   
-		  new DialogInterface.OnClickListener() {  
-		                              
-		     public void onClick(DialogInterface dialog, int which) {  
-		    	 
-				insert_db(which+1);
-		        dialog.dismiss();  
-		        
-		     }  
-		  }  
-		)  
-		.setNegativeButton(getResources().getString(R.string.cancel), null)  
-		.create()
-		.show();  
+
+		new AlertDialog.Builder(UserQuery.this)
+				.setTitle(getResources().getString(R.string.wt_text_choose))
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setSingleChoiceItems(type, 0,
+						new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog, int which) {
+
+								insert_db(which+1);
+								dialog.dismiss();
+
+							}
+						}
+				)
+				.setNegativeButton(getResources().getString(R.string.cancel), null)
+				.create()
+				.show();
 
 	}
-	
+
 }

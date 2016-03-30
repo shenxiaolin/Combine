@@ -41,46 +41,46 @@ public class M1  extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.m1);
-		
+
 		tv_m1para = (TextView) this.findViewById(R.id.textView_snr);
 		lv_data = (ListView) this.findViewById(R.id.listView1);
 		et_data = (EditText) this.findViewById(R.id.editText_data);
 		btn_read = (Button) this.findViewById(R.id.button_read);
 		btn_write = (Button) this.findViewById(R.id.button_write);
 		tv_status = (TextView) this.findViewById(R.id.textView_status);
-		
-        //ÉèÖÃ»ñÈ¡½¹µã
+
+		//è®¾ç½®è·å–ç„¦ç‚¹
 		btn_read.setFocusable(true);
 		btn_read.setFocusableInTouchMode(true);
 		btn_read.requestFocus();
-		btn_read.requestFocusFromTouch();		
-		
-		//È¡µÃÆô¶¯¸ÃActivityµÄIntent¶ÔÏó
-        Intent intent = getIntent();
-        /*È¡³öIntentÖĞ¸½¼ÓµÄÊı¾İ*/
+		btn_read.requestFocusFromTouch();
+
+		//å–å¾—å¯åŠ¨è¯¥Activityçš„Intentå¯¹è±¡
+		Intent intent = getIntent();
+        /*å–å‡ºIntentä¸­é™„åŠ çš„æ•°æ®*/
 		String m1para = intent.getStringExtra("M1Para");
-		//ÅĞ¶ÏÊÇ 1K »¹ÊÇ  4K µÄ¿¨
+		//åˆ¤æ–­æ˜¯ 1K è¿˜æ˜¯  4K çš„å¡
 		if (m1para.indexOf("S70 card") > 0)
 		{
 			flag_4k = 1;
 			nSector = 40;
 		}
-		
+
 		m1Id = intent.getByteArrayExtra("M1Id");
-		
+
 		tv_m1para.setText(m1para);
 		et_data.setText("00112233445566778899AABBCCDDEE");
 
-		//Ğ´ÈëÊı¾İÉèÖÃÎªÂÌÉ«
-		et_data.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);	//ÏÂ»®Ïß
-		et_data.setTextColor(Color.GREEN);	
-		
-		//×´Ì¬ĞÅÏ¢ÌáÊ¾ÉèÖÃÎªÀ¶É«
+		//å†™å…¥æ•°æ®è®¾ç½®ä¸ºç»¿è‰²
+		et_data.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);	//ä¸‹åˆ’çº¿
+		et_data.setTextColor(Color.GREEN);
+
+		//çŠ¶æ€ä¿¡æ¯æç¤ºè®¾ç½®ä¸ºè“è‰²
 		tv_status.setTextColor(Color.RED);	//Color.BLUE
-		
+
 
 		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);	//simple_expandable_list_item_1  
-		
+
 		btn_read.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
@@ -91,15 +91,15 @@ public class M1  extends Activity {
 				byte errflag = 0;
 				int blockIndex = 0, sectorNumber=0;
 
-				
-				// S50 µÄ¿¨, 16 ÉÈÇø;  S70µÄ¿¨, 40ÉÈÇø
+
+				// S50 çš„å¡, 16 æ‰‡åŒº;  S70çš„å¡, 40æ‰‡åŒº
 				t0 = System.currentTimeMillis();
 				for(int i=0; i<nSector; i++)
 				{
 					long t3 = System.currentTimeMillis();
-					
+
 					Arrays.fill(bKey, (byte)0xFF);
-					
+
 					if (i > 31)
 					{
 						sectorNumber = 32 + (i - 32)*4;
@@ -110,18 +110,18 @@ public class M1  extends Activity {
 						if(i == 0)
 						{
 							System.arraycopy(m1Id, 0, bKey, 0, 4);
-							
+
 							bKey[4] = 0x20;
 							bKey[5] = 0x12;
 
-							nRet = com.xd.rfid.MifAuthen((byte)0x0A, (byte)i, bKey, m1Id);					
+							nRet = com.xd.rfid.MifAuthen((byte)0x0A, (byte)i, bKey, m1Id);
 						}
 						else
 						{
 							nRet = com.xd.rfid.MifAuthen((byte)0x0A, (byte)i, bKey, m1Id);
 						}
 					}
-					
+
 					long t4 = System.currentTimeMillis();
 					Log.i(TAG, "MifRead time=" + (t4-t3) + "(ms)");
 
@@ -138,7 +138,7 @@ public class M1  extends Activity {
 						{
 							nBlock = 16;
 						}
-						
+
 						for (int j=0; j<nBlock; j++)
 						{
 							blockIndex = (i * nBlock + j);
@@ -146,12 +146,12 @@ public class M1  extends Activity {
 							{
 								blockIndex = 32*4 + (i - 32)*nBlock + j;
 							}
-							
+
 							long t5 = System.currentTimeMillis();
 							nRet = com.xd.rfid.MifRead(blockIndex, bOutData);
 							long t6 = System.currentTimeMillis();
-							Log.i(TAG, "MifRead time=" + (t6-t5) + "(ms)");							
-							
+							Log.i(TAG, "MifRead time=" + (t6-t5) + "(ms)");
+
 							if(nRet != 0)
 							{
 								strOut = "MifRead block(" + blockIndex + ") failed, nRet=" + nRet;
@@ -159,25 +159,25 @@ public class M1  extends Activity {
 								errflag = 2;
 								break;
 							}
-							
+
 							DecimalFormat df = new DecimalFormat();
 							String style = "000";
 							df.applyPattern(style);
 							//df.format(blockIndex);
-							
-					        adapter.add("Blk(" + df.format(blockIndex) + ") " + Converter.printHexLenString(bOutData, 16));
-							//ÎªListViewÉèÖÃ AdapterÀ´°ó¶¨Êı¾İ
+
+							adapter.add("Blk(" + df.format(blockIndex) + ") " + Converter.printHexLenString(bOutData, 16));
+							//ä¸ºListViewè®¾ç½® Adapteræ¥ç»‘å®šæ•°æ®
 							Log.d("kobe","Converter.printHexLenString(bOutData, 16)= "+Converter.printHexLenString(bOutData, 16));
-	
+
 						}//for j
 						if (errflag != 0)	break;
 
 						lv_data.setAdapter(adapter);
-						
+
 					}
-					
+
 				}//for i
-				
+
 				if (errflag == 0)
 				{
 					t1 = System.currentTimeMillis();
@@ -187,12 +187,12 @@ public class M1  extends Activity {
 			}
 		});
 
-		
+
 	}
-	
-	
-	
-	
+
+
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

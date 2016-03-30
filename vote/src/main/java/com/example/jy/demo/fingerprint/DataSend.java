@@ -25,29 +25,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class DataSend extends Activity {
-//	public static final String IP_ADDR = "192.168.16.51";// ·şÎñÆ÷µØÖ·
-	// private static final String IP_ADDR = "10.0.2.2";// ·şÎñÆ÷µØÖ·
-//	private static final int PORT = 8080;// ·şÎñÆ÷¶Ë¿ÚºÅ
-	
-	private static int PORT;// ·şÎñÆ÷¶Ë¿ÚºÅ
+//	public static final String IP_ADDR = "192.168.16.51";// æœåŠ¡å™¨åœ°å€
+	// private static final String IP_ADDR = "10.0.2.2";// æœåŠ¡å™¨åœ°å€
+//	private static final int PORT = 8080;// æœåŠ¡å™¨ç«¯å£å·
+
+	private static int PORT;// æœåŠ¡å™¨ç«¯å£å·
 	public static String IP_ADDR,PU_CODE;
 	public static final String fileName = "Vote.db";
 	public static final String filePath = "/databases/Vote.db";
-	
+
 	private String SYSTEM_CONFIG_PUCODE = "PU_CODE";
 	private Button mDataSendButton_Send, mDataSendButton_Back;
 	private TextView mStatus,mError;
 	private int Status;
 	private Handler mhandler;
 	private ProgressDialog mpDialog;
-	
+
 	private SharedPreferences preferences;
-	
-	private VoteVin_DBHelper mVoteDB; 
+
+	private VoteVin_DBHelper mVoteDB;
 	private Cursor mCursor = null;
-	
-	private Vote_DBHelper mVoteDB_log; 
-	
+
+	private Vote_DBHelper mVoteDB_log;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,16 +55,16 @@ public class DataSend extends Activity {
 
 		mVoteDB_log = new Vote_DBHelper(this);
 		mVoteDB = new VoteVin_DBHelper(this);
-		
+
 		mStatus = (TextView) findViewById(R.id.datasend_status);
-		mError = (TextView) findViewById(R.id.datasend_error_text); 
+		mError = (TextView) findViewById(R.id.datasend_error_text);
 		mError.setVisibility(View.GONE);
-		
+
 		preferences = this.getSharedPreferences(getResources().getString(R.string.SystemConfig_sp),MODE_PRIVATE);
 		PU_CODE = preferences.getString(SYSTEM_CONFIG_PUCODE,"34-16-10-003");
 		IP_ADDR = preferences.getString("GPRS_IP","216.24.172.73");
 		PORT = Integer.parseInt(preferences.getString("GPRS_PORT","6778"));
-		
+
 		mDataSendButton_Back = (Button) findViewById(R.id.datasend_button_back);
 		mDataSendButton_Back.setOnClickListener(new OnClickListener() {
 
@@ -81,23 +81,23 @@ public class DataSend extends Activity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				mCursor = mVoteDB.Query_Vin_table();
-				if (mCursor.getCount() == 0) {// Ä¬ÈÏµÚÒ»´ÎĞ´ÈëÒ»ÌõadminµÄ¼ÇÂ¼
+				if (mCursor.getCount() == 0) {// é»˜è®¤ç¬¬ä¸€æ¬¡å†™å…¥ä¸€æ¡adminçš„è®°å½•
 
 					Toast.makeText(DataSend.this, R.string.datasend_toast_nodata, Toast.LENGTH_SHORT).show();
-					
+
 				}else{
 					mStatus.setText(getResources().getString(R.string.datasend_text_status_process));
 					mError.setVisibility(View.GONE);
-					
+
 					mpDialog = new ProgressDialog(DataSend.this);
-					mpDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);  
-	                mpDialog.setMessage(getResources().getString(R.string.datasend_progressdialog_text));   
-	                mpDialog.setMax(100);  
-	                mpDialog.setIndeterminate(false);  
-	                mpDialog.setCanceledOnTouchOutside(false);  					
-	                mpDialog.show();
-					
-	                new Thread(new MyThread()).start();
+					mpDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+					mpDialog.setMessage(getResources().getString(R.string.datasend_progressdialog_text));
+					mpDialog.setMax(100);
+					mpDialog.setIndeterminate(false);
+					mpDialog.setCanceledOnTouchOutside(false);
+					mpDialog.show();
+
+					new Thread(new MyThread()).start();
 				}
 			}
 		});
@@ -107,45 +107,45 @@ public class DataSend extends Activity {
 			public void handleMessage(Message msg) {
 				// TODO Auto-generated method stub
 				super.handleMessage(msg);
-				
-				switch (msg.what) {
-				case 0:
-					
-					mStatus.setText(getResources().getString(R.string.datasend_text_status_fail));
-					mError.setVisibility(View.VISIBLE);
-					mError.setText(msg.obj.toString());
-//					Toast.makeText(DataSend.this, msg.obj.toString(), Toast.LENGTH_LONG).show();
-					Toast.makeText(DataSend.this, R.string.download_new_software_f, Toast.LENGTH_SHORT).show(); 
-					
-					if(mpDialog != null)
-					mpDialog.dismiss();
-					
-					mhandler.removeMessages(3);
-					break;
-					
-				case 1:
-					
-					mStatus.setText(getResources().getString(R.string.datasend_text_status_success));
-					mError.setVisibility(View.GONE);
-//					Toast.makeText(DataSend.this, R.string.datasend_text_status_success, Toast.LENGTH_LONG).show();
-					
-					//ÏµÍ³ÈÕÖ¾ ´«ÊäÊı¾İ
-					mVoteDB_log.insert_syslogtable(preferences.getString("last_login_username","Admin"),getResources().getString(R.string.System_Log_event_transfer));
-					
-					if(mpDialog != null)
-					mpDialog.dismiss();
-					
-					mhandler.removeMessages(3);
-					break;
 
-				case 3:
-					
-					mpDialog.setProgress(msg.arg1); 	
-					
-				default:
-					break;
+				switch (msg.what) {
+					case 0:
+
+						mStatus.setText(getResources().getString(R.string.datasend_text_status_fail));
+						mError.setVisibility(View.VISIBLE);
+						mError.setText(msg.obj.toString());
+//					Toast.makeText(DataSend.this, msg.obj.toString(), Toast.LENGTH_LONG).show();
+						Toast.makeText(DataSend.this, R.string.download_new_software_f, Toast.LENGTH_SHORT).show();
+
+						if(mpDialog != null)
+							mpDialog.dismiss();
+
+						mhandler.removeMessages(3);
+						break;
+
+					case 1:
+
+						mStatus.setText(getResources().getString(R.string.datasend_text_status_success));
+						mError.setVisibility(View.GONE);
+//					Toast.makeText(DataSend.this, R.string.datasend_text_status_success, Toast.LENGTH_LONG).show();
+
+						//ç³»ç»Ÿæ—¥å¿— ä¼ è¾“æ•°æ®
+						mVoteDB_log.insert_syslogtable(preferences.getString("last_login_username","Admin"),getResources().getString(R.string.System_Log_event_transfer));
+
+						if(mpDialog != null)
+							mpDialog.dismiss();
+
+						mhandler.removeMessages(3);
+						break;
+
+					case 3:
+
+						mpDialog.setProgress(msg.arg1);
+
+					default:
+						break;
 				}
-				
+
 			}
 		};
 
@@ -169,13 +169,13 @@ public class DataSend extends Activity {
 
 				mDataOutputStream = new DataOutputStream(
 						mSocket.getOutputStream());
-				
+
 				String mData = "Data_" + PU_CODE;
-				Log.v("crjlog", "mData = " + mData);	
-				
+				Log.v("crjlog", "mData = " + mData);
+
 //				mDataOutputStream.writeUTF(fileName);
 				mDataOutputStream.writeUTF(mData);
-				
+
 //				mInputStream = new FileInputStream("system/"+fileName);
 				mInputStream = new FileInputStream(getFilesDir().getParent().toString() + filePath);///data/data/com.example.jy.demo.fingerprint/databases/vote.db
 				mOutputStream = mSocket.getOutputStream();
@@ -183,56 +183,56 @@ public class DataSend extends Activity {
 				buffer = new byte[10*1024];
 				int temp = 0;
 				int Allcount = mInputStream.available();
-				
+
 				while ((temp = mInputStream.read(buffer)) != -1) {
-					
+
 					dataEncDec(buffer, 3);
 					mOutputStream.write(buffer, 0, temp);
-					
+
 					int result = Allcount - mInputStream.available();
 					Message message2 = Message.obtain();
 					message2.what=3;
 					message2.arg1 = (result*100)/Allcount;
 					mhandler.sendMessage(message2);
-					
+
 				}
 
 				mOutputStream.flush();
 
-				// Ò»¶¨Òª¼ÓÉÏÕâ¾ä£¬·ñÔòÊÕ²»µ½À´×Ô·şÎñÆ÷¶ËµÄÏûÏ¢·µ»Ø
+				// ä¸€å®šè¦åŠ ä¸Šè¿™å¥ï¼Œå¦åˆ™æ”¶ä¸åˆ°æ¥è‡ªæœåŠ¡å™¨ç«¯çš„æ¶ˆæ¯è¿”å›
 				mSocket.shutdownOutput();
 				mDataInputStream = new DataInputStream(mSocket.getInputStream());
-				
+
 				if (mDataInputStream != null) {
 					Status = mDataInputStream.readInt();
 					Log.v("crjlog", "Status = " + Status);	// 1 success , 0  fail  
 				}
-				
+
 				Log.v("crjlog", "sending complete!");
 
 				if(Status == 1){
-					Message message = Message.obtain(); 
+					Message message = Message.obtain();
 					message.what=1;
-					//Í¨¹ıHandler·¢²¼´«ËÍÏûÏ¢£¬handler
+					//é€šè¿‡Handlerå‘å¸ƒä¼ é€æ¶ˆæ¯ï¼Œhandler
 					mhandler.sendMessage(message);
 					Log.v("crjlog", "reveice complete!");
 				}
-				
+
 			} catch (Exception e) {
 				// TODO: handle exception
 
-				
-				Message message = Message.obtain(); 
+
+				Message message = Message.obtain();
 				message.what=0;
-				
+
 				if(e.getMessage() != null){
 					message.obj = e.getMessage();
 				}else{
 					message.obj = e.toString();
 				}
-				//Í¨¹ıHandler·¢²¼´«ËÍÏûÏ¢£¬handler
+				//é€šè¿‡Handlerå‘å¸ƒä¼ é€æ¶ˆæ¯ï¼Œhandler
 				mhandler.sendMessage(message);
-				
+
 				e.printStackTrace();
 			} finally {
 
@@ -244,18 +244,18 @@ public class DataSend extends Activity {
 						mOutputStream.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						
-						Message message = Message.obtain(); 
+
+						Message message = Message.obtain();
 						message.what=0;
-						
+
 						if(e.getMessage() != null){
 							message.obj = e.getMessage();
 						}else{
 							message.obj = e.toString();
 						}
-						//Í¨¹ıHandler·¢²¼´«ËÍÏûÏ¢£¬handler
+						//é€šè¿‡Handlerå‘å¸ƒä¼ é€æ¶ˆæ¯ï¼Œhandler
 						mhandler.sendMessage(message);
-						
+
 						e.printStackTrace();
 					}
 
@@ -264,15 +264,15 @@ public class DataSend extends Activity {
 						mInputStream.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						Message message = Message.obtain(); 
+						Message message = Message.obtain();
 						message.what=0;
-						
+
 						if(e.getMessage() != null){
 							message.obj = e.getMessage();
 						}else{
 							message.obj = e.toString();
 						}
-						//Í¨¹ıHandler·¢²¼´«ËÍÏûÏ¢£¬handler
+						//é€šè¿‡Handlerå‘å¸ƒä¼ é€æ¶ˆæ¯ï¼Œhandler
 						mhandler.sendMessage(message);
 						e.printStackTrace();
 					}
@@ -282,15 +282,15 @@ public class DataSend extends Activity {
 						mDataOutputStream.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						Message message = Message.obtain(); 
+						Message message = Message.obtain();
 						message.what=0;
-						
+
 						if(e.getMessage() != null){
 							message.obj = e.getMessage();
 						}else{
 							message.obj = e.toString();
 						}
-						//Í¨¹ıHandler·¢²¼´«ËÍÏûÏ¢£¬handler
+						//é€šè¿‡Handlerå‘å¸ƒä¼ é€æ¶ˆæ¯ï¼Œhandler
 						mhandler.sendMessage(message);
 						e.printStackTrace();
 					}
@@ -300,41 +300,41 @@ public class DataSend extends Activity {
 						mSocket.close();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						Message message = Message.obtain(); 
+						Message message = Message.obtain();
 						message.what=0;
-						
+
 						if(e.getMessage() != null){
 							message.obj = e.getMessage();
 						}else{
 							message.obj = e.toString();
 						}
-						//Í¨¹ıHandler·¢²¼´«ËÍÏûÏ¢£¬handler
+						//é€šè¿‡Handlerå‘å¸ƒä¼ é€æ¶ˆæ¯ï¼Œhandler
 						mhandler.sendMessage(message);
 						e.printStackTrace();
 					}
-				
+
 			}
 		}
 	}
-	
-	//×Ö½ÚÁ÷¼Ó½âÃÜ
-		public static int dataEncDec(byte[] b, int v) {
-			int nRet = 0;
-			for (int i = 0; i < b.length; i++) {
-				if (b[i] != 0 && b[i] != (byte) v) {
-					b[i] ^= v;
-				}
+
+	//å­—èŠ‚æµåŠ è§£å¯†
+	public static int dataEncDec(byte[] b, int v) {
+		int nRet = 0;
+		for (int i = 0; i < b.length; i++) {
+			if (b[i] != 0 && b[i] != (byte) v) {
+				b[i] ^= v;
 			}
-			return nRet;
 		}
-	
+		return nRet;
+	}
+
 	@Override
-		protected void onDestroy() {
-			// TODO Auto-generated method stub
-			super.onDestroy();
-			
-			if(mCursor != null)
-				mCursor.close();
-		}
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+
+		if(mCursor != null)
+			mCursor.close();
+	}
 
 }

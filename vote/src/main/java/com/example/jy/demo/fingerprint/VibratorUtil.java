@@ -2,31 +2,31 @@ package com.example.jy.demo.fingerprint;
 
 import android.util.Log;
 
-import android.app.Activity;  
-import android.app.Service;  
-import android.os.Vibrator;  
-  
-/** 
- * ÊÖ»úÕğ¶¯¹¤¾ßÀà 
- * @author Administrator 
- * 
- */  
-public class VibratorUtil {  
-      
-    /** 
-     * final Activity activity  £ºµ÷ÓÃ¸Ã·½·¨µÄActivityÊµÀı 
-     * long milliseconds £ºÕğ¶¯µÄÊ±³¤£¬µ¥Î»ÊÇºÁÃë 
-     * long[] pattern  £º×Ô¶¨ÒåÕğ¶¯Ä£Ê½ ¡£Êı×éÖĞÊı×ÖµÄº¬ÒåÒÀ´ÎÊÇ[¾²Ö¹Ê±³¤£¬Õğ¶¯Ê±³¤£¬¾²Ö¹Ê±³¤£¬Õğ¶¯Ê±³¤¡£¡£¡£]Ê±³¤µÄµ¥Î»ÊÇºÁÃë 
-     * boolean isRepeat £º ÊÇ·ñ·´¸´Õğ¶¯£¬Èç¹ûÊÇtrue£¬·´¸´Õğ¶¯£¬Èç¹ûÊÇfalse£¬Ö»Õğ¶¯Ò»´Î 
-     */  
-      
-     public static void Vibrate(final Activity activity, long milliseconds) {   
-            Vibrator vib = (Vibrator) activity.getSystemService(Service.VIBRATOR_SERVICE);   
-            vib.vibrate(milliseconds);   
-     }   
-     public static void Vibrate(final Activity activity, long[] pattern,boolean isRepeat) {   
-            Vibrator vib = (Vibrator) activity.getSystemService(Service.VIBRATOR_SERVICE);   
-            vib.vibrate(pattern, isRepeat ? 1 : -1);   
-     }   
-  
+import android.app.Activity;
+import android.app.Service;
+import android.os.Vibrator;
+
+/**
+ * æ‰‹æœºéœ‡åŠ¨å·¥å…·ç±» 
+ * @author Administrator
+ *
+ */
+public class VibratorUtil {
+
+    /**
+     * final Activity activity  ï¼šè°ƒç”¨è¯¥æ–¹æ³•çš„Activityå®ä¾‹ 
+     * long milliseconds ï¼šéœ‡åŠ¨çš„æ—¶é•¿ï¼Œå•ä½æ˜¯æ¯«ç§’ 
+     * long[] pattern  ï¼šè‡ªå®šä¹‰éœ‡åŠ¨æ¨¡å¼ ã€‚æ•°ç»„ä¸­æ•°å­—çš„å«ä¹‰ä¾æ¬¡æ˜¯[é™æ­¢æ—¶é•¿ï¼Œéœ‡åŠ¨æ—¶é•¿ï¼Œé™æ­¢æ—¶é•¿ï¼Œéœ‡åŠ¨æ—¶é•¿ã€‚ã€‚ã€‚]æ—¶é•¿çš„å•ä½æ˜¯æ¯«ç§’ 
+     * boolean isRepeat ï¼š æ˜¯å¦åå¤éœ‡åŠ¨ï¼Œå¦‚æœæ˜¯trueï¼Œåå¤éœ‡åŠ¨ï¼Œå¦‚æœæ˜¯falseï¼Œåªéœ‡åŠ¨ä¸€æ¬¡ 
+     */
+
+    public static void Vibrate(final Activity activity, long milliseconds) {
+        Vibrator vib = (Vibrator) activity.getSystemService(Service.VIBRATOR_SERVICE);
+        vib.vibrate(milliseconds);
+    }
+    public static void Vibrate(final Activity activity, long[] pattern,boolean isRepeat) {
+        Vibrator vib = (Vibrator) activity.getSystemService(Service.VIBRATOR_SERVICE);
+        vib.vibrate(pattern, isRepeat ? 1 : -1);
+    }
+
 }  

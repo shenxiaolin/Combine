@@ -2,10 +2,10 @@ package com.io;
 
 
 public class io{
-	public native static int IoOpen();
-	public native static int IoClose();
+    public native static int IoOpen();
+    public native static int IoClose();
 
-    //导入的lib名去掉前面的lib
+    //瀵煎叆鐨刲ib鍚嶅幓鎺夊墠闈㈢殑lib
     static{
         System.loadLibrary("io");
     }

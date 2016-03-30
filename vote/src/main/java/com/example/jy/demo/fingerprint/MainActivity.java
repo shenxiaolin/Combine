@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
 	private Cursor mCursor_user;
 
 	private String USER_TABLE_NAME, ADMIN_USER_NAME;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,7 +84,7 @@ public class MainActivity extends Activity {
 		mbuttonPerson = (Button) findViewById(R.id.button_mPerson);
 		//mbuttonDataEntry = (Button) findViewById(R.id.button_mDataEntry);
 		mbuttonAbout = (Button) findViewById(R.id.button_mAbout);
-		
+
 		mbuttonLockVote = (Button) findViewById(R.id.button_lockvote);
 
 		mbuttonDataQuery = (Button) findViewById(R.id.button_mQuery);
@@ -101,17 +101,17 @@ public class MainActivity extends Activity {
 
 		ET = preferences.getString("CURRENT_ELECTION_TYPE", "President");
 		pucode = preferences.getString("PU_CODE", "34-16-10-003");
-		
+
 		changePwd_username = preferences.getString("last_login_username", "President");
-		
-		
+
+
 		mbuttonPerson.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 
-				// ≈–∂œ ±º‰
+				// Âà§Êñ≠Êó∂Èó¥
 //				try {
 //
 //					long dateBegin = VoteDateTimeformat.parse(
@@ -141,8 +141,8 @@ public class MainActivity extends Activity {
 //					// TODO Auto-generated catch block
 //					e1.printStackTrace();
 //				}
-				
-				
+
+
 				//Gather
 				Intent it = new Intent(MainActivity.this, gatherMain.class);
 				startActivity(it);
@@ -157,27 +157,27 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 //				Intent it = new Intent(MainActivity.this, VinQuery.class);
 //				startActivity(it);
-				
+
 				Intent it = new Intent(MainActivity.this, DataSend.class);
 				startActivity(it);
 
 			}
 		});
 
-		
+
 		//12.19
 		mbuttonLockVote.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				
+
 				//sacn
-				
-	              Intent intent = new Intent();    
-	              intent.setClassName("com.google.zxing.client.android",    
-	                      "com.google.zxing.client.android.CaptureActivity");      
-	              startActivityForResult(intent, 1);
-				
+
+				Intent intent = new Intent();
+				intent.setClassName("com.google.zxing.client.android",
+						"com.google.zxing.client.android.CaptureActivity");
+				startActivityForResult(intent, 1);
+
 //				Boolean is_login = preferences.getBoolean("is_lockVote", false);
 //				
 //				if(is_login){
@@ -187,8 +187,8 @@ public class MainActivity extends Activity {
 //				}
 			}
 		});
-		
-		
+
+
 //		mbuttonDataEntry.setOnClickListener(new OnClickListener() {
 //
 //			@Override
@@ -206,18 +206,18 @@ public class MainActivity extends Activity {
 			public void onClick(View arg0) {
 
 				//query gather
-				
+
 				Intent it = new Intent(MainActivity.this, GatherQuery.class);
 				startActivity(it);
 
 				//mrz
-				
+
 //				Intent it = new Intent(MainActivity.this, CameraActivity.class); 
 //				startActivity(it);				
-				
+
 //				
 //				new AlertDialog.Builder(MainActivity.this) 
-//				.setTitle("«Î—°‘Ò")  
+//				.setTitle("ËØ∑ÈÄâÊã©")  
 //				.setIcon(android.R.drawable.ic_dialog_info)                  
 //				.setSingleChoiceItems(type, 0,   
 //				  new DialogInterface.OnClickListener() {  
@@ -226,7 +226,7 @@ public class MainActivity extends Activity {
 //				    	 
 //				        switch (which) {
 //				        case 0:
-//						case 1:	// “ª¥˙…Ì∑›÷§
+//						case 1:	// ‰∏Ä‰ª£Ë∫´‰ªΩËØÅ
 //						case 2:
 //						case 3:
 //						case 4:
@@ -275,11 +275,11 @@ public class MainActivity extends Activity {
 //				     }  
 //				  }  
 //				)  
-//				.setNegativeButton("»°œ˚", null)  
+//				.setNegativeButton("ÂèñÊ∂à", null)  
 //				.create()
 //				.show();  
-				
-				
+
+
 //				 Intent it = new Intent(MainActivity.this, DataSend.class);
 //				 startActivity(it);
 
@@ -338,7 +338,7 @@ public class MainActivity extends Activity {
 //															dlg.dismiss();
 //														}
 //
-//														// œµÕ≥»’÷æ –ﬁ∏ƒ√‹¬Î
+//														// Á≥ªÁªüÊó•Âøó ‰øÆÊîπÂØÜÁ†Å
 //														mVoteDB_log
 //																.insert_syslogtable(
 //																		changePwd_username,
@@ -399,15 +399,15 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 //				Intent it = new Intent(MainActivity.this, SystemAbout.class);
 //				startActivity(it);
-				
-				
-				
-			  //BT printer	
-              Intent intent = new Intent();    
-              intent.setClassName("com.example.btpdemo",    
-                      "com.example.btpdemo.MainActivity");      
-              startActivity(intent);
-				
+
+
+
+				//BT printer
+				Intent intent = new Intent();
+				intent.setClassName("com.example.btpdemo",
+						"com.example.btpdemo.MainActivity");
+				startActivity(intent);
+
 			}
 		});
 
@@ -430,7 +430,7 @@ public class MainActivity extends Activity {
 		com.io.io.IoClose();
 		//LockVoteStatus();
 	}
-	
+
 	private void initDialogView() {
 
 		dlg = new AlertDialog.Builder(MainActivity.this).create();
@@ -454,19 +454,19 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-	
+
 	//12.19
 	private void LockVoteStatus() {
-		
+
 		Boolean is_login = preferences.getBoolean("is_lockVote", false);
-		
+
 		if(is_login){
 			mbuttonLockVote.setBackgroundResource(R.drawable.mainbutton_voteclose);
 		}else{
 			mbuttonLockVote.setBackgroundResource(R.drawable.mainbutton_voteopen);
 		}
 	}
-	
+
 	private void LockVoteDialogView() {
 
 		initDialogView();
@@ -500,8 +500,8 @@ public class MainActivity extends Activity {
 		int num_f = mCursor.getCount();
 		mCursor.close();
 
-		dialog_title.setText(R.string.screen_login_LockVote_dialog_close); 
-		
+		dialog_title.setText(R.string.screen_login_LockVote_dialog_close);
+
 		String text = (getResources()
 				.getString(R.string.screen_login_exit_text)
 				+ Sum
@@ -520,18 +520,18 @@ public class MainActivity extends Activity {
 
 				Editor editor = preferences.edit();
 				editor.putBoolean("is_lockVote", true);
-				// Ã·Ωª∏¸∏ƒ
+				// Êèê‰∫§Êõ¥Êîπ
 				editor.commit();
 
 				mbuttonLockVote.setBackgroundResource(R.drawable.mainbutton_voteclose);
-				
+
 				if (dlg != null)
 					dlg.dismiss();
 
 			}
 		});
 	}
-	
+
 
 	private void exitDialogView() {
 
@@ -587,7 +587,7 @@ public class MainActivity extends Activity {
 				finish();
 				Editor editor = preferences.edit();
 				editor.putBoolean("is_login", false);
-				// Ã·Ωª∏¸∏ƒ
+				// Êèê‰∫§Êõ¥Êîπ
 				editor.commit();
 
 				// backups
@@ -602,7 +602,7 @@ public class MainActivity extends Activity {
 					Databackups();
 				}
 
-				// œµÕ≥ »’÷æ µ«≥ˆ
+				// Á≥ªÁªü Êó•Âøó ÁôªÂá∫
 				mVoteDB_log.insert_syslogtable(
 						preferences.getString("last_login_username", "Admin"),
 						getResources().getString(
@@ -634,7 +634,7 @@ public class MainActivity extends Activity {
 			int byteread = 0;
 			while ((byteread = mInputStream.read(buffer)) != -1) {
 				dataEncDec(buffer, 3);
-				bytesum += byteread; // ◊÷Ω⁄ ˝ Œƒº˛¥Û–°
+				bytesum += byteread; // Â≠óËäÇÊï∞ Êñá‰ª∂Â§ßÂ∞è
 				System.out.println(bytesum);
 				fs.write(buffer, 0, byteread);
 			}
@@ -688,7 +688,7 @@ public class MainActivity extends Activity {
 			int byteread = 0;
 			while ((byteread = mInputStream.read(buffer)) != -1) {
 				dataEncDec(buffer, 3);
-				bytesum += byteread; // ◊÷Ω⁄ ˝ Œƒº˛¥Û–°
+				bytesum += byteread; // Â≠óËäÇÊï∞ Êñá‰ª∂Â§ßÂ∞è
 				System.out.println(bytesum);
 				fs.write(buffer, 0, byteread);
 			}
@@ -710,7 +710,7 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	// ◊÷Ω⁄¡˜º”Ω‚√‹
+	// Â≠óËäÇÊµÅÂä†Ëß£ÂØÜ
 	public static int dataEncDec(byte[] b, int v) {
 		int nRet = 0;
 		for (int i = 0; i < b.length; i++) {
@@ -742,7 +742,7 @@ public class MainActivity extends Activity {
 
 	}
 
-	// ≈–∂œ”√ªß «∑Ò¥Ê‘⁄
+	// Âà§Êñ≠Áî®Êà∑ÊòØÂê¶Â≠òÂú®
 	private int queryUser(String name) {
 		mCursor_user = mVoteDB_log.query(USER_TABLE_NAME, null, "user_name = '"
 				+ name + "'", null, null, null, null);
@@ -766,7 +766,7 @@ public class MainActivity extends Activity {
 		dialog_et.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-					int arg3) {
+									  int arg3) {
 				// TODO Auto-generated method stub
 				if (arg0.length() >= ENTRY_NAME_NUM) {
 					Toast.makeText(
@@ -780,7 +780,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void beforeTextChanged(CharSequence arg0, int arg1,
-					int arg2, int arg3) {
+										  int arg2, int arg3) {
 				// TODO Auto-generated method stub
 			}
 
@@ -825,13 +825,13 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-	
-	
+
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		
+
 		if (resultCode == Activity.RESULT_OK) {
 			String scan_txt = data.getStringExtra("scan");
 			Toast.makeText(this, scan_txt, Toast.LENGTH_SHORT).show();
