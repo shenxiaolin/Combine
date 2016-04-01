@@ -7,7 +7,7 @@
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="17"/>
+        android:targetSdkVersion="23"/>
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -51,9 +51,10 @@
             android:name="com.example.jy.demo.passport.SimTestActivity"
             android:screenOrientation="sensor"/>
 
+        <!-- 读写卡的界面-->
         <activity
             android:name="com.example.jy.demo.passport.RfidTestActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="sensor"/>
 
         <activity
             android:name="com.example.jy.demo.passport.CameraOpen"
