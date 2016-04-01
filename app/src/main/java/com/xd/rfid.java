@@ -121,7 +121,7 @@ public class rfid {
     public native static int RFIDFelicaTransceive(int timeout, byte[] bInData, int inLen, byte[] bOutData, byte[] bOutLen);
 
     /**
-     * 认证卡
+     * 认证扇区
      *
      * @param keyAB 密钥的模式 0x0A (keyA 模式), 0x0B (keyB 模式)
      * @param secNo 扇区的索引， 从0开始
