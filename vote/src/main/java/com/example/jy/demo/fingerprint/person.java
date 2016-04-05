@@ -77,10 +77,7 @@ public class person extends Activity {
     Message myMessage = new Message();// 消息对象
 
     private SharedPreferences preferences;
-    private Editor editor;
-    // private final int fprint_num = 2; // 可扫描的次数
     private VoteVin_DBHelper mVoteDB;
-    // private int mfprint;
     private Cursor mCursor;
     private String VIN_TABLE_NAME;
     private Boolean mthreadRun = true;
@@ -162,7 +159,6 @@ public class person extends Activity {
 
         am = getAssets();
         preferences = this.getSharedPreferences(getResources().getString(R.string.SystemConfig_sp), MODE_PRIVATE);
-        editor = preferences.edit();
 
         configPucode = preferences.getString("PU_CODE", "34-16-10-003");
         dataVtype = preferences.getString("CURRENT_ELECTION_TYPE", "President");
@@ -337,7 +333,6 @@ public class person extends Activity {
                 mEditText_code.setText("");
                 mRusultLayout.setVisibility(View.VISIBLE);
                 imagepic.setImageDrawable(getResources().getDrawable(R.drawable.logo));
-                //imagefinger.setImageDrawable(getResources().getDrawable(R.drawable.vote_example));
                 imagefinger.setBackground(getResources().getDrawable(R.drawable.vote_example));
                 imagefinger.setImageResource(R.drawable.fp_null);
                 mRusultLayout.setBackgroundColor((0xAA9BC032));
@@ -356,82 +351,6 @@ public class person extends Activity {
                 }
 
                 mRFID_open();
-
-//				RandomAccessFile file;
-//				try {
-//
-//					String mfile1 = "/sdcard";
-//					String mfile2 = "/data/data/com.example.jy.demo.fingerprint";
-//
-//					// file = new RandomAccessFile("/sdcard/pic1.jp2", "r");
-//					file = new RandomAccessFile(mfile2 + "/pic1.jp2", "r");
-//					int len = (int) file.length(); // 取得文件长度（字节数）
-//					// Log.v("crjlog", "len = " + len);
-//					// // file.seek(208); //跳过 jp2 文件头
-//					// byte[] b = new byte[len];
-//					// file.readFully(b);
-//					// file.close();
-//					// Log.v("crjlog", "b = " + b);
-//					// CallDecoder cd = new CallDecoder();
-//					// // cd.DecodeMj2Data(b, len, "/sdcard/pic1.bmp");
-//					// cd.DecodeMj2Data(b, len, mfile2 + "/pic1.bmp");
-//					//
-//					// // FileInputStream fis = new
-//					// // FileInputStream("/sdcard/pic1.bmp");
-//					// FileInputStream fis = new FileInputStream(mfile2
-//					// + "/pic1.bmp");
-//					// Bitmap bmp = BitmapFactory.decodeStream(fis);
-//					//
-//					// Drawable drawable = new BitmapDrawable(bmp);
-//					//
-//					// imagepic.setImageDrawable(drawable);
-//
-//					// 打开NFC 读取卡内数据
-//
-//					// //若读取成功，则将信息填存到此界面
-//					// if(true){
-//					// mEditText_gender.setText("MALE");
-//					// mEditText_birthday.setText("01-01-1978");
-//					// mEditText_occ.setText("OTHER");
-//					// mEditText_name.setText("Thong, Frank");
-//					// mEditText_vin.setText("238B 9605 F036 6854 937");
-//					// mEditText_code.setText("37-06-01-012");
-//
-//					// //打开camera，录取指纹
-//					// Intent intent = new
-//					// Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//					// startActivityForResult(intent, 1);
-//
-//					// }else{
-//					// 若读取失败，则弹出提示
-//					// new AlertDialog.Builder(arg0.getContext())
-//					// .setTitle("Loading auto-save data failed")
-//					// .setMessage("Please try again")
-//					// .setPositiveButton("OK", null)
-//					// .show();
-//					// }
-//
-//				} catch (FileNotFoundException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//
-//				// mEditText_birthday.setText("01-01-1978");
-//				// mEditText_occ.setText("OTHER");
-//				mEditText_surname.setText("Adedoyin, Oluwaseun");
-//				mEditText_name.setText("01-01-1960");
-//				mEditText_vin.setText("90F5 AFE4 3329 5260 566");
-//				mEditText_code.setText("34-16-10-003");
-//				mEditText_gender.setText("Male");
-//
-//				mRusultLayout.setVisibility(View.VISIBLE);
-//				mRusultLayout.setBackgroundColor((0xAA9BC032));
-//				mTextView_result
-//						.setText(R.string.personscreen_text_result_success);
-
             }
         });
 
@@ -752,12 +671,8 @@ public class person extends Activity {
                     Bitmap bmp = BitmapFactory.decodeStream(fis);
 
                     Drawable drawable = new BitmapDrawable(bmp);
-//					imagepic = (ImageView) findViewById(R.id.imageView1);
-                    // imagepic.setImageAlpha(0xFF);
-                    // ÈÃÍ¼Ïñ¿É¼û //yjh
-                    // imagepic.setVisibility(imagepic.VISIBLE);
 
-                    imagepic.setImageDrawable(drawable);
+                    imagepic.setImageDrawable(drawable);//moubiao
                     imagefinger.setBackground(getResources().getDrawable(R.drawable.vote_example));
                     imagefinger.setImageResource(R.drawable.fp_null);
 
@@ -781,8 +696,8 @@ public class person extends Activity {
 
     private void writeFile(String fileName, String msg)
             throws java.io.IOException {
-		/*
-		 * ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        /*
+         * ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		 *
 		 * OutputStreamWriter osw = new OutputStreamWriter(bos, "UTF-8");
 		 *
@@ -1128,76 +1043,51 @@ public class person extends Activity {
         Log.d("huangmin", "keyCode= " + keyCode);
 
         if (keyCode == 57) {
-            //do what you want1
             info = "keyCode: read card";
-//				updateInfo(info, 2);
         } else if ((keyCode == 251 || keyCode == 252) && (event.getRepeatCount() == 0)) {     //扫描指纹，entry camera    level  up
             if (bReadOk) {
                 if (pucode_is_ok) {
                     if (!LockVoteStatus) {
-                        //if(!judgeVin_status()){	// zanshi
                         if (true) {
                             if (ap != null) {
-
                                 try {
                                     ap.PlayAsset(PLAY_SOUND_PUT_FINGER, am);    // 1
                                 } catch (IllegalArgumentException e) {
-                                    // TODO Auto-generated catch block
                                     e.printStackTrace();
                                 } catch (SecurityException e) {
-                                    // TODO Auto-generated catch block
                                     e.printStackTrace();
                                 } catch (IllegalStateException e) {
-                                    // TODO Auto-generated catch block
                                     e.printStackTrace();
                                 } catch (IOException e) {
-                                    // TODO Auto-generated catch block
                                     e.printStackTrace();
                                 }
                             }
-
-                            // Intent it = new Intent(person.this, CameraOpen_Automatic.class);
-                            //startActivityForResult(it, 1);
                         } else {
-
                             mRusultLayout.setVisibility(View.VISIBLE);
                             mRusultLayout.setBackgroundColor((0xAACB1D04));
-                            mTextView_result
-                                    .setText(R.string.personscreen_text_result_fail2);
+                            mTextView_result.setText(R.string.personscreen_text_result_fail2);
                         }
-
                     } else {
-
                         mRusultLayout.setVisibility(View.VISIBLE);
                         mRusultLayout.setBackgroundColor((0xAACB1D04));
-                        mTextView_result
-                                .setText(R.string.personscreen_text_lockvote_fail);
-
+                        mTextView_result.setText(R.string.personscreen_text_lockvote_fail);
                     }
                 } else {
-
                     mRusultLayout.setVisibility(View.VISIBLE);
                     mRusultLayout.setBackgroundColor((0xAACB1D04));
-                    mTextView_result
-                            .setText(R.string.personscreen_text_pucode_fail);
+                    mTextView_result.setText(R.string.personscreen_text_pucode_fail);
                 }
 
             } else {
-
                 mRusultLayout.setVisibility(View.VISIBLE);
                 mRusultLayout.setBackgroundColor((0xAACB1D04));
-                mTextView_result
-                        .setText(R.string.personscreen_text_readcard);
+                mTextView_result.setText(R.string.personscreen_text_readcard);
             }
-
 
             return true;
         } else if ((keyCode == 250 || keyCode == 249) && (event.getRepeatCount() == 0)) {    // 读卡     level down
-
             bReadOk = false;
-
             if (MyDialog != null) {
-
                 MyDialog.dismiss();
                 MyDialog.cancel();
                 MyDialog = null;
@@ -1211,45 +1101,20 @@ public class person extends Activity {
             mEditText_code.setText("");
             mRusultLayout.setVisibility(View.VISIBLE);
             imagepic.setImageDrawable(getResources().getDrawable(R.drawable.logo));
-            //imagefinger.setImageDrawable(getResources().getDrawable(R.drawable.vote_example));
             imagefinger.setBackground(getResources().getDrawable(R.drawable.vote_example));
             imagefinger.setImageResource(R.drawable.fp_null);
             mRusultLayout.setBackgroundColor((0xAA9BC032));
-            mTextView_result
-                    .setText(R.string.personscreen_text_dialog_readcard);
-
-//				//语音读卡提示
-//				if(ap != null){
-//					try {
-//						ap.PlayAsset(PLAY_SOUND_FINGER_VERIFICATION,am);	// 1 
-//					} catch (IllegalArgumentException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace(); 
-//					} catch (SecurityException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} catch (IllegalStateException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
+            mTextView_result.setText(R.string.personscreen_text_dialog_readcard);
 
             try {
                 ap.PlayTone(ToneGenerator.TONE_PROP_BEEP, 500);
             } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (SecurityException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IllegalStateException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             Log.d("huangmin", "mRFID_open");
@@ -1259,11 +1124,8 @@ public class person extends Activity {
         } else if (keyCode == 134 || keyCode == 135 || keyCode == 136) {
             info = "keyCode=" + keyCode;
             if (keyCode == 134) {
-//					new doTestRfid(1).start();
-            } else if (keyCode == 135) {//�˴�����, �Ա�������(�� Samuel ����)ʹ��ʱ VinCode ��ƥ��
+            } else if (keyCode == 135) {
                 bVinCode[0] = 0x00;
-//					info += ("Code=" + bVinCode[0]);
-//					updateInfo(info, 2);					
                 return super.onKeyDown(keyCode, event);
             }
 
@@ -1274,46 +1136,25 @@ public class person extends Activity {
             mEditText_name.setText("");
             mEditText_vin.setText("");
             mEditText_code.setText("");
-//				mHint.setText("");
-
-//				//��ͼ������		//yjh
-//				try {
-//					FileInputStream fis = new FileInputStream("/sdcard/blank.bmp");
-//					Bitmap bmp = BitmapFactory.decodeStream(fis);
-//					Drawable drawable = new BitmapDrawable(bmp); 
-////					imagepic = (ImageView) findViewById(R.id.imageView1);
-//					imagepic.setImageDrawable(drawable);
-//				} catch (FileNotFoundException e) {
-//					e.printStackTrace();
-//					return super.onKeyDown(keyCode, event); 
-//				}				
-
 
             try {
                 ap.PlayTone(ToneGenerator.TONE_PROP_BEEP, 500);
             } catch (IllegalArgumentException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (SecurityException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IllegalStateException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
             try {
             } catch (java.lang.IllegalArgumentException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (SecurityException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IllegalStateException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
@@ -1323,8 +1164,6 @@ public class person extends Activity {
 
 
     protected void onStop() {
-        // TODO Auto-generated method stub
-
         mHandler.removeCallbacks(mopenrfid);
         super.onStop();
         mRFID_close();
@@ -1365,23 +1204,16 @@ public class person extends Activity {
         SimpleDateFormat format2 = new SimpleDateFormat("hh:mm");
         String date = format.format(new Date());
         String time = format2.format(new Date());
-
         if (status) {
-
-            mVoteDB.insert_vintable(dataPuCode, dataVin, "Y", date, time,
-                    preferences.getString("CURRENT_ELECTION_TYPE", "President"));
+            mVoteDB.insert_vintable(dataPuCode, dataVin, "Y", date, time, preferences.getString("CURRENT_ELECTION_TYPE", "President"));
         } else {
-            mVoteDB.insert_vintable(dataPuCode, dataVin, "N", date, time,
-                    preferences.getString("CURRENT_ELECTION_TYPE", "President"));
+            mVoteDB.insert_vintable(dataPuCode, dataVin, "N", date, time, preferences.getString("CURRENT_ELECTION_TYPE", "President"));
         }
-
     }
-
 
     private void judgePucode() {
         if (!configPucode.equals(dataPuCode)) {
-            Toast.makeText(person.this, R.string.personscreen_text_pucode_fail,
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(person.this, R.string.personscreen_text_pucode_fail, Toast.LENGTH_SHORT).show();
             pucode_is_ok = false;
         } else {
             pucode_is_ok = true;
@@ -1419,25 +1251,19 @@ public class person extends Activity {
 
         //未验证
         if (mCursor.getCount() == 0) {
-
             Log.v("crjlog", "judgeVin insert = ");
             insert_db(false);
-
         } else {//已存在
-
             Log.v("crjlog", "judgeVin11111 ");
             //判断状态
             if (mCursor.getString(3).equals("N")) {
 //				bExist = false;
                 Log.v("crjlog", "judgeVin2222222222 ");
-
             } else {
                 Log.v("crjlog", "judgeVin33333333333333 ");
-
                 mRusultLayout.setVisibility(View.VISIBLE);
                 mRusultLayout.setBackgroundColor((0xAAECD00D));
-                mTextView_result
-                        .setText(R.string.personscreen_text_result_fail2);
+                mTextView_result.setText(R.string.personscreen_text_result_fail2);
             }
         }
     }
@@ -1469,7 +1295,6 @@ public class person extends Activity {
             int bytesum = 0;
             int byteread = 0;
             while ((byteread = mInputStream.read(buffer)) != -1) {
-
                 bytesum += byteread; // 字节数 文件大小
                 System.out.println(bytesum);
                 fs.write(buffer, 0, byteread);
@@ -1477,7 +1302,6 @@ public class person extends Activity {
             mInputStream.close();
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -1510,7 +1334,6 @@ public class person extends Activity {
             int bytesum = 0;
             int byteread = 0;
             while ((byteread = mInputStream.read(buffer)) != -1) {
-
                 bytesum += byteread; // 字节数 文件大小
                 System.out.println(bytesum);
                 fs.write(buffer, 0, byteread);
@@ -1518,7 +1341,6 @@ public class person extends Activity {
             mInputStream.close();
 
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -1550,28 +1372,20 @@ public class person extends Activity {
             Thread thread = new Thread(mopenrfid);
             thread.start();
         }
-
-
     }
 
     public void mRFID_close() {
         com.xd.rfid.RFIDRfClose();
         com.xd.rfid.RFIDMoudleClose();
-
     }
 
     public void compareFinger() {
-
         is_fp_back = true;
-
         String filePath = getFilesDir().getParent().toString() + "/";
-
-        String votefilePath = getFilesDir().getParent().toString() + "/"
-                + getResources().getString(R.string.app_name);
+        String votefilePath = getFilesDir().getParent().toString() + "/" + getResources().getString(R.string.app_name);
 
         CallDecoder cd = new CallDecoder();
         cd.Bmp2Pgm(votefilePath + ".bmp", votefilePath + ".pgm");
-
         CallFprint cf = new CallFprint();
         cf.pgmChangeToXyt(votefilePath + ".pgm", votefilePath + ".xyt");
 
@@ -1579,21 +1393,18 @@ public class person extends Activity {
         String Extension = "xyt";
         File[] files = new File(filePath).listFiles();
         List<String> lstFile = new ArrayList<String>();
-
         for (int i = 0; i < files.length; i++) {
-
             if (files[i].getName().substring(files[i].getName().length() - Extension.length()).equals(Extension)) //判断
             {
-                if (!files[i].getName().equals("Vote.xyt"))
+                if (!files[i].getName().equals("Vote.xyt")) {
                     lstFile.add(files[i].getName());
+                }
             }
         }
 
         String[] xytFiles;
         xytFiles = new String[lstFile.size()];
-
         for (int i = 0; i < lstFile.size(); i++) {
-
             xytFiles[i] = filePath + lstFile.get(i).toString();
         }
 
@@ -1601,7 +1412,6 @@ public class person extends Activity {
         int i = 0;
         int fMatch = 0;
         String cmpResult = null;
-
         for (i = 0; i < xytFiles.length; i++) {
             nRet = cf.fprintCompare(filePath + "/Vote.xyt", xytFiles[i]);
             Log.i(TAG, "fprintCompare " + xytFiles[i] + "[" + i + "] nRet= " + nRet);
@@ -1610,7 +1420,6 @@ public class person extends Activity {
         }
 
         int value = nRet + fp_matchvalue;
-
         if (i == xytFiles.length) {
             fMatch = 0;    // 四个指纹均不匹配
             fp_is_ok = false;
@@ -1626,16 +1435,12 @@ public class person extends Activity {
                 try {
                     ap.PlayAsset(PLAY_SOUND_FINGER_AUTHENTICATION_FAIL, am);
                 } catch (IllegalArgumentException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (SecurityException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -1648,14 +1453,12 @@ public class person extends Activity {
             if (!judgeVin_status() && pucode_is_ok == true) {
                 mVoteDB.update_vintable(dataVin, "Y");
             }
-
             mRusultLayout.setVisibility(View.VISIBLE);
             mRusultLayout.setBackgroundColor((0xAA9BC032));
             String stext = getResources().getString(R.string.personscreen_text_result_success) + " " + "(" + nRet + "/" + value + ")";
             mTextView_result.setText(stext);
 
             if (ap != null) {
-
                 try {
                     ap.PlayAsset(PLAY_SOUND_FINGER_VERIFICATION, am);
                 } catch (IllegalArgumentException e) {
@@ -1680,7 +1483,6 @@ public class person extends Activity {
 
     //12.19
     private Boolean is_LockVoteStatus() {
-
         Boolean is_login = preferences.getBoolean("is_lockVote", false);
         return is_login;
     }
