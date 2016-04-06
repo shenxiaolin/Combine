@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
-import com.xiongdi.recognition.R;
-
 /**
  * Created by moubiao on 2016/3/22.
+ * 单选对话框
  */
 @SuppressLint("ValidFragment")
 public class SingleChoiceDialogFragment extends DialogFragment {
