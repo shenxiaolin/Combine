@@ -1,4 +1,4 @@
-package com.xiongdi.recognition.fragment;
+package com.xiongdi.recognition.widget;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -33,13 +33,12 @@ public class SingleChoiceDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+
+        return new AlertDialog.Builder(getActivity())
                 .setTitle(dialogTitle)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setSingleChoiceItems(dialogItems, selectedID, clickListener)
                 .setNegativeButton("Done", null)
                 .create();
-
-        return dialog;
     }
 }

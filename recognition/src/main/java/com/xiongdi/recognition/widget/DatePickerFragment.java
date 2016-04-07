@@ -1,4 +1,4 @@
-package com.xiongdi.recognition.fragment;
+package com.xiongdi.recognition.widget;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
