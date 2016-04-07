@@ -24,6 +24,7 @@ import com.opencv.LibImgFun;
 import com.xiongdi.recognition.R;
 import com.xiongdi.recognition.audio.AudioPlay;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -171,8 +172,10 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
             AudioPlay ap = new AudioPlay();
             final int audioType;
             if (null == GatherActivity.fingerPrint_pic_path || GatherActivity.fingerPrint_pic_path.equals("")) {
-                SharedPreferences sp = getSharedPreferences("fingerprintPath", Context.MODE_PRIVATE);
-                GatherActivity.fingerPrint_pic_path = sp.getString("fingerprintPath", null);
+                //以前是将.xyt文件按的路径保存在sharedPreferences里面，现在将.xyt的路径固定在下面的新路径下
+//                SharedPreferences sp = getSharedPreferences("fingerprintPath", Context.MODE_PRIVATE);
+//                GatherActivity.fingerPrint_pic_path = sp.getString("fingerprintPath", null);
+                GatherActivity.fingerPrint_pic_path = getExternalFilesDir("card") + File.separator + "cardFingerprint.xyt";
             }
             if (null != GatherActivity.fingerPrint_pic_path && !GatherActivity.fingerPrint_pic_path.equals("")) {
                 int ret = CallFprint.fprintCompare(xytFile, GatherActivity.fingerPrint_pic_path);

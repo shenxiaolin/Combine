@@ -1,4 +1,4 @@
-package com.xiongdi.recognition.fragment;
+package com.xiongdi.recognition.widget;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 
-import com.xiongdi.recognition.R;
-
 /**
  * Created by moubiao on 2016/3/22.
+ * 单选对话框
  */
 @SuppressLint("ValidFragment")
 public class SingleChoiceDialogFragment extends DialogFragment {
@@ -34,13 +33,12 @@ public class SingleChoiceDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+
+        return new AlertDialog.Builder(getActivity())
                 .setTitle(dialogTitle)
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setSingleChoiceItems(dialogItems, selectedID, clickListener)
                 .setNegativeButton("Done", null)
                 .create();
-
-        return dialog;
     }
 }

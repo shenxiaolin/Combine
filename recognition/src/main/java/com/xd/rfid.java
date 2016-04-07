@@ -1,5 +1,8 @@
 package com.xd;
 
+/**
+ * 读写卡的接口
+ */
 public class rfid {
     /**
      * 打开 SAM 模块(SAM硬加密模块)
