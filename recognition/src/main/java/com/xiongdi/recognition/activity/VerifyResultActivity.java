@@ -16,6 +16,7 @@ import com.xiongdi.recognition.R;
 import com.xiongdi.recognition.bean.Person;
 import com.xiongdi.recognition.db.PersonDao;
 import com.xiongdi.recognition.helper.M1CardHelper;
+import com.xiongdi.recognition.util.StringUtil;
 import com.xiongdi.recognition.util.ToastUtil;
 import com.xiongdi.recognition.widget.ProgressDialogFragment;
 
@@ -121,6 +122,11 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                 Bitmap bitmap = m1CardHelper.getPicture();
                 if (bitmap != null) {
                     pictureIMG.setImageBitmap(bitmap);
+                } else {
+                    pictureIMG.setImageResource(R.mipmap.person_photo);
+                }
+                if(!StringUtil.hasLength(cardData[1])){
+                    ToastUtil.getInstance().showToast(getApplicationContext(), getString(R.string.common_no_data));
                 }
             } else {
                 ToastUtil.getInstance().showToast(getApplicationContext(), getString(R.string.read_failed_message));

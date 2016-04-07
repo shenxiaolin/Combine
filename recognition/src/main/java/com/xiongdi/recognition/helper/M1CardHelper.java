@@ -265,13 +265,19 @@ public class M1CardHelper {
         IDCard = new String(IDDataRead);
         if (finNameData != null) {
             nameCard = new String(finNameData);
+        } else {
+            nameCard = "";
         }
         if (finGenderData != null) {
             genderCard = new String(finGenderData);
+        } else {
+            genderCard = "";
         }
         birthdayCard = new String(birthdayDataRead);
         if (finAddressData != null) {
             addressCard = new String(finAddressData);
+        } else {
+            addressCard = "";
         }
         IDNOCard = new String(IDNODataRead);
 
@@ -350,11 +356,12 @@ public class M1CardHelper {
                 System.arraycopy(picData, 0, realPicData, 0, i + 1);
                 break;
             }
-
         }
 
         if (realPicData != null) {
             cardImg = BitmapFactory.decodeByteArray(realPicData, 0, realPicData.length);
+        } else {
+            cardImg = null;
         }
 
         return true;

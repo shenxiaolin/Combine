@@ -5,6 +5,7 @@
     <string name="common_sure">sure</string>
     <string name="common_cancel">cancel</string>
     <string name="common_tips">tips</string>
+    <string name="common_no_data">no data</string>
 
     <!-- 填写登记信息界面-->
     <string name="write_info_title">INFORMATION</string>
