@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,19 +13,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 import com.xiongdi.recognition.R;
 import com.xiongdi.recognition.bean.Account;
 import com.xiongdi.recognition.db.AccountDao;
-import com.xiongdi.recognition.db.DatabaseHelper;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class LoginActivity extends Activity implements OnClickListener {
+public class LoginActivity extends AppCompatActivity implements OnClickListener {
     private Button loginBT;
     private EditText nameTX, passwordTX;
 
