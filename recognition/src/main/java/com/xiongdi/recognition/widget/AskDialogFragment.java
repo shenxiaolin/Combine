@@ -23,6 +23,11 @@ public class AskDialogFragment extends DialogFragment {
         this.message = message;
     }
 
+    public void setData(String title, String message){
+        this.title = title;
+        this.message = message;
+    }
+
     public void setListener(DialogInterface.OnClickListener listener) {
         this.listener = listener;
     }
