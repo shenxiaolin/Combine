@@ -3,24 +3,28 @@ package com.xiongdi.recognition.activity;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xiongdi.recognition.R;
 import com.xiongdi.recognition.bean.Person;
 import com.xiongdi.recognition.db.PersonDao;
-import com.xiongdi.recognition.fragment.DatePickerFragment;
-import com.xiongdi.recognition.fragment.SingleChoiceDialogFragment;
+import com.xiongdi.recognition.helper.M1CardHelper;
 import com.xiongdi.recognition.interfaces.DatePickerInterface;
 import com.xiongdi.recognition.util.DateUtil;
 import com.xiongdi.recognition.util.StringUtil;
+import com.xiongdi.recognition.util.ToastUtil;
+import com.xiongdi.recognition.widget.AskDialogFragment;
+import com.xiongdi.recognition.widget.DatePickerFragment;
+import com.xiongdi.recognition.widget.ProgressDialogFragment;
+import com.xiongdi.recognition.widget.SingleChoiceDialogFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +36,8 @@ import java.io.IOException;
  * 填写身份信息的activity
  */
 public class FillInfoActivity extends AppCompatActivity implements View.OnClickListener, DatePickerInterface, DialogInterface.OnClickListener {
+    private static final int DIALOG_SURE = -1;
+    private static final int DIALOG_CANCEL = -2;
     private static final int MALE = 0;
     private static final int FEMALE = 1;
     private static final int GATHER_ACTIVITY_CODE = 0;//跳转到采集指纹和拍照的页面
@@ -42,16 +48,22 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     private Button backBT, entryBT;
     private PersonDao personDao;
 
+    FragmentManager fgManager;
+    ProgressDialogFragment progressDialog;
+    AskDialogFragment askDialog;
+
     private int gatherID;
     private String gatherName;
     private String gatherGender;
     private String gatherBirthday;
     private String gatherAddress;
-    private String gatherINNO;
+    private String gatherIDNO;
     private String gatherPicUrl;
-
+    private String gatherFingerUrl;
 
     private int selectedID = 0;
+
+    M1CardHelper m1CardHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +91,15 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
         if (view != null) {
             view.setVisibility(View.GONE);
         }
+
+        fgManager = getSupportFragmentManager();
+        progressDialog = new ProgressDialogFragment(getString(R.string.saving_to_card));
+        askDialog = new AskDialogFragment(getString(R.string.common_tips), getString(R.string.save_to_card_message));
     }
 
     private void iniData() {
+        m1CardHelper = new M1CardHelper(getApplicationContext());
+        m1CardHelper.setRFModule();
         personDao = new PersonDao(getApplicationContext());
         gatherID = Integer.parseInt(String.valueOf(personDao.getQuantity()));
         refreshView();
@@ -89,10 +107,10 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
 
     private void refreshView() {
         ++gatherID;
-        fill_ID_tx.setText(String.format("%1$,06d", gatherID));
+        fill_ID_tx.setText(String.format("%1$,05d", gatherID));
         nameET.setText("");
         addressET.setText("");
-        ID_NO_ET.setText(String.format("%1$,06d", gatherID));
+        ID_NO_ET.setText(String.format("%1$,05d", gatherID));
     }
 
     private void setListener() {
@@ -104,6 +122,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
 
         backBT.setOnClickListener(this);
         entryBT.setOnClickListener(this);
+        askDialog.setListener(this);
     }
 
     @Override
@@ -112,10 +131,10 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
             case R.id.gender_tv:
                 SingleChoiceDialogFragment singleDialog = new SingleChoiceDialogFragment("gender", new String[]{"Male", "Female"}, selectedID);
                 singleDialog.setListener(this);
-                singleDialog.show(getSupportFragmentManager(), "gender");
+                singleDialog.show(fgManager, "gender");
                 break;
             case R.id.birthday_tv:
-                new DatePickerFragment(birthdayTX.getText().toString(), this).show(getSupportFragmentManager(), "date");
+                new DatePickerFragment(birthdayTX.getText().toString(), this).show(fgManager, "date");
                 break;
             case R.id.bottom_left_bt:
                 finish();
@@ -142,6 +161,15 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
+            case DIALOG_SURE:
+                askDialog.dismiss();
+                new WriteCardTask().execute();
+
+                break;
+            case DIALOG_CANCEL:
+
+                break;
+
             case MALE:
                 selectedID = 0;
                 genderTX.setText("Male");
@@ -158,13 +186,50 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
         dialog.dismiss();
     }
 
+    private class WriteCardTask extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            String[] saveData = new String[]{
+                    String.format("%1$,05d", (gatherID - 1)),
+                    gatherName,
+                    gatherGender,
+                    gatherBirthday,
+                    gatherAddress,
+                    gatherIDNO,
+                    gatherPicUrl,
+                    gatherFingerUrl};
+            m1CardHelper.setSaveData(saveData);
+            m1CardHelper.openRFSignal();
+            progressDialog.show(fgManager, "progress");
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            return m1CardHelper.writeM1Card();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            m1CardHelper.closeRFSignal();
+            progressDialog.dismiss();
+            if (success) {
+                ToastUtil.getInstance().showToast(getApplicationContext(), "success");
+            } else {
+                askDialog.setData(getString(R.string.common_tips), getString(R.string.save_failed_message));
+                askDialog.show(fgManager, "saveDialog");
+            }
+
+        }
+    }
+
     private boolean checkInformation() {
         gatherID = Integer.valueOf(fill_ID_tx.getText().toString());
         gatherName = nameET.getText().toString();
         gatherAddress = addressET.getText().toString();
         gatherGender = genderTX.getText().toString();
         gatherBirthday = birthdayTX.getText().toString();
-        gatherINNO = ID_NO_ET.getText().toString();
+        gatherIDNO = ID_NO_ET.getText().toString();
         if (!StringUtil.hasLength(gatherName)) {
             showToast(getString(R.string.information_incomplete));
             return false;
@@ -173,7 +238,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
             showToast(getString(R.string.information_incomplete));
             return false;
         }
-        if (!StringUtil.hasLength(String.valueOf(gatherINNO))) {
+        if (!StringUtil.hasLength(String.valueOf(gatherIDNO))) {
             showToast(getString(R.string.information_incomplete));
             return false;
         }
@@ -188,8 +253,11 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
             switch (requestCode) {
                 case GATHER_ACTIVITY_CODE:
                     gatherPicUrl = data.getStringExtra("pictureUrl");
+                    gatherFingerUrl = data.getStringExtra("fingerPrintUrl");
                     saveInformation();
                     refreshView();
+                    askDialog.show(fgManager, "saveDialog");
+
                     break;
                 default:
                     break;
@@ -209,7 +277,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
                 + "BIRTHDAY: " + gatherBirthday + "\r\n"
                 + "ADDRESS: " + gatherAddress + "\r\n"
                 + "ISSUEDATE: " + data + "\r\n"
-                + "ID NO.: " + gatherINNO;
+                + "ID NO.: " + gatherIDNO;
         Buffer = Buffer.append(txt);
 
         Log.d("moubiao", "Buffer.toString() = " + Buffer.toString());
@@ -221,7 +289,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
         person.setGender(gatherGender);
         person.setBirthday(gatherBirthday);
         person.setAddress(gatherAddress);
-        person.setID_NO(gatherINNO);
+        person.setID_NO(gatherIDNO);
         if (gatherPicUrl != null) {
             person.setGatherPictureUrl(gatherPicUrl);
         }
@@ -255,6 +323,13 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void showToast(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        ToastUtil.getInstance().showToast(getApplicationContext(), message);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        m1CardHelper.closeRFModule();
     }
 }
