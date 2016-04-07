@@ -10,12 +10,12 @@ import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -30,6 +30,7 @@ import com.xiongdi.recognition.fragment.RightHandFragment;
 import com.xiongdi.recognition.media.CropOption;
 import com.xiongdi.recognition.media.CropOptionAdapter;
 import com.xiongdi.recognition.util.FileUtil;
+import com.xiongdi.recognition.widget.ProgressDialogFragment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
 
     private String gatherID;
     private String pictureUrl;
+    private String fingerprintUrl;
     Uri mImageCaptureUri;
     FileUtil fileUtil;
 
@@ -132,13 +134,7 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.bottom_right_bt:
                 if (haveInformation) {
-                    saveFingerprint();
-                    Intent data = new Intent();
-                    if (pictureUrl != null) {
-                        data.putExtra("pictureUrl", pictureUrl);
-                    }
-                    setResult(Activity.RESULT_OK, data);
-                    finish();
+                    new SaveTask().execute();
                 } else {
                     Toast.makeText(GatherActivity.this, getString(R.string.no_fingerprint), Toast.LENGTH_SHORT).show();
                 }
@@ -146,6 +142,35 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             default:
                 break;
+        }
+    }
+
+    private class SaveTask extends AsyncTask<Void, Void, Void> {
+        ProgressDialogFragment progressDialog = new ProgressDialogFragment(getString(R.string.saving_to_card));
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog.show(getSupportFragmentManager(), "save");
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            saveFingerprint();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void o) {
+            progressDialog.dismiss();
+            Intent data = new Intent();
+            if (pictureUrl != null) {
+                data.putExtra("pictureUrl", pictureUrl);
+            }
+            if (fingerprintUrl != null) {
+                data.putExtra("fingerPrintUrl", fingerprintUrl);
+            }
+            setResult(Activity.RESULT_OK, data);
+            finish();
         }
     }
 
@@ -188,14 +213,14 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
         String newFilepath = getExternalFilesDir(null) + "/" + getResources().getString(R.string.app_name) + "/"
                 + gatherID + "/" + "Fingerprint";
         fileUtil.isDirExist(newFilepath);
-        String destFilepath = getExternalFilesDir(null) + "/" + getResources().getString(R.string.app_name) + "/"
+        fingerprintUrl = getExternalFilesDir(null) + "/" + getResources().getString(R.string.app_name) + "/"
                 + gatherID + "/" + "Fingerprint" + "/" + "vote" + fingerNUM + ".xyt";
         try {
-            fileUtil.copyFile(oldPicPath, destFilepath);
+            fileUtil.copyFile(oldPicPath, fingerprintUrl);
             SharedPreferences.Editor editor = getSharedPreferences("fingerprintPath", Context.MODE_PRIVATE).edit();
-            editor.putString("fingerprintPath", destFilepath);
+            editor.putString("fingerprintPath", fingerprintUrl);
             editor.apply();
-            fingerPrint_pic_path = destFilepath;
+            fingerPrint_pic_path = fingerprintUrl;
         } catch (Exception e) {
             e.printStackTrace();
         }
