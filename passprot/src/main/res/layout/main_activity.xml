@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#aaaaaa"
+                android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/tv_read_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Fingerprint"
+        android:textColor="#ffffff"
+        android:textSize="25dp"/>
+
+
+    <LinearLayout
+        android:id="@+id/lo_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_read_type"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="1dp"
+        android:background="#ffffff"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_English"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/color_layout"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="Gather"
+            android:textColor="#eeeeee"
+            android:textSize="25dp"/>
+
+        <TextView
+            android:id="@+id/tv_Turkish"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/color_layout2"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="Verify"
+            android:textColor="#eeeeee"
+            android:textSize="25dp"/>
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/usr_photo"
+        android:layout_width="202px"
+        android:layout_height="226px"
+        android:layout_alignLeft="@+id/lo_1"
+        android:layout_alignStart="@+id/lo_1"
+        android:layout_below="@+id/lo_1"
+        android:layout_marginLeft="58dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="59dp"
+        android:layout_x="213dp"
+        android:layout_y="20dp"
+        android:background="#333333"/>
+
+</RelativeLayout>

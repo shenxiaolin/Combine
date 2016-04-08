@@ -1,1 +1,2 @@
 include ':app', ':recognition', ':test', ':vote'
+include ':passprot'

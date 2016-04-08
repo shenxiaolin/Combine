@@ -20,28 +20,60 @@ the .jar file in your project was of an older version than the
 dependency we picked, which could render the project not compileable.
 You can disable the jar replacement in the import wizard and try again:
 
-android-support-v4.jar => com.android.support:support-v4:18.0.0
+android-support-v4.jar => com.android.support:support-v4:18.+
 
 Moved Files:
 ------------
 Android Gradle projects use a different directory structure than ADT
 Eclipse projects. Here's how the projects were restructured:
 
-* AndroidManifest.xml => app\src\main\AndroidManifest.xml
-* assets\ => app\src\main\assets
-* libs\armeabi\libemp5500drv.so => app\src\main\jniLibs\armeabi\libemp5500drv.so
-* libs\armeabi\libemp5500drv_n.so => app\src\main\jniLibs\armeabi\libemp5500drv_n.so
-* libs\armeabi\libfprint.so => app\src\main\jniLibs\armeabi\libfprint.so
-* libs\armeabi\libglib-2.0.so => app\src\main\jniLibs\armeabi\libglib-2.0.so
-* libs\armeabi\libiconv.so => app\src\main\jniLibs\armeabi\libiconv.so
-* libs\armeabi\libImgFun.so => app\src\main\jniLibs\armeabi\libImgFun.so
-* libs\armeabi\libintl.so => app\src\main\jniLibs\armeabi\libintl.so
-* libs\armeabi\libjp2dec.so => app\src\main\jniLibs\armeabi\libjp2dec.so
-* libs\armeabi\libopenjp2.so => app\src\main\jniLibs\armeabi\libopenjp2.so
-* libs\armeabi\libopenmj2.so => app\src\main\jniLibs\armeabi\libopenmj2.so
-* libs\armeabi\libparser.so => app\src\main\jniLibs\armeabi\libparser.so
-* res\ => app\src\main\res\
-* src\ => app\src\main\java\
+* AndroidManifest.xml => passprot\src\main\AndroidManifest.xml
+* assets\ => passprot\src\main\assets
+* libs\android-openssl.jar => passprot\libs\android-openssl.jar
+* libs\android-ximage.jar => passprot\libs\android-ximage.jar
+* libs\android_auth.jar => passprot\libs\android_auth.jar
+* libs\armeabi\libAccessHIDNDK.so => passprot\src\main\jniLibs\armeabi\libAccessHIDNDK.so
+* libs\armeabi\libcrypto.so => passprot\src\main\jniLibs\armeabi\libcrypto.so
+* libs\armeabi\libDecodeWlt.so => passprot\src\main\jniLibs\armeabi\libDecodeWlt.so
+* libs\armeabi\libemp5500drv.so => passprot\src\main\jniLibs\armeabi\libemp5500drv.so
+* libs\armeabi\libemp5500drv.so___ => passprot\src\main\jniLibs\armeabi\libemp5500drv.so___
+* libs\armeabi\libemp5500drv_n.so => passprot\src\main\jniLibs\armeabi\libemp5500drv_n.so
+* libs\armeabi\libemp5500drv_o.so => passprot\src\main\jniLibs\armeabi\libemp5500drv_o.so
+* libs\armeabi\libfprint.so => passprot\src\main\jniLibs\armeabi\libfprint.so
+* libs\armeabi\libglib-2.0.so => passprot\src\main\jniLibs\armeabi\libglib-2.0.so
+* libs\armeabi\libiconv.so => passprot\src\main\jniLibs\armeabi\libiconv.so
+* libs\armeabi\libImgFun.so => passprot\src\main\jniLibs\armeabi\libImgFun.so
+* libs\armeabi\libintl.so => passprot\src\main\jniLibs\armeabi\libintl.so
+* libs\armeabi\libjp2dec.so => passprot\src\main\jniLibs\armeabi\libjp2dec.so
+* libs\armeabi\libopenjp2.so => passprot\src\main\jniLibs\armeabi\libopenjp2.so
+* libs\armeabi\libopenmj2.so => passprot\src\main\jniLibs\armeabi\libopenmj2.so
+* libs\armeabi\libopssl.so => passprot\src\main\jniLibs\armeabi\libopssl.so
+* libs\armeabi\libparser.so => passprot\src\main\jniLibs\armeabi\libparser.so
+* libs\armeabi\libserial_port.so => passprot\src\main\jniLibs\armeabi\libserial_port.so
+* libs\armeabi\libssl.so => passprot\src\main\jniLibs\armeabi\libssl.so
+* libs\armeabi\libWltRS.so => passprot\src\main\jniLibs\armeabi\libWltRS.so
+* libs\bcprov-ext-jdk15-146.jar => passprot\libs\bcprov-ext-jdk15-146.jar
+* libs\DecodeWlt.jar => passprot\libs\DecodeWlt.jar
+* libs\idcard_sdk.jar => passprot\libs\idcard_sdk.jar
+* libs\ksoap2-android-assembly-2.4-jar-with-dependencies.jar => passprot\libs\ksoap2-android-assembly-2.4-jar-with-dependencies.jar
+* libs\microlog4android-1.0.0.jar => passprot\libs\microlog4android-1.0.0.jar
+* libs\pki.jar => passprot\libs\pki.jar
+* res\ => passprot\src\main\res\
+* src\ => passprot\src\main\java\
+
+Missing Android Support Repository:
+-----------------------------------
+Some useful libraries, such as the Android Support Library, are
+installed from a special Maven repository, which should be installed
+via the SDK manager.
+
+It looks like this library is missing from your SDK installation at:
+null
+
+To install it, open the SDK manager, and in the Extras category,
+select "Android Support Repository". You may also want to install the
+"Google Repository" if you want to use libraries like Google Play
+Services.
 
 Next Steps:
 -----------
