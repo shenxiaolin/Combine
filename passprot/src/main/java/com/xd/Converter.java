@@ -221,8 +221,10 @@ public class Converter {
         return result;
     }
 
-    //byte[] 数组转 指定长度的16进制字符串, 长度 bLen 小于等于 byte数组的原本大小
-    //与该函数对应的是 hexStringToBytes()
+    /**
+     * byte[] 数组转 指定长度的16进制字符串, 长度 bLen 小于等于 byte数组的原本大小
+     * 与该函数对应的是 hexStringToBytes()
+     */
     public static String printHexLenString(byte[] b, int bLen) {
         String result = "";
 
@@ -235,6 +237,33 @@ public class Converter {
             result = result + hex.toUpperCase();
         }
         return result;
+    }
+
+    /**
+     * 16进制字符串转 byte[] 数组
+     * 与该函数对应的是 printHexString() or printHexLenString()
+     */
+    public static byte[] hexStringToBytes(String hexString) {
+        if (hexString == null || hexString.equals("")) {
+            return null;
+        }
+        hexString = hexString.toUpperCase();
+        int length = hexString.length() / 2;
+        if ((hexString.length() % 2) != 0) {//奇数个字符, 右补"0" 凑成偶数字节
+            length += 1;
+            hexString = hexString + "0";
+        }
+        Log.i("CommonFunc", "CommonFunc lenth=" + length);
+        //字符串转 char[] 数组
+        char[] hexChars = hexString.toCharArray();
+        byte[] d = new byte[length];
+        int i, pos;
+        for (i = 0; i < length; i++) {
+            pos = i * 2;
+            Log.i("CommonFunc", "CommonFunc i=" + i + " pos=" + pos);
+            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+        }
+        return d;
     }
     //将字符串 hex 扩展到 size 大小, 左边不足部分填充字符 c
 //	public static String leftPad(String hex, char c, int size) {
@@ -263,32 +292,6 @@ public class Converter {
     private static byte charToByte(char c) {
         return (byte) "0123456789ABCDEF".indexOf(c);
     }
-
-    //16进制字符串转 byte[] 数组
-    //与该函数对应的是     printHexString() or printHexLenString()
-    public static byte[] hexStringToBytes(String hexString) {
-        if (hexString == null || hexString.equals("")) {
-            return null;
-        }
-        hexString = hexString.toUpperCase();
-        int length = hexString.length() / 2;
-        if ((hexString.length() % 2) != 0) {//奇数个字符, 右补"0" 凑成偶数字节
-            length += 1;
-            hexString = hexString + "0";
-        }
-        Log.i("CommonFunc", "CommonFunc lenth=" + length);
-        //字符串转 char[] 数组
-        char[] hexChars = hexString.toCharArray();
-        byte[] d = new byte[length];
-        int i, pos;
-        for (i = 0; i < length; i++) {
-            pos = i * 2;
-            Log.i("CommonFunc", "CommonFunc i=" + i + " pos=" + pos);
-            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
-        }
-        return d;
-    }
-
 
     //byte[] 数组异或加解密
     public static int dataEncDec(byte[] b, int v) {
