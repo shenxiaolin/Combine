@@ -127,7 +127,7 @@ public class PassportLib {
         int nOffset = 0;
         int nLen = 0;
 
-        int ret = onSRFEX(buf, nFileID);
+        int ret = onSRFEX(buf, nFileID);//moubiao expend time here
         if (bufLen < ret) {
             return -1;
         }
@@ -820,7 +820,7 @@ public class PassportLib {
 
     public int EMP_ReadPassport_Read(byte[] buf, int bufLen, int nFileID) {
 
-        int ret = ReadFile(buf, bufLen, nFileID);
+        int ret = ReadFile(buf, bufLen, nFileID);//moubiao expend time here
 
         return ret;
     }

@@ -38,6 +38,9 @@ public class ReadCardKit {
 
     private PassportLib mPassPort = new PassportLib();
 
+    /**
+     * 读取护照信息
+     */
     public int ReadPassPortInf(int m_iPort, int m_iIfOpen) {
         int ret = 0;
         String str;
@@ -152,7 +155,7 @@ public class ReadCardKit {
 
         //EFDG2
         bufLen = MAX_PATH;
-        ret = mPassPort.EMP_ReadPassport_Read(buf, bufLen, 1);
+        ret = mPassPort.EMP_ReadPassport_Read(buf, bufLen, 1);//moubiao expend time here
         bufLen = ret;
         if (ret == -1) {
             strLog += "Passport Read EFDG2 Failed!\r\n";
@@ -325,7 +328,7 @@ public class ReadCardKit {
                 ATRData[3] != 0x00 ||
                 ATRData[4] != 0x00 ||
                 (ATRData[6] != 0x00)) {
-            ret = ReadPassPortInf(0, 0);
+            ret = ReadPassPortInf(0, 0);//moubiao expend time here
             if (ret != 0) {
                 Utils.memset(ATRData, 0, ATRData.length);
             }
@@ -345,8 +348,6 @@ public class ReadCardKit {
     }
 
     public int ReaderCardReset(byte[] bRats) {
-        //
-
         int nRet = rfid.RFIDInit();
         if (nRet != 0) {
             return 1;
@@ -431,7 +432,7 @@ public class ReadCardKit {
     public Bitmap getPhotoBmp() {
         if (null == photo_dat) return null;
 
-        CxImage fac = CxImage.Decode(photo_dat, 46, photo_dat_len - 46);
+        CxImage fac = CxImage.Decode(photo_dat, 46, photo_dat_len - 46);//moubiao
 
         if (fac != null) {
             Bitmap map = fac.getBitmap();

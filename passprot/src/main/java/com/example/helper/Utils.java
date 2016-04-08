@@ -47,12 +47,27 @@ public class Utils {
     }
 
 
+    /**
+     * 设置指定数组的值
+     *
+     * @param buf   指定的数组
+     * @param value 要设置的值
+     * @param size  指定数组的长度
+     */
     public static void memset(byte[] buf, int value, int size) {
         for (int t = 0; t < size; t++) {
             buf[t] = (byte) value;
         }
     }
 
+    /**
+     * 比较两个数组指定长度范围内的元素是否相等
+     *
+     * @param ary_src 数组 1
+     * @param ary_des 数组 2
+     * @param len     比较的长度
+     * @return true：相等；false：不相等
+     */
     public static boolean memcmp(byte[] ary_src, byte[] ary_des, int len) {
 
         for (int i = 0; i < len; i++) {

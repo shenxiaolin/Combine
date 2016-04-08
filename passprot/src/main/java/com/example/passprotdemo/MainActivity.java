@@ -15,6 +15,8 @@ import com.example.helper.ReadCardKit;
 import com.example.mrzdemo.R;
 
 public class MainActivity extends Activity {
+    private static String TAG = "moubiao";
+
     private AndroidAPP application;
     private static int DES_ENCRYPT = 1;
     private static int DES_DECRYPT = 0;
@@ -35,9 +37,8 @@ public class MainActivity extends Activity {
         mbuttonLockVote.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //
                 /*		Intent intent = new Intent(MainActivity.this, PassprotActivity.class);
-			              Bundle bundle=new Bundle();
+                          Bundle bundle=new Bundle();
 			              bundle.putString("lan_id", "0");
 			              intent.putExtras(bundle);   
 			              startActivity(intent);  	
@@ -55,32 +56,30 @@ public class MainActivity extends Activity {
                 usr_photo.invalidate();
                 //
                 if (cardKit.openModule()) {
-                    Log.e("", "打开模块成功...");
-                    if (0 != cardKit.ReadCard()) {
-                        Log.e("读卡失败", "锟诫将锟斤拷锟秸匡拷锟斤拷锟斤拷锟斤拷锟斤拷锟�");
-                        Toast.makeText(MainActivity.this, "锟斤拷锟斤拷锟铰讹拷锟斤拷", 0).show();
+                    Log.e("TAG", "打开模块成功...");
+                    int readRet = cardKit.ReadCard();//moubiao expend time here
+                    if (0 != readRet) {
+                        Log.d("TAG", "read failed");
+                        Toast.makeText(MainActivity.this, "read failed", Toast.LENGTH_SHORT).show();
                     } else {
-                        Bitmap bmp = cardKit.getPhotoBmp();
+                        Bitmap bmp = cardKit.getPhotoBmp();//moubiao expend time here
                         if (null != bmp) {
                             usr_photo.setImageBitmap(bmp);
-                            Toast.makeText(MainActivity.this, "读取头像成功", 1).show();
-                            Log.e("", "锟斤拷锟斤拷锟缴癸拷");
-
-                            Log.e("锟斤拷锟斤拷锟斤拷锟斤拷", cardKit.getName());//锟斤拷锟斤拷锟斤拷
-                            Log.e("MRZ1", cardKit.getMRZ2());//MRZ1
-                            Log.e("MRZ2", cardKit.getMRZ1());//MRZ2
-                            //Log.e("签锟斤拷锟斤拷锟�, cardKit.getIssuer());//签锟斤拷锟斤拷锟�
-                            Log.e("锟斤拷锟�", cardKit.getDocType());//锟斤拷锟
-                            Log.e("锟斤拷锟斤拷锟斤拷锟斤拷", cardKit.getBirthDate());//锟斤拷锟斤拷锟斤拷锟斤拷
-                            Log.e("证锟斤拷锟斤拷锟斤拷", cardKit.getDocNumber());//证锟斤拷锟斤拷锟斤拷
-                            Log.e("锟斤拷", cardKit.getNationlity());//锟斤拷
-                            Log.e("锟斤拷选锟斤拷锟�", cardKit.getOptData());//锟斤拷选锟斤拷锟�
-                            Log.e("锟皆憋拷", cardKit.getSex());//锟皆憋拷
-                            Log.e("英锟斤拷锟斤拷", cardKit.getSurname());//英锟斤拷锟斤拷
-                            Log.e("锟斤拷效锟斤拷", cardKit.getValiduntil());//锟斤拷效锟斤拷
-
+                            Toast.makeText(MainActivity.this, "读取头像成功", Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "read success");
+                            Log.d("TAG", cardKit.getName());
+                            Log.d("TAG", cardKit.getMRZ2());
+                            Log.d("TAG", cardKit.getMRZ1());
+                            Log.d("TAG", cardKit.getDocType());
+                            Log.d("TAG", cardKit.getBirthDate());
+                            Log.d("TAG", cardKit.getDocNumber());
+                            Log.d("TAG", cardKit.getNationlity());
+                            Log.d("TAG", cardKit.getOptData());
+                            Log.d("TAG", cardKit.getSex());
+                            Log.d("TAG", cardKit.getSurname());
+                            Log.d("TAG", cardKit.getValiduntil());
                         } else {
-                            Toast.makeText(MainActivity.this, "图片锟斤拷", 0).show();
+                            Toast.makeText(MainActivity.this, "no picture", Toast.LENGTH_SHORT).show();
                         }
                     }
 
