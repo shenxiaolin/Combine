@@ -110,8 +110,6 @@ public class Utils {
         return true;
     }
 
-
-    ///
     public static int AscToInt(byte cIn) {
         int nRet;
         if (cIn <= '9' && cIn >= '0')
