@@ -7,6 +7,8 @@ import com.openssl.DesLib;
 import com.openssl.DigestEncoder;
 import com.xd.rfid;
 
+import java.util.Arrays;
+
 public class PassportLib {
     private static int MAX_PATH = 1024 * 1024;
     private static byte MRZ_WEIGHT[] = {7, 3, 1};
@@ -55,15 +57,12 @@ public class PassportLib {
     private static final int EF_SOD = 15;
     private static final int EF_COM = 16;
 
-
     private static String strTagName[] = {"EF_DG1", "EF_DG2", "EF_DG3", "EF_DG4", "EF_DG5", "EF_DG6", "EF_DG7", "EF_DG8", "EF_DG9", "EF_DG10",
             "EF_DG11", "EF_DG12", "EF_DG13", "EF_DG14", "EF_DG15", "EF_DG16", "EF_SOD", "EF_COM"};
 
     private static int ICAO_SID[] = {EF_NULL, EF_DG1, EF_DG2, EF_DG3, EF_DG4, EF_DG5, EF_DG6, EF_DG7, EF_DG8, EF_DG9, EF_DG10, EF_DG11, EF_DG12, EF_DG13, EF_DG14, EF_DG15, EF_DG16,
             EF_NULL, EF_NULL, EF_NULL, EF_NULL, EF_NULL, EF_NULL, EF_NULL, EF_NULL, EF_NULL, EF_NULL, EF_NULL, EF_NULL, EF_SOD, EF_COM};
 
-
-    //
     boolean Simulator = true;
     String m_strPassportNo;
     String m_strLogInfo;
@@ -72,39 +71,32 @@ public class PassportLib {
 
     //	证件信息
     String m_StrMRZ2;   //证件信息，包含了证件号码，出生日期，有效期等
-
     String m_StrNumber;        //证件号码
     String m_StrDateOfBirth;   //出生日期
     String m_StrExpiry;        //有效期
-
-    String m_StrMRZInfo;
-    String m_StrMRZInfoSHA;
-
     String m_StrKmrz;   //经过处理后的护照信息
-    String m_StrKseedHash;
-    String m_StrKseed;            //Kseed (SHA1 hash digest of kmrz)
 
     //同一个护照信息生成两个key
-    String m_StrKenc;   //第一个key 作为卡的随机数加密后的数据
-    String m_StrKmac;   //第二个key 作为对卡的随机数的响应
+    String m_StrKenc;   //第一个key 加密读卡器随机数据的密钥
+    String m_StrKmac;   //第二个key 校验随机数据加密数据的MAC的密钥
 
     //验证卡
-    String m_StrRndIfd;    //随机数	passport.GetRandom(8) 读卡器发送给卡的随机数
-    String m_StrRndIcc;    //随机数	passport.iso_7816_get_challenge(8) 获取的卡的随机数
+    String m_StrRndIfd;    //读卡器产生的随机数（16为）
+    String m_StrRndIcc;    //卡产生的随机数（16为）
     String m_StrKifd;      //随机数	passport.GetRandom(16)
     String m_StrS;         //完整的随机数
-    String m_StrEifd;      //读卡器对卡的随机数加密后的数据
-    String m_StrMifd;      //读卡器对卡的随机数响应的MAC值
-    String m_StrCmdData;   //读卡器对卡的随机数的响应，由读卡器对卡的随机数加密后的数据 和 读卡器对卡的随机数响应的MAC值 组成
-    String m_StrRespData;  //卡对读卡器发送的随机数的响应 由卡对读卡器的随机数加密后的数据 和 卡对读卡器的随机数响应的MAC值 组成
-    String m_StrResp;      //卡对读卡器发送的随机数加密后返回来的数据
-    String m_StrRespMac;   //卡对读卡器发送的随机数响应的MAC
+    String m_StrEifd;      //读卡器对卡的随机数加密后的数据(密文)
+    String m_StrMifd;      //读卡器对卡的随机数响应的MAC值（MAC）
+    String m_StrCmdData;   //读卡器对卡的随机数的响应，由读卡器对卡的随机数加密后的数据 和 读卡器对卡的随机数响应的MAC值 组成（读卡器的密钥）
+    String m_StrRespData;  //卡对读卡器发送的随机数的响应 由卡对读卡器的随机数加密后的数据 和 卡对读卡器的随机数响应的MAC值 组成（卡的密钥）
+    String m_StrResp;      //卡对读卡器发送的随机数加密后返回来的数据（密文）
+    String m_StrRespMac;   //卡对读卡器发送的随机数响应的MAC（MAC）
 
-    String m_StrKseed2;
-    String m_StrKicc;
-    String m_StrKSenc;
-    String m_StrKSmac;
-    String m_StrSSC;
+    String m_StrKseed2;    //m_StrKifd 和 m_StrKicc异或后的数据
+    String m_StrKicc;      //卡返回的数据解码后的一部分，和m_StrKifd相对应
+    String m_StrKSenc;     //卡返回密文的密钥
+    String m_StrKSmac;     //卡返回的密文的MAC的密文
+    String m_StrSSC;       //卡的随机数的后八位 + 读卡器的随机数的后八位
 
     public PassportLib() {
         m_StrRndIcc = "4608F91988702212";
@@ -114,17 +106,18 @@ public class PassportLib {
     }
 
 
+    /**
+     * 读文件
+     *
+     * @param buf     保存数据的数据
+     * @param bufLen  数据长度
+     * @param nFileID 文件标志符
+     * @return 读取的文件长度
+     */
     int ReadFile(byte[] buf, int bufLen, int nFileID) {
         if (null == buf) {
             return -1;
         }
-
-        String strAPDU, strRes;
-        boolean bRead = false;
-        String strFileName;
-        int nRecvLen = 0;
-        int nOffset = 0;
-        int nLen = 0;
 
         int ret = onSRFEX(buf, nFileID);//moubiao expend time here
         if (bufLen < ret) {
@@ -139,11 +132,54 @@ public class PassportLib {
         return bufLen;
     }
 
+    /**
+     * 将 strKifd 和 strKicc 的前16位异或后赋给 cKseed
+     *
+     * @param strKifd 异或数组1
+     * @param strKicc 异或数组2
+     * @param cKseed  接收数组
+     * @return cKseed的前16为字符床
+     */
+    String GetKseed(String strKifd, String strKicc, byte[] cKseed) {
+        byte[] cKifd = Utils.hexStringTobyte(strKifd);
+        byte[] cKicc = Utils.hexStringTobyte(strKicc);
+        for (int i = 0; i < 16; i++) {
+            cKseed[i] = (byte) (((cKifd[i] & 0xFF) ^ (cKicc[i] & 0xFF)) & 0xFF);
+        }
+
+        String strKseed = Utils.byte2HexStr(cKseed, 0, 16);
+        return strKseed;
+    }
 
     /**
-     * 内部认证，读卡器验证卡返回的数据
+     * 生成密文
+     * 获取将随机数和生成的两个可关联加密后的到的数据
      *
-     * @param strRspData 卡返回的数据
+     * @param strRndICC 随机数
+     * @return 读卡器加密随机数的数据及相应的MAC值
+     */
+    public String GetCmdData(String strRndICC) {
+        if (Simulator) {
+            if (16 == strRndICC.length())
+                m_StrRndIcc = strRndICC;
+        }
+
+        m_StrS = m_StrRndIfd + m_StrRndIcc + m_StrKifd;//构建完整的随机数
+        m_StrEifd = TDES_Encrypt(m_StrS, Utils.hexStringTobyte(m_StrKenc), DES_ENCRYPT);//将随机数和生成的第一个key关联起来并加密
+
+        String strAlign = AlignString(m_StrEifd, "80");
+
+        m_StrMifd = TDES_MAC(strAlign, m_StrKmac);//将mac加密 将加密后的随机数的密钥和生成的第二个可以关联起来
+
+        m_StrCmdData = m_StrEifd + m_StrMifd;
+
+        return m_StrCmdData;
+    }
+
+    /**
+     * 内部认证，读卡器验证卡返回的密钥
+     *
+     * @param strRspData 卡返回的密钥
      * @return true：成功；false：失败
      */
     boolean AuthRespData(String strRspData) {
@@ -153,13 +189,13 @@ public class PassportLib {
             }
         }
 
-        m_StrResp = m_StrRespData.substring(0, 64);
-        m_StrRespMac = m_StrRespData.substring(m_StrRespData.length() - 16);
+        m_StrResp = m_StrRespData.substring(0, 64);//密文
+        m_StrRespMac = m_StrRespData.substring(m_StrRespData.length() - 16);//MAC（本来应该先验证MAC值，验证通过了才解码）
 
-        String strDecResp = TDES_Encrypt(m_StrResp, Utils.hexStringTobyte(m_StrKenc), DES_DECRYPT);
+        String strDecResp = TDES_Encrypt(m_StrResp, Utils.hexStringTobyte(m_StrKenc), DES_DECRYPT);//解码密文
 
-        String rnd_icc = strDecResp.substring(0, 16);
-        String recifd = strDecResp.substring(16, 32);
+        String rnd_icc = strDecResp.substring(0, 16);//卡的随机数
+        String recifd = strDecResp.substring(16, 32);//读卡器的随机数
         m_StrKicc = strDecResp.substring(32, 64);
 
         byte[] ucKseed = new byte[128];
@@ -178,25 +214,11 @@ public class PassportLib {
         }
     }
 
-
-    //---------------------------------------------------------
-    String GetKseed(String strKifd, String strKicc, byte[] cKseed) {
-        byte[] cKifd = Utils.hexStringTobyte(strKifd);
-        byte[] cKicc = Utils.hexStringTobyte(strKicc);
-        for (int i = 0; i < 16; i++) {
-            cKseed[i] = (byte) (((cKifd[i] & 0xFF) ^ (cKicc[i] & 0xFF)) & 0xFF);
-        }
-
-        String strKseed = Utils.byte2HexStr(cKseed, 0, 16);
-        return strKseed;
-    }
-
-
     /**
-     * 外部认证，卡验证读卡器加密后的数据
+     * 外部认证，卡验证读卡器发送的密钥
      *
-     * @param strCmdData 读卡器加密卡的随机数后的数据及相应的MAX
-     * @return 卡加密读卡器发送的随机数后的数据及响应的MAC值
+     * @param strCmdData 发送给卡密钥
+     * @return 卡返回来的密钥
      */
     public String Authenticate(String strCmdData) {
         int nLen = strCmdData.length() / 2;
@@ -226,33 +248,6 @@ public class PassportLib {
         return "";
     }
 
-
-    /**
-     * 获取将随机数和生成的两个可关联加密后的到的数据
-     * 会话密钥的认证和建立（不太明白）
-     *
-     * @param strRndICC 随机数
-     * @return 读卡器加密随机数的数据及相应的MAC值
-     */
-    public String GetCmdData(String strRndICC) {
-        if (Simulator) {
-            if (16 == strRndICC.length())
-                m_StrRndIcc = strRndICC;
-        }
-
-        m_StrS = m_StrRndIfd + m_StrRndIcc + m_StrKifd;//构建完整的随机数
-        m_StrEifd = TDES_Encrypt(m_StrS, Utils.hexStringTobyte(m_StrKenc), DES_ENCRYPT);//将随机数和生成的第一个key关联起来并加密
-
-        String strAlign = AlignString(m_StrEifd, "80");
-
-        m_StrMifd = TDES_MAC(strAlign, m_StrKmac);//将mac加密 将加密后的随机数的密钥和生成的第二个可以关联起来
-
-        m_StrCmdData = m_StrEifd + m_StrMifd;
-
-        return m_StrCmdData;
-    }
-
-
     /**
      * 通过名字选择MF(主文件)
      *
@@ -274,6 +269,16 @@ public class PassportLib {
         return 1;
     }
 
+    /**
+     * 发送APDU指令
+     *
+     * @param cSend 指令数据
+     * @param nSend 指令长度
+     * @param cRecv 输出数据
+     * @param nRecv 输出数据长度
+     * @param ucSW  执行状态码
+     * @return 输出数据的长度
+     */
     public int Transmit(byte[] cSend, int nSend, byte[] cRecv, int nRecv, byte[] ucSW) {
         if (!rfid.IsOpen()) {
             return -1;
@@ -281,7 +286,6 @@ public class PassportLib {
 
         byte[] bOutData = new byte[MAX_PATH];
         byte[] bOutLen = new byte[1];
-
 
         int ret = rfid.RFIDRfApdu(1, cSend, nSend, bOutData, bOutLen, ucSW);
         if (ret != 0) {
@@ -302,6 +306,9 @@ public class PassportLib {
     }
 
 
+    /**
+     * 分割证件信息
+     */
     private boolean SplitMRZ(String strMRZ) {
         m_StrNumber = strMRZ.substring(0, 9);
         m_StrDateOfBirth = strMRZ.substring(13, 19);
@@ -327,12 +334,9 @@ public class PassportLib {
 
         m_StrKmrz = m_StrNumber + strNumber_cd + m_StrDateOfBirth + strDateOfBirth_cd + m_StrExpiry + strExpiry_cd;//处理后的护照信息
 
-        byte ucKseedBCD[] = new byte[128];//护照信息对应的编码
-        for (int s = 0; s < ucKseedBCD.length; s++) {
-            ucKseedBCD[s] = 0x00;
-        }
-
-        ucKseedBCD = DigestEncoder.encodeEx("SHA1", m_StrKmrz);//将护照信息编码，得到对应的编码
+        byte[] ucKseedBCD = new byte[128];//护照信息的信息摘要
+        Arrays.fill(ucKseedBCD, (byte) 0x00);
+        ucKseedBCD = DigestEncoder.encodeEx("SHA1", m_StrKmrz);
 
         m_StrKenc = GetDESKey(ucKseedBCD, 1);    //1:Kenc
         m_StrKmac = GetDESKey(ucKseedBCD, 2);    //2:Kmac
@@ -341,8 +345,10 @@ public class PassportLib {
     }
 
 
+    /**
+     * 计算出strData的标志，用来区分证件号码，出生日期，有效期
+     */
     public String CalculateCheckDigit(String strData) {
-        //
         int nLen = strData.length();
         char[] cData = new char[nLen];
 
@@ -351,31 +357,35 @@ public class PassportLib {
         int nValue;
         int nD = 0;
         for (int i = 0; i < nLen; i++) {
-            if ('A' <= cData[i] && cData[i] <= 'Z')
+            if ('A' <= cData[i] && cData[i] <= 'Z') {
                 nValue = cData[i] - 55;
-            else if ('<' == cData[i])
+            } else if ('<' == cData[i]) {
                 nValue = 0;
-            else
+            } else {
                 nValue = cData[i] - '0';
-
+            }
             nValue = (nValue * MRZ_WEIGHT[i % 3]);
             nD += nValue;
         }
-
 
         nD = nD % 10;
 
         return ("" + nD);
     }
 
-    //
+    /**
+     * 获取一个key
+     *
+     * @param ucKseed
+     * @param nType
+     * @return
+     */
     public String GetDESKey(byte[] ucKseed, int nType) {
         byte[] ucSHA = new byte[64];
         Utils.memset(ucSHA, 0, ucSHA.length);
 
         byte[] uck_dat = new byte[20];
         System.arraycopy(ucKseed, 0, uck_dat, 0, 20);
-
         uck_dat[16] = 0x00;
         uck_dat[17] = 0x00;
         uck_dat[18] = 0x00;
@@ -383,7 +393,7 @@ public class PassportLib {
         uck_dat[19] = (byte) (nType & 0xFF);    //ucKseed + nType
 
         ucSHA = DigestEncoder.encodeBytes("SHA1", uck_dat);
-        AdjustParity(ucSHA, 16);        //
+        AdjustParity(ucSHA, 16);
 
         String strKey = Utils.byte2HexStr(ucSHA, 0, 16);
         strKey = strKey.toUpperCase();
@@ -391,10 +401,12 @@ public class PassportLib {
         return strKey;
     }
 
+    /**
+     * 调整奇偶性
+     */
     private void AdjustParity(byte[] ucData, int nLen) {
         for (int i = 0; i < nLen; i++) {
             int by2 = (((ucData[i] & 0xFF) ^ 0xff) & 0xFF);
-
             if (8 == (PARITY[by2] & 0xFF)) {
                 ucData[i] = (byte) (((ucData[i] & 0xFF) ^ 1) & 0xFF);
             } else {
@@ -403,6 +415,11 @@ public class PassportLib {
         }
     }
 
+    /**
+     * 获取卡的随机数
+     *
+     * @return 获取到的随机数
+     */
     public String GetCardRandom(int len) {
         byte apdu[] = {0x00, (byte) 0x84, 0x00, 0x00, (byte) len};
         byte[] response = new byte[256];
@@ -422,7 +439,9 @@ public class PassportLib {
 
     }
 
-    //字符串对齐
+    /**
+     * 字符串对齐，对齐为16字节的倍数
+     */
     private String AlignString(String strS, String strFill) {
         String strTmp = strS + strFill;
         while (0 != (strTmp.length() % 16)) {
@@ -433,7 +452,13 @@ public class PassportLib {
     }
 
 
-    //函数说明 ： MAC计算
+    /**
+     * 生成MAC值
+     *
+     * @param strSource
+     * @param strkey
+     * @return
+     */
     public String TDES_MAC(String strSource, String strkey) {
         int nLen = strSource.length() / 2;
 
@@ -477,12 +502,19 @@ public class PassportLib {
     }
 
 
+    /**
+     * 生成一个选择要操作的文件的APDU指令
+     *
+     * @param strKey
+     * @param strMac
+     * @param strFID
+     * @return APDU指令
+     */
     private String SecSelectFile(String strKey, String strMac, String strFID) {
-
         String strCmdHeader = AlignString("0CA4020C", "80");
         String strStuff = AlignString(strFID, "80");
 
-        String strStruff3DES = TDES_Encrypt(strStuff, Utils.hexStringTobyte(strKey), DES_ENCRYPT);
+        String strStruff3DES = TDES_Encrypt(strStuff, Utils.hexStringTobyte(strKey), DES_ENCRYPT);//加密文件描述符
         String strDO87 = "870901" + strStruff3DES;
         String strM = strCmdHeader + strDO87;
 
@@ -499,22 +531,19 @@ public class PassportLib {
         String strLen = String.format("%02x", nLen / 2);
         String strAPDU = "0CA4020C" + strLen + strDO87 + strDO8E + "00";
 
-
         return strAPDU;
     }
 
 
     /**
-     * 得到一个APDU指令
+     * 得到一个读取文件的APDU指令
      */
     String SecReadBin(String strMac, int readlen, int offset) {
-
         String strOffset, strCmdHeader, strLen;
         strOffset = String.format("%04x", offset);
         strLen = String.format("%02x", readlen);
 
         strCmdHeader = String.format("0CB0%s", strOffset);
-
         String strCmdHeaderA = AlignString(strCmdHeader, "80");
         String strD097 = "9701" + strLen;
         String strM = strCmdHeaderA + strD097;
@@ -522,10 +551,8 @@ public class PassportLib {
         String strN = strNextSSC + strM;
         strN = AlignString(strN, "80");
 
-
         String strCC = TDES_MAC(strN, strMac);
         String strDO8E = "8E08" + strCC;
-
 
         int nLen = strD097.length() + strDO8E.length();
         strLen = String.format("%02x", nLen / 2);
@@ -556,7 +583,6 @@ public class PassportLib {
         int nRLen = strRAPDU.length();
         if (nRLen < 32) return -1;
 
-
         String strRAPDU_D087 = strRAPDU.substring(0, nRLen - 8 - 20 - 4);
         String strRAPDU_D099 = strRAPDU.substring(nRLen - 8 - 20 - 4, (nRLen - 8 - 20 - 4) + 4 * 2);
         String strRAPDU_D08E = strRAPDU.substring(nRLen - 8 - 20 - 4 + 8, (nRLen - 8 - 20 - 4 + 8) + 10 * 2);
@@ -577,7 +603,6 @@ public class PassportLib {
 
         String strBin = TDES_Encrypt(strRAPDU_D087_Value, Utils.hexStringTobyte(m_StrKSenc), DES_DECRYPT);
         m_strLastErrInfo = strBin.substring(0, nLen * 2);
-
 
         int FileLen = 0;
         if (0 == nOffset) {
@@ -607,30 +632,25 @@ public class PassportLib {
         int nReadLen, nRes;
 
         String strRes;
-        String strAPDU = SecSelectFile(m_StrKSenc, m_StrKSmac, strTagFid[nFileID]);//得到一个APDU指令
-
+        String strAPDU = SecSelectFile(m_StrKSenc, m_StrKSmac, strTagFid[nFileID]);//得到一个选择文件的APDU指令
         strRes = sendAPDU(strAPDU);//发送APDU指令，返回apdu指令对应的结果
         GetNextSSC();
-
         if (strRes.equals("")) {
             return -1;
         }
 
-        //
-        strAPDU = SecReadBin(m_StrKSmac, 4, nOffset);//得到一个apdu指令
+        strAPDU = SecReadBin(m_StrKSmac, 4, nOffset);//得到读bin文件的apdu指令
 
         if (!Simulator) {
             strRes = "8709019FF0EC34F9922651990290008E08AD55CC17140B2DED9000";
         } else {
-
-            strRes = sendAPDU(strAPDU);
-
+            strRes = sendAPDU(strAPDU);//读bin文件
             if (strRes.equals("")) {
                 return -1;
             }
         }
 
-        nLen = ReadBinAuth(strRes, nOffset, 4);
+        nLen = ReadBinAuth(strRes, nOffset, 4);//验证读取的bin文件
         nOffset += 4;
 
         if (0 > nLen || 0 == nLen) {
@@ -638,11 +658,9 @@ public class PassportLib {
         }
 
         if (nLen > 0) {
-            //
             System.arraycopy(Utils.hexStringToBytes(m_strLastErrInfo), 0, buf_recv, cot_recv_pos, m_strLastErrInfo.length() / 2);
             cot_recv_pos += m_strLastErrInfo.length() / 2;
         }
-
 
         while (nLen > 0) {
             if (nLen > MAXCHUNK) {
@@ -655,20 +673,16 @@ public class PassportLib {
             if (!Simulator) {
                 strRes = "871901FB9235F4E4037F2327DCC8964F1F9B8C30F42C8E2FFF224A990290008E08C8B2787EAEA07D749000";
             } else {
-
                 strRes = sendAPDU(strAPDU);
-
                 if (strRes.equals("")) {
                     return -1;
                 }
             }
 
-            //
             nRes = ReadBinAuth(strRes, nOffset, nReadLen);
             if (0 > nRes) {
                 return -1;
             } else {
-
                 System.arraycopy(Utils.hexStringTobyte(m_strLastErrInfo), 0, buf_recv, cot_recv_pos, m_strLastErrInfo.length() / 2);
                 cot_recv_pos += m_strLastErrInfo.length() / 2;
             }
@@ -711,17 +725,14 @@ public class PassportLib {
 
     //函数说明:获取下一个SSC
     public String GetNextSSC() {
-        //
         long llTrun = 0;
         byte[] cSSCIn = new byte[9];
         byte[] cSSCOut = new byte[9];
 
         System.arraycopy(Utils.hexStringTobyte(m_StrSSC), 0, cSSCIn, 0, 8);
 
-        //
         Utils.TurnChar(cSSCIn, cSSCOut, 8);
 
-        //
         long tmp = 0x00;
         for (int t = 7; t >= 0; t--) {
             tmp = (cSSCOut[t] & 0xFF);
@@ -730,8 +741,6 @@ public class PassportLib {
 
         llTrun++;
 
-
-        //
         for (int t = 0; t < 8; t++) {
             tmp = 0xFF;
             tmp = llTrun & (tmp << (t * 8));
@@ -740,7 +749,6 @@ public class PassportLib {
 
         Utils.TurnChar(cSSCIn, cSSCOut, 8);
 
-        //
         m_StrSSC = Utils.byte2HexStr(cSSCOut, 0, 8);
 
         return m_StrSSC;
@@ -765,7 +773,6 @@ public class PassportLib {
 
         byte[] cKey = new byte[LEN_OF_KEY];
         System.arraycopy(szkey, 0, cKey, 0, key_len);
-
 
         System.arraycopy(cKey, 0, key, 0, key_len);
         System.arraycopy(cKey, 0, key, key_len, LEN_OF_KEY - key_len);
@@ -821,7 +828,7 @@ public class PassportLib {
             return 4;
         }
 
-        //根据随机数跟key关联后得到的数据
+        //生成密文
         String strCmdData = GetCmdData(strRndIcc);
         if (strCmdData.equals("")) {
             return 4;
@@ -842,10 +849,23 @@ public class PassportLib {
     }
 
 
+    /**
+     * 验证护照
+     *
+     * @param mrz2 护照信息
+     */
     public int EMP_ReadPassport_Auth(String mrz2) {
         return doAuth(mrz2);
     }
 
+    /**
+     * 读护照
+     *
+     * @param buf     保存数据的数组
+     * @param bufLen  数据的长度
+     * @param nFileID 文件标志符
+     * @return 读取的文件长度
+     */
     public int EMP_ReadPassport_Read(byte[] buf, int bufLen, int nFileID) {
 
         int ret = ReadFile(buf, bufLen, nFileID);//moubiao expend time here

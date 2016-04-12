@@ -355,7 +355,7 @@ public class ReadCardKit {
             }
         }
 
-        //EFDG2
+        //EFDG2 读照片
         bufLen = MAX_PATH;//MAX_PATH = 2014 * 64
         ret = mPassPort.EMP_ReadPassport_Read(buf, bufLen, 1);//moubiao expend time here  读取照片
         bufLen = ret;
