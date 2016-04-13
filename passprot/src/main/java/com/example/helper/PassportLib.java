@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class PassportLib {
     private static int MAX_PATH = 1024 * 1024;
     private static byte MRZ_WEIGHT[] = {7, 3, 1};
-    private static int MAXCHUNK = 118;
+    private static int MAXCHUNK = 118;//最大长度
     private static int EF_NULL = 0;
     private static int WS_EX_LAYERED = 0x00080000;
     private static int LWA_COLORKEY = 0x00000001;
@@ -66,7 +66,7 @@ public class PassportLib {
     boolean Simulator = true;
     String m_strPassportNo;
     String m_strLogInfo;
-    String m_strLastErrInfo;
+    String m_strLastErrInfo;//读取到的需要的信息（Err是迷惑人的）
     byte[] m_byteLastErrInfo;
 
     //	证件信息
@@ -152,8 +152,7 @@ public class PassportLib {
     }
 
     /**
-     * 生成密文
-     * 获取将随机数和生成的两个可关联加密后的到的数据
+     * 生成外部认证的数据（密文 + mac）
      *
      * @param strRndICC 随机数
      * @return 读卡器加密随机数的数据及相应的MAC值
@@ -261,8 +260,7 @@ public class PassportLib {
         byte[] sw = {0x00, 0x00};
 
         int ret = Transmit(apdu, apdu.length, response, responseLen, sw);
-        if (ret >= 0 &&
-                (0x90 == (sw[0] & 0xFF) || 0x61 == (sw[0] & 0xFF))) {
+        if (ret >= 0 && (0x90 == (sw[0] & 0xFF) || 0x61 == (sw[0] & 0xFF))) {
             return 0;
         }
 
@@ -292,8 +290,8 @@ public class PassportLib {
             return -1;
         }
 
-        if (ret == 0 && (ucSW[0] & 0xff) == 0X00 && (ucSW[1] & 0xff) == 0X00) {
-            Log.e("", "err.....................");
+        if ((ucSW[0] & 0xff) == 0X00 && (ucSW[1] & 0xff) == 0X00) {
+            Log.e("moubiao", "err.....................");
         }
 
         nRecv = (bOutLen[0] & 0xFF);
@@ -440,7 +438,7 @@ public class PassportLib {
     }
 
     /**
-     * 字符串对齐，对齐为16字节的倍数
+     * 将字符串的长度对齐为16（8）的倍数
      */
     private String AlignString(String strS, String strFill) {
         String strTmp = strS + strFill;
@@ -545,25 +543,30 @@ public class PassportLib {
 
         strCmdHeader = String.format("0CB0%s", strOffset);
         String strCmdHeaderA = AlignString(strCmdHeader, "80");
-        String strD097 = "9701" + strLen;
+        String strD097 = "9701" + strLen;//文件描述符
         String strM = strCmdHeaderA + strD097;
         String strNextSSC = GetNextSSC();
         String strN = strNextSSC + strM;
         strN = AlignString(strN, "80");
 
         String strCC = TDES_MAC(strN, strMac);
-        String strDO8E = "8E08" + strCC;
+        String strDO8E = "8E08" + strCC;//文件描述符
 
         int nLen = strD097.length() + strDO8E.length();
         strLen = String.format("%02x", nLen / 2);
         strLen = strLen.toUpperCase();
 
-        String strAPDU = strCmdHeader + strLen + strD097 + strDO8E + "00";
+        String strAPDU = strCmdHeader + strLen + strD097 + strDO8E + "00";// 0CB00000 + 0D + ......
 
         return strAPDU;
     }
 
-    String GetDO(String strDO, String strValue) {
+    /**
+     * 获取字符串的子字符串
+     *
+     * @return 子字符串
+     */
+    String GetDO(String strDO) {
         String strName = strDO.substring(0, 2);
         String strLen = strDO.substring(2, 4);
 
@@ -575,14 +578,24 @@ public class PassportLib {
             nLen -= 1;
         }
 
-        strValue = strDO.substring(nOffset, nOffset + nLen * 2);
-        return strValue;
+        return strDO.substring(nOffset, nOffset + nLen * 2);
     }
 
+    /**
+     * 验证读取的文件结果是否正确
+     *
+     * @param strRAPDU 上次读取的文件内容（apdu指令）
+     * @param nOffset  偏移量
+     * @param nLen     错误信息的长度
+     * @return 有效文件的长度
+     */
     int ReadBinAuth(String strRAPDU, int nOffset, int nLen) {
         int nRLen = strRAPDU.length();
-        if (nRLen < 32) return -1;
+        if (nRLen < 32) {
+            return -1;
+        }
 
+        //D087和D099用来生成MAC，D08E用来验证生成的MAC是否正确，D087也用来生成apdu指令
         String strRAPDU_D087 = strRAPDU.substring(0, nRLen - 8 - 20 - 4);
         String strRAPDU_D099 = strRAPDU.substring(nRLen - 8 - 20 - 4, (nRLen - 8 - 20 - 4) + 4 * 2);
         String strRAPDU_D08E = strRAPDU.substring(nRLen - 8 - 20 - 4 + 8, (nRLen - 8 - 20 - 4 + 8) + 10 * 2);
@@ -590,16 +603,14 @@ public class PassportLib {
         String strNextSSC = GetNextSSC();
         String strN = strNextSSC + strRAPDU_D087 + strRAPDU_D099;
         strN = AlignString(strN, "80");
-        String strCC = TDES_MAC(strN, m_StrKSmac);
+        String strCC = TDES_MAC(strN, m_StrKSmac);//MAC
 
-        String strRAPDU_D08E_Value = "";
-        strRAPDU_D08E_Value = GetDO(strRAPDU_D08E, strRAPDU_D08E_Value);
+        String strRAPDU_D08E_Value = GetDO(strRAPDU_D08E);
 
         if (!strRAPDU_D08E_Value.substring(0, 16).equals(strCC.substring(0, 16)))
             return -1;
 
-        String strRAPDU_D087_Value = "";
-        strRAPDU_D087_Value = GetDO(strRAPDU_D087, strRAPDU_D087_Value);
+        String strRAPDU_D087_Value = GetDO(strRAPDU_D087);
 
         String strBin = TDES_Encrypt(strRAPDU_D087_Value, Utils.hexStringTobyte(m_StrKSenc), DES_DECRYPT);
         m_strLastErrInfo = strBin.substring(0, nLen * 2);
@@ -628,12 +639,13 @@ public class PassportLib {
     private int onSRFEX(byte[] buf_recv, int nFileID) {
         int cot_recv_pos = 0;
         int nOffset = 0;
-        int nLen;
-        int nReadLen, nRes;
+        int nLen;//要读取的文件的整个长度
+        int nReadLen;//某次读取的文件的长度
+        int nRes;
 
         String strRes;
         String strAPDU = SecSelectFile(m_StrKSenc, m_StrKSmac, strTagFid[nFileID]);//得到一个选择文件的APDU指令
-        strRes = sendAPDU(strAPDU);//发送APDU指令，返回apdu指令对应的结果
+        strRes = sendAPDU(strAPDU);//发送选择文件的APDU指令，并返回结果
         GetNextSSC();
         if (strRes.equals("")) {
             return -1;
@@ -644,13 +656,13 @@ public class PassportLib {
         if (!Simulator) {
             strRes = "8709019FF0EC34F9922651990290008E08AD55CC17140B2DED9000";
         } else {
-            strRes = sendAPDU(strAPDU);//读bin文件
+            strRes = sendAPDU(strAPDU);//读bin文件 理解为：先读取一个文件，这个文件里放的是读取真正数据的apdu指令
             if (strRes.equals("")) {
                 return -1;
             }
         }
 
-        nLen = ReadBinAuth(strRes, nOffset, 4);//验证读取的bin文件
+        nLen = ReadBinAuth(strRes, nOffset, 4);//验证读取的bin文件  理解为：验证读取的apdu指令是否正确
         nOffset += 4;
 
         if (0 > nLen || 0 == nLen) {
@@ -828,13 +840,13 @@ public class PassportLib {
             return 4;
         }
 
-        //生成密文
+        //生成外部认证的数据
         String strCmdData = GetCmdData(strRndIcc);
         if (strCmdData.equals("")) {
             return 4;
         }
 
-        //外部认证,并向卡发送一个随机数
+        //外部认证
         String strRes = Authenticate(strCmdData);
         if (strRes.equals("")) {
             return 4;

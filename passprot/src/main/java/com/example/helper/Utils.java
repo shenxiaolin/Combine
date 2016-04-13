@@ -4,8 +4,6 @@ import java.io.ByteArrayOutputStream;
 
 
 public class Utils {
-
-
     //16锟斤拷锟斤拷锟街凤拷转锟斤拷锟斤拷锟斤拷锟斤拷
     public static byte[] hexStringTobyte(String hex) {
         int len = hex.length() / 2;
@@ -17,8 +15,7 @@ public class Utils {
             result[i] = (byte) (toByte(achar[pos]) << 4 | toByte(achar[pos + 1]));
             temp += result[i] + ",";
         }
-        // uiHandler.obtainMessage(206, hex + "=read=" + new String(result))
-        // .sendToTarget();
+
         return result;
     }
 
@@ -124,6 +121,9 @@ public class Utils {
         return (nRet);
     }
 
+    /**
+     * String转换成int
+     */
     public static int AscToInt(String str) {
         int nLen = str.length();
         byte[] cTmp = str.getBytes();
