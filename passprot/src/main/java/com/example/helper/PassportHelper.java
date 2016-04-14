@@ -66,40 +66,40 @@ public class PassportHelper {
     boolean simulate = true;
     String readContent;//每条命令读取到的需要的信息
 
-    //	证件信息
-    String m_StrMRZ2;   //证件信息，包含了证件号码，出生日期，有效期等
-    String m_StrNumber;        //证件号码
-    String m_StrDateOfBirth;   //出生日期
-    String m_StrExpiry;        //有效期
-    String m_StrKmrz;   //经过处理后的护照信息
+    //证件信息
+    String originMRZ;   //证件信息，包含了证件号码，出生日期，有效期等
+    String dealMRZ;   //经过处理后的护照信息
+    String IDNumber;        //证件号码
+    String birthdayDate;   //出生日期
+    String expiryDate;        //有效期
 
-    //验证卡
-    String m_StrRndIfd;    //读卡器产生的随机数（16为）
-    String m_StrRndIcc;    //卡产生的随机数（16为）
-    String m_StrKifd;      //随机数	passport.GetRandom(16)
-    String m_StrS;         //完整的随机数
-    String m_StrEifd;      //读卡器对卡的随机数加密后的数据(密文)
-    String m_StrMifd;      //读卡器对卡的随机数响应的MAC值（MAC）
-    String m_StrCmdData;   //读卡器对卡的随机数的响应，由读卡器对卡的随机数加密后的数据 和 读卡器对卡的随机数响应的MAC值 组成（读卡器的密钥）
-    String m_StrRespData;  //卡对读卡器发送的随机数的响应 由卡对读卡器的随机数加密后的数据 和 卡对读卡器的随机数响应的MAC值 组成（卡的密钥）
-    String m_StrResp;      //卡对读卡器发送的随机数加密后返回来的数据（密文）
-    String m_StrRespMac;   //卡对读卡器发送的随机数响应的MAC（MAC）
+    //射频模块和卡交互相关的数据
+    String modelRandomNum;    //读卡器产生的随机数（16为）
+    String cardRandomNum;    //卡产生的随机数（16为）
+    String modelIntermediateNum;      //随机数	passport.GetRandom(16)
+    String cardIntermediateNum;      //卡返回的数据解码后的一部分，和m_StrKifd相对应
+    String totalRandomNum;         //完整的随机数
+    String encryptDataToCard;      //读卡器对卡的随机数加密后的数据(密文)
+    String encryptMacToCard;      //读卡器对卡的随机数响应的MAC值（MAC）
+    String dataToCard;   //读卡器对卡的随机数的响应，由读卡器对卡的随机数加密后的数据 和 读卡器对卡的随机数响应的MAC值 组成（读卡器的密钥）
+    String dataFromCard;  //卡对读卡器发送的随机数的响应 由卡对读卡器的随机数加密后的数据 和 卡对读卡器的随机数响应的MAC值 组成（卡的密钥）
+    String encryptDataFromCard;      //卡对读卡器发送的随机数加密后返回来的数据（密文）
+    String encryptMacFromCard;   //卡对读卡器发送的随机数响应的MAC（MAC）
 
     //密钥
-    String m_StrKenc;   //第一个key 读卡器发送的密文的密钥
-    String m_StrKmac;   //第二个key 校验读卡器发送的密文的MAC的密钥
-    String m_StrKicc;      //卡返回的数据解码后的一部分，和m_StrKifd相对应
-    String m_StrKSenc;     //卡返回密文的密钥
-    String m_StrKSmac;     //卡返回的密文的MAC的密钥
-    String m_StrSSC;       //卡的随机数的后八位 + 读卡器的随机数的后八位
+    String keyToCardData;   //第一个key 读卡器发送的密文的密钥
+    String keyMacToCardData;   //第二个key 校验读卡器发送的密文的MAC的密钥
+    String keyFromCardData;     //卡返回密文的密钥
+    String keyMacFromCardData;     //卡返回的密文的MAC的密钥
+    String SSCStr;       //卡的随机数的后八位 + 读卡器的随机数的后八位
 
-    byte[] sw = {0x00, 0x00};//apdu指令运行状态码
+    byte[] orderSW = {0x00, 0x00};//apdu指令运行状态码
 
     public PassportHelper() {
-        m_StrRndIcc = "4608F91988702212";
-        m_StrRndIfd = "781723860C06C226";
-        m_StrKifd = "0B795240CB7049B01C19B33E32804F0B";
-        m_StrRespData = "46B9342A41396CD7386BF5803104D7CEDC122B9132139BAF2EEDC94EE178534F2F2D235D074D7449";
+        cardRandomNum = "4608F91988702212";
+        modelRandomNum = "781723860C06C226";
+        modelIntermediateNum = "0B795240CB7049B01C19B33E32804F0B";
+        dataFromCard = "46B9342A41396CD7386BF5803104D7CEDC122B9132139BAF2EEDC94EE178534F2F2D235D074D7449";
     }
 
     /**
@@ -130,18 +130,18 @@ public class PassportHelper {
     public String getCipherData(String cardRandom) {
         if (simulate) {
             if (16 == cardRandom.length())
-                m_StrRndIcc = cardRandom;
+                cardRandomNum = cardRandom;
         }
 
-        m_StrS = m_StrRndIfd + m_StrRndIcc + m_StrKifd;//构建完整的随机数
-        m_StrEifd = encryptOrDecryption(m_StrS, Utils.hexStringTobyte(m_StrKenc), DES_ENCRYPT);//将随机数和生成的第一个key关联起来并加密
+        totalRandomNum = modelRandomNum + cardRandomNum + modelIntermediateNum;//构建完整的随机数
+        encryptDataToCard = encryptOrDecryption(totalRandomNum, Utils.hexStringTobyte(keyToCardData), DES_ENCRYPT);//将随机数和生成的第一个key关联起来并加密
 
-        String strAlign = alignString(m_StrEifd, "80");
-        m_StrMifd = getMAC(strAlign, m_StrKmac);//将mac加密 将加密后的随机数的密钥和生成的第二个可以关联起来
+        String strAlign = alignString(encryptDataToCard, "80");
+        encryptMacToCard = getMAC(strAlign, keyMacToCardData);//将mac加密 将加密后的随机数的密钥和生成的第二个可以关联起来
 
-        m_StrCmdData = m_StrEifd + m_StrMifd;
+        dataToCard = encryptDataToCard + encryptMacToCard;
 
-        return m_StrCmdData;
+        return dataToCard;
     }
 
     /**
@@ -153,31 +153,31 @@ public class PassportHelper {
     boolean verifyInside(String strRspData) {
         if (simulate) {
             if (80 == strRspData.length()) {
-                m_StrRespData = strRspData;
+                dataFromCard = strRspData;
             }
         }
 
-        m_StrResp = m_StrRespData.substring(0, 64);//密文
-        m_StrRespMac = m_StrRespData.substring(m_StrRespData.length() - 16);//MAC（本来应该先验证MAC值，验证通过了才解码）
+        encryptDataFromCard = dataFromCard.substring(0, 64);//密文
+        encryptMacFromCard = dataFromCard.substring(dataFromCard.length() - 16);//MAC（本来应该先验证MAC值，验证通过了才解码）
 
-        String strDecResp = encryptOrDecryption(m_StrResp, Utils.hexStringTobyte(m_StrKenc), DES_DECRYPT);//解码密文
+        String strDecResp = encryptOrDecryption(encryptDataFromCard, Utils.hexStringTobyte(keyToCardData), DES_DECRYPT);//解码密文
 
         String rnd_icc = strDecResp.substring(0, 16);//卡的随机数
         String recifd = strDecResp.substring(16, 32);//读卡器的随机数
-        m_StrKicc = strDecResp.substring(32, 64);
+        cardIntermediateNum = strDecResp.substring(32, 64);
 
         byte[] keySeedData = new byte[128];
-        getKeySeed(m_StrKifd, m_StrKicc, keySeedData);
+        getKeySeed(modelIntermediateNum, cardIntermediateNum, keySeedData);
 
-        m_StrKSenc = getDESKey(keySeedData, 1);//1:Kenc
-        m_StrKSmac = getDESKey(keySeedData, 2);//2:Kmac
+        keyFromCardData = getDESKey(keySeedData, 1);//1:Kenc
+        keyMacFromCardData = getDESKey(keySeedData, 2);//2:Kmac
 
-        m_StrSSC = rnd_icc.substring(8, 16) + recifd.substring(8, 16);
+        SSCStr = rnd_icc.substring(8, 16) + recifd.substring(8, 16);
 
-        if (recifd.equals(m_StrRndIfd)) {
+        if (recifd.equals(modelRandomNum)) {
             return true;
         } else {
-            readContent = ("RND.ifd比较失败[" + m_StrRndIfd + "-" + recifd + "]");
+            readContent = ("RND.ifd比较失败[" + modelRandomNum + "-" + recifd + "]");
             return false;
         }
     }
@@ -201,8 +201,8 @@ public class PassportHelper {
         nLen += 5;
 
         byte[] response = new byte[256];
-        int ret = transmit(apdu, nLen, response, response.length, sw);
-        if (0x90 == (sw[0] & 0xFF)) {
+        int ret = transmit(apdu, nLen, response, response.length, orderSW);
+        if (0x90 == (orderSW[0] & 0xFF)) {
             if (ret > 0) {
                 return Utils.byte2HexStr(response, 0, ret);
             } else {
@@ -221,8 +221,8 @@ public class PassportHelper {
     public int selectMFByName() {
         byte[] apdu = {0x00, (byte) 0xA4, 0x04, 0x00, 0x07, (byte) 0xA0, 0x00, 0x00, 0x02, 0x47, 0x10, 0x01};
         byte[] response = new byte[256];
-        int ret = transmit(apdu, apdu.length, response, response.length, sw);
-        if (ret >= 0 && (0x90 == (sw[0] & 0xFF) || 0x61 == (sw[0] & 0xFF))) {
+        int ret = transmit(apdu, apdu.length, response, response.length, orderSW);
+        if (ret >= 0 && (0x90 == (orderSW[0] & 0xFF) || 0x61 == (orderSW[0] & 0xFF))) {
             return 0;
         }
 
@@ -273,9 +273,9 @@ public class PassportHelper {
      * 分割证件信息
      */
     private boolean splitMRZ(String strMRZ) {
-        m_StrNumber = strMRZ.substring(0, 9);
-        m_StrDateOfBirth = strMRZ.substring(13, 19);
-        m_StrExpiry = strMRZ.substring(21, 27);
+        IDNumber = strMRZ.substring(0, 9);
+        birthdayDate = strMRZ.substring(13, 19);
+        expiryDate = strMRZ.substring(21, 27);
 
         return true;
     }
@@ -287,27 +287,27 @@ public class PassportHelper {
      */
     public boolean getKeys() {
         //通过MRZ获取个人信息
-        if (m_StrMRZ2.length() > 0) {
-            splitMRZ(m_StrMRZ2);//截取证件号/有效日期/出生年月
+        if (originMRZ.length() > 0) {
+            splitMRZ(originMRZ);//截取证件号/有效日期/出生年月
         } else {
-            if (0 == m_StrNumber.length()) {
+            if (0 == IDNumber.length()) {
                 readContent = "请输入护照信息[MRZ 或者 证件号码\\出生日期\\有效期]";
                 return false;
             }
         }
 
-        String strNumber_cd = calculateCheckDigit(m_StrNumber);
-        String strDateOfBirth_cd = calculateCheckDigit(m_StrDateOfBirth);
-        String strExpiry_cd = calculateCheckDigit(m_StrExpiry);
+        String strNumber_cd = calculateCheckDigit(IDNumber);
+        String strDateOfBirth_cd = calculateCheckDigit(birthdayDate);
+        String strExpiry_cd = calculateCheckDigit(expiryDate);
 
-        m_StrKmrz = m_StrNumber + strNumber_cd + m_StrDateOfBirth + strDateOfBirth_cd + m_StrExpiry + strExpiry_cd;//处理后的护照信息
+        dealMRZ = IDNumber + strNumber_cd + birthdayDate + strDateOfBirth_cd + expiryDate + strExpiry_cd;//处理后的护照信息
 
         byte[] ucKseedBCD = new byte[128];//护照信息的信息摘要
         Arrays.fill(ucKseedBCD, (byte) 0x00);
-        ucKseedBCD = DigestEncoder.encodeEx("SHA1", m_StrKmrz);
+        ucKseedBCD = DigestEncoder.encodeEx("SHA1", dealMRZ);
 
-        m_StrKenc = getDESKey(ucKseedBCD, 1);    //1:Kenc
-        m_StrKmac = getDESKey(ucKseedBCD, 2);    //2:Kmac
+        keyToCardData = getDESKey(ucKseedBCD, 1);    //1:Kenc
+        keyMacToCardData = getDESKey(ucKseedBCD, 2);    //2:Kmac
 
         return true;
     }
@@ -392,8 +392,8 @@ public class PassportHelper {
         byte apdu[] = {0x00, (byte) 0x84, 0x00, 0x00, (byte) len};
         byte[] response = new byte[256];
 
-        int ret = transmit(apdu, apdu.length, response, response.length, sw);
-        if (0x90 == (sw[0] & 0xFF)) {
+        int ret = transmit(apdu, apdu.length, response, response.length, orderSW);
+        if (0x90 == (orderSW[0] & 0xFF)) {
             if (ret > 0) {
                 return Utils.byte2HexStr(response, 0, ret);
             } else {
@@ -558,7 +558,7 @@ public class PassportHelper {
         String strN = getNextSSC() + strRAPDU_D087 + strRAPDU_D099;
         strN = alignString(strN, "80");
         long startMacTime = System.currentTimeMillis();
-        String strCC = getMAC(strN, m_StrKSmac);//MAC
+        String strCC = getMAC(strN, keyMacFromCardData);//MAC
         long expendMacTime = System.currentTimeMillis() - startMacTime;
         Log.d(TAG, "Mac Time = " + expendMacTime);
 
@@ -570,7 +570,7 @@ public class PassportHelper {
         String strRAPDU_D087_Value = getSubString(strRAPDU_D087);
 
         long startEnTime = System.currentTimeMillis();
-        String strBin = encryptOrDecryption(strRAPDU_D087_Value, Utils.hexStringTobyte(m_StrKSenc), DES_DECRYPT);
+        String strBin = encryptOrDecryption(strRAPDU_D087_Value, Utils.hexStringTobyte(keyFromCardData), DES_DECRYPT);
         long expendEnTime = System.currentTimeMillis() - startEnTime;
         Log.d(TAG, "En Time = " + expendEnTime);
         readContent = strBin.substring(0, nLen * 2);
@@ -604,14 +604,14 @@ public class PassportHelper {
         int decodeResult;//解码结果
 
         String orderResult;
-        String order = getSelectFileOrder(m_StrKSenc, m_StrKSmac, filesFid[fileID]);//得到一个选择文件的APDU指令
+        String order = getSelectFileOrder(keyFromCardData, keyMacFromCardData, filesFid[fileID]);//得到一个选择文件的APDU指令
         orderResult = sendOrder(order);//发送选择文件的APDU指令，并返回结果
         getNextSSC();
         if ("".equals(orderResult)) {
             return -1;
         }
 
-        order = getReadFileOrder(m_StrKSmac, 4, orderOffset);//得到读bin文件的apdu指令
+        order = getReadFileOrder(keyMacFromCardData, 4, orderOffset);//得到读bin文件的apdu指令
 
         if (!simulate) {
             orderResult = "8709019FF0EC34F9922651990290008E08AD55CC17140B2DED9000";
@@ -648,7 +648,7 @@ public class PassportHelper {
             firstTime = System.currentTimeMillis();
 
             //获取apdu指令消耗的时间
-            order = getReadFileOrder(m_StrKSmac, onceReadLength, orderOffset);
+            order = getReadFileOrder(keyMacFromCardData, onceReadLength, orderOffset);
             long expendTime1 = System.currentTimeMillis() - firstTime;
             Log.d(TAG, "get apdu time = " + expendTime1);//获取apdu指令需要的时间
             if (!simulate) {
@@ -694,14 +694,14 @@ public class PassportHelper {
         byte[] apdu = Utils.hexStringToBytes(APDUStr);
 
         long startTime = System.currentTimeMillis();
-        int ret = transmit(apdu, apdu.length, readCardResponse, readCardResponse.length, sw);//发送apdu指令
+        int ret = transmit(apdu, apdu.length, readCardResponse, readCardResponse.length, orderSW);//发送apdu指令
         long expendTime = System.currentTimeMillis() - startTime;
         Log.d(TAG, "transmit time = " + expendTime);
-        if (0x90 == (sw[0] & 0xFF)) {
+        if (0x90 == (orderSW[0] & 0xFF)) {
             if (ret > 0) {
-                return Utils.byte2HexStr(readCardResponse, 0, ret) + Utils.toHexString(sw);
+                return Utils.byte2HexStr(readCardResponse, 0, ret) + Utils.toHexString(orderSW);
             } else {
-                return Utils.toHexString(sw);
+                return Utils.toHexString(orderSW);
             }
         }
 
@@ -716,7 +716,7 @@ public class PassportHelper {
     byte[] cSSCOut = new byte[8];
 
     public String getNextSSC() {
-        System.arraycopy(Utils.hexStringTobyte(m_StrSSC), 0, cSSCIn, 0, 8);
+        System.arraycopy(Utils.hexStringTobyte(SSCStr), 0, cSSCIn, 0, 8);
         Utils.TurnChar(cSSCIn, cSSCOut, 8);
 
         long tmp;
@@ -734,9 +734,9 @@ public class PassportHelper {
         }
 
         Utils.TurnChar(cSSCIn, cSSCOut, 8);
-        m_StrSSC = Utils.byte2HexStr(cSSCOut, 0, 8);
+        SSCStr = Utils.byte2HexStr(cSSCOut, 0, 8);
 
-        return m_StrSSC;
+        return SSCStr;
     }
 
 
@@ -795,7 +795,7 @@ public class PassportHelper {
      * @param information 护照信息
      */
     public int verifyPassportInfo(String information) {
-        m_StrMRZ2 = information;
+        originMRZ = information;
         //根据护照信息生成两个不同的key
         getKeys();
 
