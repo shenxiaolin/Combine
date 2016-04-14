@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.helper.ReadCardKit;
+import com.example.helper.OperateCardHelper;
 import com.example.mrzdemo.R;
 
 public class MainActivity extends Activity {
@@ -44,31 +44,24 @@ public class MainActivity extends Activity {
         mbuttonDataQuery.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                ReadCardKit cardKit = new ReadCardKit();
                 usr_photo.setBackgroundResource(R.drawable.photo);
                 usr_photo.invalidate();
-                //
-                if (cardKit.openModule()) {
-                    Log.d(TAG, "打开模块成功...");
-                    int readRet = cardKit.ReadCard();//moubiao expend time here
+                OperateCardHelper cardHelper = new OperateCardHelper();
+                if (cardHelper.openModule()) {
+                    int readRet = cardHelper.readCard();//moubiao expend time here
                     if (0 != readRet) {
-                        Log.d("TAG", "read failed");
                         Toast.makeText(MainActivity.this, "read failed", Toast.LENGTH_SHORT).show();
                     } else {
-                        long startTime = System.currentTimeMillis();
-                        Bitmap bmp = cardKit.getPhotoBmp();//moubiao expend time here
-                        long expendTime = System.currentTimeMillis() - startTime;
-                        Log.d(TAG, "set bitmap time = " + expendTime);
+                        Bitmap bmp = cardHelper.getPhotoBmp();
                         if (null != bmp) {
                             usr_photo.setImageBitmap(bmp);
-                            Toast.makeText(MainActivity.this, "读取头像成功", Toast.LENGTH_LONG).show();
                             Log.d(TAG, "read success");
                         } else {
                             Toast.makeText(MainActivity.this, "no picture", Toast.LENGTH_SHORT).show();
                         }
                     }
 
-                    cardKit.closeModule();
+                    cardHelper.closeModule();
                 }
 
             }

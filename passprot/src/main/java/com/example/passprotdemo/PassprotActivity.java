@@ -26,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.accessltd.device.AccessParserNDKInterface;
-import com.example.helper.ReadCardKit;
+import com.example.helper.OperateCardHelper;
 import com.example.mrzdemo.R;
 
 import java.io.IOException;
@@ -298,13 +298,13 @@ public class PassprotActivity extends SerialPortActivity {
 
 
                     //
-                    ReadCardKit cardKit = new ReadCardKit();
+                    OperateCardHelper cardKit = new OperateCardHelper();
                     image_photo.setBackgroundResource(R.drawable.photo);
 
                     //
                     if (cardKit.openModule()) {
                         Log.e("", "开始读卡...");
-                        if (0 != cardKit.ReadCard()) {
+                        if (0 != cardKit.readCard()) {
                             Log.e("无卡", "请将护照靠近读卡区域.");
                             Toast.makeText(PassprotActivity.this, "请重新读卡", 0).show();
                         } else {

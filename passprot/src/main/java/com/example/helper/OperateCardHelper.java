@@ -3,14 +3,13 @@ package com.example.helper;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.xd.Converter;
 import com.xd.rfid;
 
 import java.util.Arrays;
 
 import at.mroland.android.apps.imagedecoder.CxImage;
 
-public class ReadCardKit {
+public class OperateCardHelper {
     private static String TAG = "moubiao";
     private static int MAX_PATH = 1024 * 64;
 
@@ -37,11 +36,14 @@ public class ReadCardKit {
 
     private byte[] ATRData = new byte[64];
 
-    private PassportLib mPassPort = new PassportLib();
+    private PassportHelper passportHelper = new PassportHelper();
 
-    public void SplitMRZ(String strMRZ1, String strMRZ2) {
+    /**
+     * 获取持证人的详细信息，生日，国籍等
+     */
+    public void getPersonInfo(String strMRZ1, String strMRZ2) {
 
-        String str = "";
+        String str;
         m_strDocType = strMRZ1.substring(0, 2);
         m_strDocNumber = strMRZ2.substring(0, 9);
         m_strNationlity = strMRZ2.substring(10, 13);
@@ -152,13 +154,13 @@ public class ReadCardKit {
     /**
      * 读卡
      */
-    public int ReadCard() {
+    public int readCard() {
         int ret;
         //激活卡
         byte[] tmpATRData = new byte[64];//激活cpu卡时的ATS响应
         Arrays.fill(tmpATRData, (byte) 0);
         int ATRlen = tmpATRData.length;//ATR长度
-        ret = ReaderCardReset(tmpATRData);
+        ret = activeCard(tmpATRData);
 
         //判断激活卡的结果
         if (ret != 0x90) {
@@ -169,10 +171,10 @@ public class ReadCardKit {
             return ret;
         }
 
-        //处理激活卡后得到的数据
+        //读卡
         System.arraycopy(tmpATRData, 0, ATRData, 0, ATRlen);
         if (ATRData[2] != 0x00 || ATRData[3] != 0x00 || ATRData[4] != 0x00 || (ATRData[6] != 0x00)) {
-            ret = readPassportInfo();//moubiao expend time here
+            ret = readPassport();//moubiao expend time here
             if (ret != 0) {
                 Arrays.fill(ATRData, (byte) 0);
             }
@@ -187,7 +189,7 @@ public class ReadCardKit {
      *
      * @param bRats ATS 保存卡的响应数据
      */
-    public int ReaderCardReset(byte[] bRats) {
+    public int activeCard(byte[] bRats) {
         //初始化射频模块
         int nRet = rfid.RFIDInit();
         if (nRet != 0) {
@@ -198,13 +200,12 @@ public class ReadCardKit {
         if (nRet != 0) {
             return 1;
         }
-        //标记射频模块的状态
+        //标记射频模块的状态标识
         rfid.SetOpenStatu(true);
 
         byte sak;//卡的响应
         short atqa;//模块发出的指令
         String cardType;//卡的类型
-        String strOut = "";
         byte[] bIdLen = new byte[1];
         byte[] bSNR = new byte[64];//序列号
         //获取卡的序列号
@@ -233,11 +234,8 @@ public class ReadCardKit {
             cardType = ", Unknown card";
         }
 
-        strOut += cardType;
-        String snr = Converter.printHexLenString(bSNR, bSNR.length);
-
-        Arrays.fill(bRats, (byte) 0);
         //激活cpu卡
+        Arrays.fill(bRats, (byte) 0);
         nRet = rfid.RFIDTypeARats(1, bRats);
         if (nRet != 0) {
             return 1;//失败
@@ -249,31 +247,31 @@ public class ReadCardKit {
     /**
      * 读取护照信息
      */
-    public int readPassportInfo() {
-        int ret;
-        byte tag[] = new byte[2];
+    public int readPassport() {
         String MRZStr;
+        int result;
+        byte tag[] = new byte[2];
 
         //当前读到的信息载取后赋值给下面三个变量
-        String m_PassPortNum = "G80014686";//"G80013706";
-        String m_BirthDate = "19910817";//"19740901";
-        String m_ValidUntil = "20250922";
+        String passportNum = "G80014686";//"G80013706";
+        String birthdayDate = "19910817";//"19740901";
+        String validityDate = "20250922";
         //判断护照信息是否正确
-        if (m_PassPortNum.length() != 9) {
+        if (passportNum.length() != 9) {
             return -2;
         }
-        if (m_BirthDate.length() != 8) {
+        if (birthdayDate.length() != 8) {
             return -3;
         }
-        if (m_ValidUntil.length() != 8) {
+        if (validityDate.length() != 8) {
             return -4;
         }
-        MRZStr = m_PassPortNum + "<<<<" + m_BirthDate.substring(m_BirthDate.length() - 6) + "<<"
-                + m_ValidUntil.substring(m_ValidUntil.length() - 6) + "<<<<<<<<<<<<<<<<<";
+        MRZStr = passportNum + "<<<<" + birthdayDate.substring(birthdayDate.length() - 6) + "<<"
+                + validityDate.substring(validityDate.length() - 6) + "<<<<<<<<<<<<<<<<<";
 
         //验证护照
-        ret = mPassPort.verifyPassportInfo(MRZStr);
-        if (ret != 0) {
+        result = passportHelper.verifyPassportInfo(MRZStr);
+        if (result != 0) {
             Log.d(TAG, "Passport doBAC Failed!");
             return 2;
         }
@@ -281,9 +279,9 @@ public class ReadCardKit {
         //读护照 EFDG1
         int bufLen = MAX_PATH;//1024*64;
         byte[] buf = new byte[bufLen];
-        ret = mPassPort.readPassportInfo(buf, bufLen, 0);
-        bufLen = ret;
-        if (ret == -1) {
+        result = passportHelper.readPassportFile(buf, bufLen, 0);
+        bufLen = result;
+        if (result == -1) {
             Log.d(TAG, "Passport Read EFDG1 Failed!");
             return 3;
         }
@@ -299,13 +297,13 @@ public class ReadCardKit {
             m_strMRZ1 = Utils.hexStrToAscStr(m_strMRZ1);
             m_strMRZ2 = Utils.hexStrToAscStr(m_strMRZ2);
 
-            SplitMRZ(m_strMRZ1, m_strMRZ2);
+            getPersonInfo(m_strMRZ1, m_strMRZ2);
         }
 
         //EFDG11
-        ret = mPassPort.readPassportInfo(buf, bufLen, 10);
-        bufLen = ret;
-        if (ret == -1) {
+        result = passportHelper.readPassportFile(buf, bufLen, 10);
+        bufLen = result;
+        if (result == -1) {
             Log.d(TAG, "Passport Read EFDG11 Failed!");
             return 5;
         }
@@ -342,10 +340,10 @@ public class ReadCardKit {
         }
 
         //EFDG2 读照片
-        bufLen = MAX_PATH;//MAX_PATH = 2014 * 64
-        ret = mPassPort.readPassportInfo(buf, bufLen, 1);//moubiao expend time here  读取照片
-        bufLen = ret;
-        if (ret == -1) {
+        bufLen = MAX_PATH;
+        result = passportHelper.readPassportFile(buf, bufLen, 1);//moubiao expend time here  读取照片
+        bufLen = result;
+        if (result == -1) {
             Log.d(TAG, "Passport Read EFDG2 Failed!");
             return 4;
         }
@@ -367,12 +365,11 @@ public class ReadCardKit {
     }
 
     public boolean openModule() {
-        //
         int nRet = rfid.RFIDModuleOpen();
         if (nRet != 0) {
             return false;
         }
-
+        Log.d(TAG, "RFID model open success");
         return true;
     }
 
