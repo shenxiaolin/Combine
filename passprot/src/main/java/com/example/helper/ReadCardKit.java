@@ -156,13 +156,13 @@ public class ReadCardKit {
         int ret;
         //激活卡
         byte[] tmpATRData = new byte[64];//激活cpu卡时的ATS响应
-        Utils.memset(tmpATRData, 0, tmpATRData.length);
+        Arrays.fill(tmpATRData, (byte) 0);
         int ATRlen = tmpATRData.length;//ATR长度
         ret = ReaderCardReset(tmpATRData);
 
         //判断激活卡的结果
         if (ret != 0x90) {
-            Utils.memset(ATRData, 0x00, ATRData.length);
+            Arrays.fill(ATRData, (byte) 0);
             return ret;
         }
         if (Utils.memcmp(ATRData, tmpATRData, ATRlen)) {
@@ -172,7 +172,7 @@ public class ReadCardKit {
         //处理激活卡后得到的数据
         System.arraycopy(tmpATRData, 0, ATRData, 0, ATRlen);
         if (ATRData[2] != 0x00 || ATRData[3] != 0x00 || ATRData[4] != 0x00 || (ATRData[6] != 0x00)) {
-            ret = ReadPassPortInf(0, 0);//moubiao expend time here
+            ret = readPassportInfo();//moubiao expend time here
             if (ret != 0) {
                 Arrays.fill(ATRData, (byte) 0);
             }
@@ -249,17 +249,15 @@ public class ReadCardKit {
     /**
      * 读取护照信息
      */
-    public int ReadPassPortInf(int m_iPort, int m_iIfOpen) {
+    public int readPassportInfo() {
         int ret;
-        String strLog = "";
         byte tag[] = new byte[2];
-        long StartTime, STime, ETime, EndTime;//DWORD
-        String m_strMRZ;
+        String MRZStr;
 
         //当前读到的信息载取后赋值给下面三个变量
         String m_PassPortNum = "G80014686";//"G80013706";
         String m_BirthDate = "19910817";//"19740901";
-        String m_Validuntil = "20250922";
+        String m_ValidUntil = "20250922";
         //判断护照信息是否正确
         if (m_PassPortNum.length() != 9) {
             return -2;
@@ -267,14 +265,14 @@ public class ReadCardKit {
         if (m_BirthDate.length() != 8) {
             return -3;
         }
-        if (m_Validuntil.length() != 8) {
+        if (m_ValidUntil.length() != 8) {
             return -4;
         }
-        m_strMRZ = m_PassPortNum + "<<<<" + m_BirthDate.substring(m_BirthDate.length() - 6) + "<<"
-                + m_Validuntil.substring(m_Validuntil.length() - 6) + "<<<<<<<<<<<<<<<<<";
+        MRZStr = m_PassPortNum + "<<<<" + m_BirthDate.substring(m_BirthDate.length() - 6) + "<<"
+                + m_ValidUntil.substring(m_ValidUntil.length() - 6) + "<<<<<<<<<<<<<<<<<";
 
         //验证护照
-        ret = mPassPort.EMP_ReadPassport_Auth(m_strMRZ);
+        ret = mPassPort.verifyPassportInfo(MRZStr);
         if (ret != 0) {
             Log.d(TAG, "Passport doBAC Failed!");
             return 2;
@@ -283,7 +281,7 @@ public class ReadCardKit {
         //读护照 EFDG1
         int bufLen = MAX_PATH;//1024*64;
         byte[] buf = new byte[bufLen];
-        ret = mPassPort.EMP_ReadPassport_Read(buf, bufLen, 0);
+        ret = mPassPort.readPassportInfo(buf, bufLen, 0);
         bufLen = ret;
         if (ret == -1) {
             Log.d(TAG, "Passport Read EFDG1 Failed!");
@@ -304,10 +302,8 @@ public class ReadCardKit {
             SplitMRZ(m_strMRZ1, m_strMRZ2);
         }
 
-
         //EFDG11
-        bufLen = MAX_PATH;
-        ret = mPassPort.EMP_ReadPassport_Read(buf, bufLen, 10);
+        ret = mPassPort.readPassportInfo(buf, bufLen, 10);
         bufLen = ret;
         if (ret == -1) {
             Log.d(TAG, "Passport Read EFDG11 Failed!");
@@ -317,15 +313,11 @@ public class ReadCardKit {
 
         tag[0] = 0x5F;//名字TAG
         tag[1] = 0x0E;
-
-        //
         m_strName = FindTagStr(buf, bufLen, tag, 2);
         m_strName = Utils.hexStrToAscStr(m_strName);
 
         tag[0] = 0x5F;//英文姓名
         tag[1] = 0x0F;
-
-        //
         m_strSurname = FindTagStr(buf, bufLen, tag, 2);
         m_strSurname = Utils.hexStrToAscStr(m_strSurname);
 
@@ -351,11 +343,10 @@ public class ReadCardKit {
 
         //EFDG2 读照片
         bufLen = MAX_PATH;//MAX_PATH = 2014 * 64
-        ret = mPassPort.EMP_ReadPassport_Read(buf, bufLen, 1);//moubiao expend time here  读取照片
+        ret = mPassPort.readPassportInfo(buf, bufLen, 1);//moubiao expend time here  读取照片
         bufLen = ret;
         if (ret == -1) {
             Log.d(TAG, "Passport Read EFDG2 Failed!");
-            Log.e("读相片失败", strLog);
             return 4;
         }
         Log.d(TAG, "Passport Read EFDG2 Success!");
@@ -363,19 +354,15 @@ public class ReadCardKit {
         //查找图片tag，并保存为jpg
         tag[0] = 0x5F;//照片TAG
         tag[1] = 0x2E;
-
-        //
         int v_len = 0;
         v_len = getTagFromTlvEx(buf, 0, bufLen, tag, 2, photo_dat, v_len);
         if (v_len == -1) {
-            Log.d(TAG, "Passport getPhote Failed!");
+            Log.d(TAG, "Passport getPhoto Failed!");
             return 4;
         }
-
         photo_dat_len = v_len;
 
         Log.d(TAG, "Passport Read Success!");
-
         return 0;
     }
 
@@ -410,7 +397,7 @@ public class ReadCardKit {
     }
 
     public Bitmap getPhotoBmp() {
-        if (null == photo_dat){
+        if (null == photo_dat) {
             return null;
         }
 

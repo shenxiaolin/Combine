@@ -385,7 +385,7 @@ public class PassportLib {
      */
     public String GetDESKey(byte[] ucKseed, int nType) {
         byte[] ucSHA = new byte[64];
-        Utils.memset(ucSHA, 0, ucSHA.length);
+        Arrays.fill(ucSHA, (byte) 0);
 
         byte[] uck_dat = new byte[20];
         System.arraycopy(ucKseed, 0, uck_dat, 0, 20);
@@ -805,7 +805,7 @@ public class PassportLib {
         System.arraycopy(cKey, 0, key, 0, key_len);
         System.arraycopy(cKey, 0, key, key_len, LEN_OF_KEY - key_len);
 
-        Utils.memset(block_key, 0, block_key.length);
+        Arrays.fill(block_key, (byte) 0);
         System.arraycopy(key, 0, block_key, 0, 8);
         DesLib.DES_set_key_unchecked(block_key, 0x0A);
 
@@ -825,7 +825,7 @@ public class PassportLib {
         cOut[nLen / 2] = 0x00;
 
         byte[] IV = new byte[8];
-        Utils.memset(IV, 0, 8);
+        Arrays.fill(IV, (byte) 0);
         DesLib.DES_ede3_cbc_encrypt(cSource, cOut, nSourceLen, IV, nType);//加解密
 
         String ret_str = Utils.toHexString(cOut);
@@ -878,12 +878,12 @@ public class PassportLib {
 
 
     /**
-     * 验证护照
+     * 验证护照信息
      *
-     * @param mrz2 护照信息
+     * @param information 护照信息
      */
-    public int EMP_ReadPassport_Auth(String mrz2) {
-        return doAuth(mrz2);
+    public int verifyPassportInfo(String information) {
+        return doAuth(information);
     }
 
     /**
@@ -894,11 +894,8 @@ public class PassportLib {
      * @param nFileID 文件标志符
      * @return 读取的文件长度
      */
-    public int EMP_ReadPassport_Read(byte[] buf, int bufLen, int nFileID) {
-
-        int ret = ReadFile(buf, bufLen, nFileID);//moubiao expend time here
-
-        return ret;
+    public int readPassportInfo(byte[] buf, int bufLen, int nFileID) {
+        return ReadFile(buf, bufLen, nFileID);//moubiao expend time here
     }
 
 
