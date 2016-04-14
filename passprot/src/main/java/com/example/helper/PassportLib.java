@@ -10,6 +10,8 @@ import com.xd.rfid;
 import java.util.Arrays;
 
 public class PassportLib {
+    private static String TAG = "moubiao";
+
     private static int MAX_PATH = 1024 * 1024;
     private static byte MRZ_WEIGHT[] = {7, 3, 1};
     private static int MAXCHUNK = 118;//最大长度
@@ -97,6 +99,8 @@ public class PassportLib {
     String m_StrKSenc;     //卡返回密文的密钥
     String m_StrKSmac;     //卡返回的密文的MAC的密文
     String m_StrSSC;       //卡的随机数的后八位 + 读卡器的随机数的后八位
+
+    byte[] sw = {0x00, 0x00};//apdu指令运行状态码
 
     public PassportLib() {
         m_StrRndIcc = "4608F91988702212";
@@ -233,7 +237,6 @@ public class PassportLib {
 
         byte[] response = new byte[256];
         int responseLen = response.length;
-        byte[] sw = {0x00, 0x00};
 
         int ret = Transmit(apdu, nLen, response, responseLen, sw);
         if (0x90 == (sw[0] & 0xFF)) {
@@ -257,7 +260,6 @@ public class PassportLib {
         byte[] response = new byte[256];
 
         int responseLen = response.length;
-        byte[] sw = {0x00, 0x00};
 
         int ret = Transmit(apdu, apdu.length, response, responseLen, sw);
         if (ret >= 0 && (0x90 == (sw[0] & 0xFF) || 0x61 == (sw[0] & 0xFF))) {
@@ -277,27 +279,30 @@ public class PassportLib {
      * @param ucSW  执行状态码
      * @return 输出数据的长度
      */
+    byte[] receiveData = new byte[MAX_PATH];
+    byte[] receiveDataLength = new byte[1];
+
     public int Transmit(byte[] cSend, int nSend, byte[] cRecv, int nRecv, byte[] ucSW) {
         if (!rfid.IsOpen()) {
             return -1;
         }
 
-        byte[] bOutData = new byte[MAX_PATH];
-        byte[] bOutLen = new byte[1];
-
-        int ret = rfid.RFIDRfApdu(1, cSend, nSend, bOutData, bOutLen, ucSW);
+        long startTime = System.currentTimeMillis();
+        int ret = rfid.RFIDRfApdu(1, cSend, nSend, receiveData, receiveDataLength, ucSW);
+        long expendTime = System.currentTimeMillis() - startTime;
+        Log.d(TAG, "apdu expend time = " + expendTime);
         if (ret != 0) {
             return -1;
         }
 
         if ((ucSW[0] & 0xff) == 0X00 && (ucSW[1] & 0xff) == 0X00) {
-            Log.e("moubiao", "err.....................");
+            Log.e(TAG, "err.....................");
         }
 
-        nRecv = (bOutLen[0] & 0xFF);
+        nRecv = (receiveDataLength[0] & 0xFF);
 
         if (nRecv > 0) {
-            System.arraycopy(bOutData, 0, cRecv, 0, nRecv);
+            System.arraycopy(receiveData, 0, cRecv, 0, nRecv);
         }
 
         return nRecv;
@@ -457,29 +462,25 @@ public class PassportLib {
      * @param strkey
      * @return
      */
+    byte[] macKey = new byte[16];
+    byte[] cMac = new byte[8];
+    byte[] cMac2 = new byte[8];
+    byte[] cData = new byte[8];
+
     public String TDES_MAC(String strSource, String strkey) {
         int nLen = strSource.length() / 2;
 
         byte[] cSource = new byte[nLen];
-        byte[] cKey = new byte[16];
         Utils.ASC2BCD(strSource.getBytes(), cSource, nLen);
-        Utils.ASC2BCD(strkey.getBytes(), cKey, 16);
+        Utils.ASC2BCD(strkey.getBytes(), macKey, 16);
 
-        byte[] cKeyA = new byte[8];
-        byte[] cKeyB = new byte[8];
-        System.arraycopy(cKey, 0, cKeyA, 0, 8);
-        System.arraycopy(cKey, 8, cKeyB, 0, 8);
+        Arrays.fill(cMac, (byte) 0);
+        Arrays.fill(cMac2, (byte) 0);
 
-        byte[] cMac = new byte[8];
-        byte[] cMac2 = new byte[8];
-        Utils.memset(cMac, 0, 8);
-        Utils.memset(cMac2, 0, 8);
+        DesLib.DES_set_key_checked(Arrays.copyOfRange(macKey, 0, 8), 0x0A);//设置密钥并检验（第二个key）
+        DesLib.DES_set_key_checked(Arrays.copyOfRange(macKey, 8, 16), 0x0B);//设置密钥并检验（第二个key）
 
-        DesLib.DES_set_key_checked(cKeyA, 0x0A);//设置密钥并检验（第二个key）
-        DesLib.DES_set_key_checked(cKeyB, 0x0B);//设置密钥并检验（第二个key）
-
-
-        byte[] cData = new byte[8];
+        long startWhileTime = System.currentTimeMillis();
         int i = 0;
         while (i < nLen) {
             System.arraycopy(cSource, i, cData, 0, 8);
@@ -492,6 +493,8 @@ public class PassportLib {
 
             i += 8;
         }
+        long expendWhileTime = System.currentTimeMillis() - startWhileTime;
+        Log.d(TAG, "while time = " + expendWhileTime);
 
         DesLib.DES_ecb_encrypt(cMac, cMac2, 0x0B, DES_DECRYPT);//解密mac
         DesLib.DES_ecb_encrypt(cMac2, cMac, 0x0A, DES_ENCRYPT);//加密mac
@@ -527,9 +530,8 @@ public class PassportLib {
 
         int nLen = strDO87.length() + strDO8E.length();
         String strLen = String.format("%02x", nLen / 2);
-        String strAPDU = "0CA4020C" + strLen + strDO87 + strDO8E + "00";
 
-        return strAPDU;
+        return "0CA4020C" + strLen + strDO87 + strDO8E + "00";
     }
 
 
@@ -537,28 +539,20 @@ public class PassportLib {
      * 得到一个读取文件的APDU指令
      */
     String SecReadBin(String strMac, int readlen, int offset) {
-        String strOffset, strCmdHeader, strLen;
-        strOffset = String.format("%04x", offset);
+        String strCmdHeader, strLen;
         strLen = String.format("%02x", readlen);
 
-        strCmdHeader = String.format("0CB0%s", strOffset);
-        String strCmdHeaderA = AlignString(strCmdHeader, "80");
+        strCmdHeader = String.format("0CB0%s", String.format("%04x", offset));
         String strD097 = "9701" + strLen;//文件描述符
-        String strM = strCmdHeaderA + strD097;
-        String strNextSSC = GetNextSSC();
-        String strN = strNextSSC + strM;
+        String strN = GetNextSSC() + AlignString(strCmdHeader, "80") + strD097;
         strN = AlignString(strN, "80");
 
-        String strCC = TDES_MAC(strN, strMac);
-        String strDO8E = "8E08" + strCC;//文件描述符
+        String strDO8E = "8E08" + TDES_MAC(strN, strMac);//文件描述符
 
-        int nLen = strD097.length() + strDO8E.length();
-        strLen = String.format("%02x", nLen / 2);
+        strLen = String.format("%02x", (strD097.length() + strDO8E.length()) / 2);
         strLen = strLen.toUpperCase();
 
-        String strAPDU = strCmdHeader + strLen + strD097 + strDO8E + "00";// 0CB00000 + 0D + ......
-
-        return strAPDU;
+        return strCmdHeader + strLen + strD097 + strDO8E + "00";
     }
 
     /**
@@ -603,7 +597,10 @@ public class PassportLib {
         String strNextSSC = GetNextSSC();
         String strN = strNextSSC + strRAPDU_D087 + strRAPDU_D099;
         strN = AlignString(strN, "80");
+        long startMacTime = System.currentTimeMillis();
         String strCC = TDES_MAC(strN, m_StrKSmac);//MAC
+        long expendMacTime = System.currentTimeMillis() - startMacTime;
+        Log.d(TAG, "Mac Time = " + expendMacTime);
 
         String strRAPDU_D08E_Value = GetDO(strRAPDU_D08E);
 
@@ -612,7 +609,10 @@ public class PassportLib {
 
         String strRAPDU_D087_Value = GetDO(strRAPDU_D087);
 
+        long startEnTime = System.currentTimeMillis();
         String strBin = TDES_Encrypt(strRAPDU_D087_Value, Utils.hexStringTobyte(m_StrKSenc), DES_DECRYPT);
+        long expendEnTime = System.currentTimeMillis() - startEnTime;
+        Log.d(TAG, "En Time = " + expendEnTime);
         m_strLastErrInfo = strBin.substring(0, nLen * 2);
 
         int FileLen = 0;
@@ -674,6 +674,8 @@ public class PassportLib {
             cot_recv_pos += m_strLastErrInfo.length() / 2;
         }
 
+
+        long firstTime = 0;
         while (nLen > 0) {
             if (nLen > MAXCHUNK) {
                 nReadLen = MAXCHUNK;
@@ -681,17 +683,31 @@ public class PassportLib {
                 nReadLen = nLen;
             }
 
+            //读一次相差的时间
+            long expendTime = System.currentTimeMillis() - firstTime;
+            Log.d(TAG, "all time = " + expendTime);//完整的读一次数据需要的时间
+            firstTime = System.currentTimeMillis();
+
+            //获取apdu指令消耗的时间
             strAPDU = SecReadBin(m_StrKSmac, nReadLen, nOffset);
+            long expendTime1 = System.currentTimeMillis() - firstTime;
+            Log.d(TAG, "get apdu time = " + expendTime1);//获取apdu指令需要的时间
             if (!Simulator) {
                 strRes = "871901FB9235F4E4037F2327DCC8964F1F9B8C30F42C8E2FFF224A990290008E08C8B2787EAEA07D749000";
             } else {
+                long time1 = System.currentTimeMillis();
                 strRes = sendAPDU(strAPDU);
+                long expend1 = System.currentTimeMillis() - time1;
+                Log.d(TAG, "sendAPDU time = " + expend1);//发送apdu指令需要的时间
                 if (strRes.equals("")) {
                     return -1;
                 }
             }
 
+            long time2 = System.currentTimeMillis();
             nRes = ReadBinAuth(strRes, nOffset, nReadLen);
+            long expendTime2 = System.currentTimeMillis() - time2;
+            Log.d(TAG, "auth time = " + expendTime2);//验证指令需要的时间
             if (0 > nRes) {
                 return -1;
             } else {
@@ -713,19 +729,18 @@ public class PassportLib {
      * @param strAPDU APDU指令
      * @return apdu指令得到的数据
      */
+    byte[] readCardResponse = new byte[MAX_PATH];
+
     String sendAPDU(String strAPDU) {
-        byte[] sw = {0x00, 0x00};
-
-        byte[] response = new byte[MAX_PATH];//响应数组
-        int responseLen = response.length;//响应数组的长度
-
         byte[] apdu = Utils.hexStringToBytes(strAPDU);
-        int apduLen = apdu.length;
 
-        int ret = Transmit(apdu, apduLen, response, responseLen, sw);//发送apdu指令
+        long startTime = System.currentTimeMillis();
+        int ret = Transmit(apdu, apdu.length, readCardResponse, readCardResponse.length, sw);//发送apdu指令
+        long expendTime = System.currentTimeMillis() - startTime;
+        Log.d(TAG, "Transmit time = " + expendTime);
         if (0x90 == (sw[0] & 0xFF)) {
             if (ret > 0) {
-                return Utils.byte2HexStr(response, 0, ret) + Utils.toHexString(sw);
+                return Utils.byte2HexStr(readCardResponse, 0, ret) + Utils.toHexString(sw);
             } else {
                 return Utils.toHexString(sw);
             }
@@ -736,16 +751,17 @@ public class PassportLib {
 
 
     //函数说明:获取下一个SSC
+    byte[] cSSCIn = new byte[9];
+    byte[] cSSCOut = new byte[9];
+
     public String GetNextSSC() {
         long llTrun = 0;
-        byte[] cSSCIn = new byte[9];
-        byte[] cSSCOut = new byte[9];
 
         System.arraycopy(Utils.hexStringTobyte(m_StrSSC), 0, cSSCIn, 0, 8);
 
         Utils.TurnChar(cSSCIn, cSSCOut, 8);
 
-        long tmp = 0x00;
+        long tmp;
         for (int t = 7; t >= 0; t--) {
             tmp = (cSSCOut[t] & 0xFF);
             llTrun += (tmp << (t * 8));

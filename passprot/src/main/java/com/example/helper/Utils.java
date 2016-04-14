@@ -4,32 +4,26 @@ import java.io.ByteArrayOutputStream;
 
 
 public class Utils {
-    //16锟斤拷锟斤拷锟街凤拷转锟斤拷锟斤拷锟斤拷锟斤拷
     public static byte[] hexStringTobyte(String hex) {
         int len = hex.length() / 2;
         byte[] result = new byte[len];
         char[] achar = hex.toCharArray();
-        String temp = "";
         for (int i = 0; i < len; i++) {
             int pos = i * 2;
             result[i] = (byte) (toByte(achar[pos]) << 4 | toByte(achar[pos + 1]));
-            temp += result[i] + ",";
         }
 
         return result;
     }
 
     public static int toByte(char c) {
-        byte b = (byte) "0123456789ABCDEF".indexOf(c);
-        return b;
+        return (byte) "0123456789ABCDEF".indexOf(c);
     }
 
-
-    //锟斤拷锟斤拷转锟斤拷16锟斤拷锟斤拷锟街凤拷
     public static String toHexString(byte[] b) {
-        StringBuffer buffer = new StringBuffer();
-        for (int i = 0; i < b.length; i++) {
-            buffer.append(toHexString1(b[i]));
+        StringBuilder buffer = new StringBuilder();
+        for (byte item : b) {
+            buffer.append(toHexString1(item));
         }
         return buffer.toString();
     }
@@ -66,7 +60,6 @@ public class Utils {
      * @return true：相等；false：不相等
      */
     public static boolean memcmp(byte[] ary_src, byte[] ary_des, int len) {
-
         for (int i = 0; i < len; i++) {
             if (ary_src[i] != ary_des[i]) {
                 return false;
@@ -76,19 +69,14 @@ public class Utils {
         return true;
     }
 
-
-    ///
     public static boolean ASC2BCD(byte[] strASC, byte[] strBCD, int lenBCD) {
         int i, nTemp, nP;
         boolean bOne = true;
         byte[] chrTemp = new byte[lenBCD * 2 + 2];
 
         nP = 0;
-        //memcpy(chrTemp , strASC, lenBCD*2);
 
-        //memcpy(chrTemp , strASC, strlen(strASC));
         System.arraycopy(strASC, 0, chrTemp, 0, strASC.length);
-
 
         for (i = 0; i < lenBCD * 2; i++) {
             nTemp = AscToInt((byte) (chrTemp[i] & 0xFF));
@@ -135,11 +123,9 @@ public class Utils {
         return (nRet);
     }
 
-    ///
     public static String byte2HexStr(byte[] b, int offset, int length) {
         String hs = "";
-        String stmp = "";
-
+        String stmp;
         for (int n = offset; n < offset + length; ++n) {
             stmp = Integer.toHexString(b[n] & 0xFF);
             if (stmp.length() == 1) {
@@ -153,6 +139,9 @@ public class Utils {
     }
 
 
+    /**
+     * 十六进制字符串转化成byte[]数组
+     */
     public static byte[] hexStringToBytes(String hexString) {
         if ((hexString == null) || (hexString.equals(""))) {
             return null;
@@ -189,15 +178,14 @@ public class Utils {
         return true;
     }
 
-    //
     public static String hexStrToAscStr(String bytes) {
         String hexString = "0123456789ABCDEF";
         ByteArrayOutputStream baos = new ByteArrayOutputStream(bytes.length() / 2);
         //锟斤拷每2位16锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷装锟斤拷一锟斤拷锟街斤拷
-        for (int i = 0; i < bytes.length(); i += 2)
+        for (int i = 0; i < bytes.length(); i += 2) {
             baos.write((hexString.indexOf(bytes.charAt(i)) << 4 | hexString.indexOf(bytes.charAt(i + 1))));
+        }
         return new String(baos.toByteArray());
     }
-
 
 }

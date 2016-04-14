@@ -84,16 +84,14 @@ public class ReadCardKit {
             return -1;
         }
 
-        if (pos >= data.length) return -1;
+        if (pos >= data.length) {
+            return -1;
+        }
 
-        int tmpTagLen = 0;   //现在只处理TAG域最多为两字节
-
-        int tmpLenLen = 0;
-
-        int tmpValueLen = 0;
-
-        int tmpTlvLen = 0;
-
+        int tmpTagLen;   //现在只处理TAG域最多为两字节
+        int tmpLenLen;
+        int tmpValueLen;
+        int tmpTlvLen;
 
         if (0x1F == ((data[pos] & 0xFF) & 0x1F)) {
             tmpTagLen = 2;
@@ -119,8 +117,7 @@ public class ReadCardKit {
         }
 
         tmpTlvLen = tmpTagLen + tmpLenLen + tmpValueLen;
-        if (dataLen >= tmpTlvLen)//是一个有效的TLV
-        {
+        if (dataLen >= tmpTlvLen) {//是一个有效的TLV
             ttt = pos + tmpTagLen + tmpLenLen;
 
             boolean bcmp = true;
@@ -135,18 +132,15 @@ public class ReadCardKit {
                 System.arraycopy(data, ttt, value, 0, data.length - ttt);
                 valueLen = tmpValueLen;
                 return valueLen;
-            } else if (0x20 == ((data[pos] & 0xFF) & 0x20)) //在子TLV中查找
-            {
+            } else if (0x20 == ((data[pos] & 0xFF) & 0x20)) {//在子TLV中查找
                 int ret = getTagFromTlvEx(data, ttt, tmpValueLen, tag, tagLen, value, valueLen);
-
                 if (ret != -1) {
                     valueLen = ret;
                     return valueLen;
                 }
             }
 
-            if (dataLen > (tmpTagLen + tmpLenLen + tmpValueLen))//data中可能包含多个TLV
-            {
+            if (dataLen > (tmpTagLen + tmpLenLen + tmpValueLen)) {//data中可能包含多个TLV
                 return getTagFromTlvEx(data, pos + tmpTlvLen, dataLen - tmpTlvLen, tag, tagLen, value, valueLen);
             }
         }
@@ -180,7 +174,7 @@ public class ReadCardKit {
         if (ATRData[2] != 0x00 || ATRData[3] != 0x00 || ATRData[4] != 0x00 || (ATRData[6] != 0x00)) {
             ret = ReadPassPortInf(0, 0);//moubiao expend time here
             if (ret != 0) {
-                Utils.memset(ATRData, 0, ATRData.length);
+                Arrays.fill(ATRData, (byte) 0);
             }
         }
 
@@ -416,14 +410,13 @@ public class ReadCardKit {
     }
 
     public Bitmap getPhotoBmp() {
-        if (null == photo_dat) return null;
+        if (null == photo_dat){
+            return null;
+        }
 
-        CxImage fac = CxImage.Decode(photo_dat, 46, photo_dat_len - 46);//moubiao
-
+        CxImage fac = CxImage.Decode(photo_dat, 46, photo_dat_len - 46);
         if (fac != null) {
-            Bitmap map = fac.getBitmap();
-
-            return map;
+            return fac.getBitmap();
         }
 
         return null;
