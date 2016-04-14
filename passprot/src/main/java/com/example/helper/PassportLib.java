@@ -236,9 +236,7 @@ public class PassportLib {
         nLen += 5;
 
         byte[] response = new byte[256];
-        int responseLen = response.length;
-
-        int ret = Transmit(apdu, nLen, response, responseLen, sw);
+        int ret = Transmit(apdu, nLen, response, response.length, sw);
         if (0x90 == (sw[0] & 0xFF)) {
             if (ret > 0) {
                 return Utils.byte2HexStr(response, 0, ret);
@@ -258,10 +256,7 @@ public class PassportLib {
     public int SelectMFbyName() {
         byte[] apdu = {0x00, (byte) 0xA4, 0x04, 0x00, 0x07, (byte) 0xA0, 0x00, 0x00, 0x02, 0x47, 0x10, 0x01};
         byte[] response = new byte[256];
-
-        int responseLen = response.length;
-
-        int ret = Transmit(apdu, apdu.length, response, responseLen, sw);
+        int ret = Transmit(apdu, apdu.length, response, response.length, sw);
         if (ret >= 0 && (0x90 == (sw[0] & 0xFF) || 0x61 == (sw[0] & 0xFF))) {
             return 0;
         }
@@ -426,10 +421,8 @@ public class PassportLib {
     public String GetCardRandom(int len) {
         byte apdu[] = {0x00, (byte) 0x84, 0x00, 0x00, (byte) len};
         byte[] response = new byte[256];
-        int responseLen = response.length;
-        byte sw[] = {0x00, 0x00};
 
-        int ret = Transmit(apdu, apdu.length, response, responseLen, sw);
+        int ret = Transmit(apdu, apdu.length, response, response.length, sw);
         if (0x90 == (sw[0] & 0xFF)) {
             if (ret > 0) {
                 return Utils.byte2HexStr(response, 0, ret);
