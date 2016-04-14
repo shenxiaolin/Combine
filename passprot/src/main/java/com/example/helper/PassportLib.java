@@ -512,9 +512,7 @@ public class PassportLib {
         String strDO87 = "870901" + strStruff3DES;
         String strM = strCmdHeader + strDO87;
 
-        String strNextSSC = GetNextSSC();
-
-        String strN = strNextSSC + strM;
+        String strN = getNextSSC() + strM;
         strN = AlignString(strN, "80");
 
         String strCC = TDES_MAC(strN, strMac);
@@ -537,7 +535,7 @@ public class PassportLib {
 
         strCmdHeader = String.format("0CB0%s", String.format("%04x", offset));
         String strD097 = "9701" + strLen;//文件描述符
-        String strN = GetNextSSC() + AlignString(strCmdHeader, "80") + strD097;
+        String strN = getNextSSC() + AlignString(strCmdHeader, "80") + strD097;
         strN = AlignString(strN, "80");
 
         String strDO8E = "8E08" + TDES_MAC(strN, strMac);//文件描述符
@@ -587,8 +585,7 @@ public class PassportLib {
         String strRAPDU_D099 = strRAPDU.substring(nRLen - 8 - 20 - 4, (nRLen - 8 - 20 - 4) + 4 * 2);
         String strRAPDU_D08E = strRAPDU.substring(nRLen - 8 - 20 - 4 + 8, (nRLen - 8 - 20 - 4 + 8) + 10 * 2);
 
-        String strNextSSC = GetNextSSC();
-        String strN = strNextSSC + strRAPDU_D087 + strRAPDU_D099;
+        String strN = getNextSSC() + strRAPDU_D087 + strRAPDU_D099;
         strN = AlignString(strN, "80");
         long startMacTime = System.currentTimeMillis();
         String strCC = TDES_MAC(strN, m_StrKSmac);//MAC
@@ -639,7 +636,7 @@ public class PassportLib {
         String strRes;
         String strAPDU = SecSelectFile(m_StrKSenc, m_StrKSmac, strTagFid[nFileID]);//得到一个选择文件的APDU指令
         strRes = sendAPDU(strAPDU);//发送选择文件的APDU指令，并返回结果
-        GetNextSSC();
+        getNextSSC();
         if (strRes.equals("")) {
             return -1;
         }
@@ -743,25 +740,24 @@ public class PassportLib {
     }
 
 
-    //函数说明:获取下一个SSC
-    byte[] cSSCIn = new byte[9];
-    byte[] cSSCOut = new byte[9];
+    /**
+     * 获取下一个SSC
+     */
+    byte[] cSSCIn = new byte[8];
+    byte[] cSSCOut = new byte[8];
 
-    public String GetNextSSC() {
-        long llTrun = 0;
-
+    public String getNextSSC() {
         System.arraycopy(Utils.hexStringTobyte(m_StrSSC), 0, cSSCIn, 0, 8);
-
         Utils.TurnChar(cSSCIn, cSSCOut, 8);
 
         long tmp;
+        long llTrun = 0;
         for (int t = 7; t >= 0; t--) {
             tmp = (cSSCOut[t] & 0xFF);
             llTrun += (tmp << (t * 8));
         }
 
         llTrun++;
-
         for (int t = 0; t < 8; t++) {
             tmp = 0xFF;
             tmp = llTrun & (tmp << (t * 8));
@@ -769,7 +765,6 @@ public class PassportLib {
         }
 
         Utils.TurnChar(cSSCIn, cSSCOut, 8);
-
         m_StrSSC = Utils.byte2HexStr(cSSCOut, 0, 8);
 
         return m_StrSSC;
