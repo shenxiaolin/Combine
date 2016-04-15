@@ -247,10 +247,7 @@ public class PassportHelper {
             return -1;
         }
 
-        long startTime = System.currentTimeMillis();
         int ret = rfid.RFIDRfApdu(1, cSend, nSend, receiveData, receiveDataLength, ucSW);
-        long expendTime = System.currentTimeMillis() - startTime;
-        Log.d(TAG, "apdu expend time = " + expendTime);
         if (ret != 0) {
             return -1;
         }
@@ -443,7 +440,6 @@ public class PassportHelper {
         DesLib.DES_set_key_checked(Arrays.copyOfRange(macKey, 0, 8), 0x0A);//设置密钥并检验（第二个key）
         DesLib.DES_set_key_checked(Arrays.copyOfRange(macKey, 8, 16), 0x0B);//设置密钥并检验（第二个key）
 
-        long startWhileTime = System.currentTimeMillis();
         int i = 0;
         while (i < nLen) {
             System.arraycopy(cSource, i, cData, 0, 8);
@@ -456,8 +452,6 @@ public class PassportHelper {
 
             i += 8;
         }
-        long expendWhileTime = System.currentTimeMillis() - startWhileTime;
-        Log.d(TAG, "while time = " + expendWhileTime);
 
         DesLib.DES_ecb_encrypt(cMac, cMac2, 0x0B, DES_DECRYPT);//解密mac
         DesLib.DES_ecb_encrypt(cMac2, cMac, 0x0A, DES_ENCRYPT);//加密mac
@@ -557,10 +551,7 @@ public class PassportHelper {
 
         String strN = getNextSSC() + strRAPDU_D087 + strRAPDU_D099;
         strN = alignString(strN, "80");
-        long startMacTime = System.currentTimeMillis();
         String strCC = getMAC(strN, keyMacFromCardData);//MAC
-        long expendMacTime = System.currentTimeMillis() - startMacTime;
-        Log.d(TAG, "Mac Time = " + expendMacTime);
 
         String strRAPDU_D08E_Value = getSubString(strRAPDU_D08E);
 
@@ -569,10 +560,7 @@ public class PassportHelper {
 
         String strRAPDU_D087_Value = getSubString(strRAPDU_D087);
 
-        long startEnTime = System.currentTimeMillis();
         String strBin = encryptOrDecryption(strRAPDU_D087_Value, Utils.hexStringTobyte(keyFromCardData), DES_DECRYPT);
-        long expendEnTime = System.currentTimeMillis() - startEnTime;
-        Log.d(TAG, "En Time = " + expendEnTime);
         readContent = strBin.substring(0, nLen * 2);
 
         int FileLen = 0;
@@ -634,7 +622,6 @@ public class PassportHelper {
             receiveOffset += readContent.length() / 2;
         }
 
-        long firstTime = 0;
         while (fileLength > 0) {
             if (fileLength > MAXREADLENGTH) {
                 onceReadLength = MAXREADLENGTH;
@@ -642,31 +629,18 @@ public class PassportHelper {
                 onceReadLength = fileLength;
             }
 
-            //读一次相差的时间
-            long expendTime = System.currentTimeMillis() - firstTime;
-            Log.d(TAG, "all time = " + expendTime);//完整的读一次数据需要的时间
-            firstTime = System.currentTimeMillis();
-
             //获取apdu指令消耗的时间
             order = getReadFileOrder(keyMacFromCardData, onceReadLength, orderOffset);
-            long expendTime1 = System.currentTimeMillis() - firstTime;
-            Log.d(TAG, "get apdu time = " + expendTime1);//获取apdu指令需要的时间
             if (!simulate) {
                 orderResult = "871901FB9235F4E4037F2327DCC8964F1F9B8C30F42C8E2FFF224A990290008E08C8B2787EAEA07D749000";
             } else {
-                long time1 = System.currentTimeMillis();
                 orderResult = sendOrder(order);
-                long expend1 = System.currentTimeMillis() - time1;
-                Log.d(TAG, "sendOrder time = " + expend1);//发送apdu指令需要的时间
                 if ("".equals(orderResult)) {
                     return -1;
                 }
             }
 
-            long time2 = System.currentTimeMillis();
             decodeResult = decodeReadContent(orderResult, orderOffset, onceReadLength);
-            long expendTime2 = System.currentTimeMillis() - time2;
-            Log.d(TAG, "auth time = " + expendTime2);//验证指令需要的时间
             if (0 > decodeResult) {
                 return -1;
             } else {
@@ -693,10 +667,7 @@ public class PassportHelper {
     String sendOrder(String APDUStr) {
         byte[] apdu = Utils.hexStringToBytes(APDUStr);
 
-        long startTime = System.currentTimeMillis();
         int ret = transmit(apdu, apdu.length, readCardResponse, readCardResponse.length, orderSW);//发送apdu指令
-        long expendTime = System.currentTimeMillis() - startTime;
-        Log.d(TAG, "transmit time = " + expendTime);
         if (0x90 == (orderSW[0] & 0xFF)) {
             if (ret > 0) {
                 return Utils.byte2HexStr(readCardResponse, 0, ret) + Utils.toHexString(orderSW);
