@@ -14,7 +14,6 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -382,6 +381,12 @@ public class M1CardHelper {
                     fos.flush();
                     String bitmapPath = opj2k.DecompressJ2KtoImage(file.getPath() + "/decodePic.png");
                     cardImg = BitmapFactory.decodeFile(bitmapPath);
+                    File tempFile = new File(file.getPath() + "/decodePic.png");
+                    if (tempFile.exists()) {
+                        if (tempFile.delete()) {
+                            Log.d(TAG, "readPicture: delete tempFile failed");
+                        }
+                    }
                 }
             }
         } catch (IOException e) {
