@@ -19,6 +19,7 @@ import com.xiongdi.recognition.db.PersonDao;
 import com.xiongdi.recognition.helper.M1CardHelper;
 import com.xiongdi.recognition.interfaces.DatePickerInterface;
 import com.xiongdi.recognition.util.DateUtil;
+import com.xiongdi.recognition.util.FileUtil;
 import com.xiongdi.recognition.util.StringUtil;
 import com.xiongdi.recognition.util.ToastUtil;
 import com.xiongdi.recognition.widget.AskDialogFragment;
@@ -216,6 +217,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
             progressDialog.dismiss();
             if (success) {
                 ToastUtil.getInstance().showToast(getApplicationContext(), "success");
+                new FileUtil().deleteFile(compressPicUrl);
             } else {
                 askDialog.setData(getString(R.string.common_tips), getString(R.string.save_failed_message));
                 askDialog.show(fgManager, "saveDialog");

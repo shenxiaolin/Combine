@@ -260,6 +260,7 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
                     OpenJpeg opj2k = new OpenJpeg();
                     opj2k.GetLibVersion();
                     compressPicUrl = opj2k.CompressImageToJ2K(path);
+                    fileUtil.deleteFile(path);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

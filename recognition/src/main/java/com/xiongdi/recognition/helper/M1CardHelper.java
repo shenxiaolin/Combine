@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.xd.rfid;
+import com.xiongdi.recognition.util.FileUtil;
 import com.yzq.OpenJpeg;
 
 import java.io.BufferedOutputStream;
@@ -381,12 +382,7 @@ public class M1CardHelper {
                     fos.flush();
                     String bitmapPath = opj2k.DecompressJ2KtoImage(file.getPath() + "/decodePic.png");
                     cardImg = BitmapFactory.decodeFile(bitmapPath);
-                    File tempFile = new File(file.getPath() + "/decodePic.png");
-                    if (tempFile.exists()) {
-                        if (tempFile.delete()) {
-                            Log.d(TAG, "readPicture: delete tempFile failed");
-                        }
-                    }
+                    new FileUtil().deleteFile(file.getPath() + "/decodePic.png");
                 }
             }
         } catch (IOException e) {
