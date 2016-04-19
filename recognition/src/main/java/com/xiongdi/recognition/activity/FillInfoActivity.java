@@ -60,6 +60,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     private String gatherIDNO;
     private String gatherPicUrl;
     private String gatherFingerUrl;
+    private String compressPicUrl;
 
     private int selectedID = 0;
 
@@ -196,7 +197,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
                     gatherBirthday,
                     gatherAddress,
                     gatherIDNO,
-                    gatherPicUrl,
+                    compressPicUrl,
                     gatherFingerUrl};
             m1CardHelper.setSaveData(saveData);
             m1CardHelper.openRFSignal();
@@ -253,6 +254,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
             switch (requestCode) {
                 case GATHER_ACTIVITY_CODE:
                     gatherPicUrl = data.getStringExtra("pictureUrl");
+                    compressPicUrl = data.getStringExtra("compressPicUrl");
                     gatherFingerUrl = data.getStringExtra("fingerPrintUrl");
                     saveInformation();
                     refreshView();
@@ -299,7 +301,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     private void saveFileToDevice(String toSaveString) {
         try {
             String filePath = getExternalFilesDir(null) + "/" + getResources().getString(R.string.app_name) + "/" +
-                    String.format("%1$,06d", gatherID) + "/" + TXT_NAME + ".ini";
+                    String.format("%1$,05d", gatherID) + "/" + TXT_NAME + ".ini";
 
             File saveFile = new File(filePath);
             if (!saveFile.exists()) {
