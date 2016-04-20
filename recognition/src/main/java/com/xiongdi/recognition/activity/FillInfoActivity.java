@@ -19,6 +19,7 @@ import com.xiongdi.recognition.db.PersonDao;
 import com.xiongdi.recognition.helper.M1CardHelper;
 import com.xiongdi.recognition.interfaces.DatePickerInterface;
 import com.xiongdi.recognition.util.DateUtil;
+import com.xiongdi.recognition.util.FileUtil;
 import com.xiongdi.recognition.util.StringUtil;
 import com.xiongdi.recognition.util.ToastUtil;
 import com.xiongdi.recognition.widget.AskDialogFragment;
@@ -60,6 +61,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     private String gatherIDNO;
     private String gatherPicUrl;
     private String gatherFingerUrl;
+    private String compressPicUrl;
 
     private int selectedID = 0;
 
@@ -196,7 +198,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
                     gatherBirthday,
                     gatherAddress,
                     gatherIDNO,
-                    gatherPicUrl,
+                    compressPicUrl,
                     gatherFingerUrl};
             m1CardHelper.setSaveData(saveData);
             m1CardHelper.openRFSignal();
@@ -215,6 +217,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
             progressDialog.dismiss();
             if (success) {
                 ToastUtil.getInstance().showToast(getApplicationContext(), "success");
+                new FileUtil().deleteFile(compressPicUrl);
             } else {
                 askDialog.setData(getString(R.string.common_tips), getString(R.string.save_failed_message));
                 askDialog.show(fgManager, "saveDialog");
@@ -253,6 +256,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
             switch (requestCode) {
                 case GATHER_ACTIVITY_CODE:
                     gatherPicUrl = data.getStringExtra("pictureUrl");
+                    compressPicUrl = data.getStringExtra("compressPicUrl");
                     gatherFingerUrl = data.getStringExtra("fingerPrintUrl");
                     saveInformation();
                     refreshView();
@@ -299,7 +303,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     private void saveFileToDevice(String toSaveString) {
         try {
             String filePath = getExternalFilesDir(null) + "/" + getResources().getString(R.string.app_name) + "/" +
-                    String.format("%1$,06d", gatherID) + "/" + TXT_NAME + ".ini";
+                    String.format("%1$,05d", gatherID) + "/" + TXT_NAME + ".ini";
 
             File saveFile = new File(filePath);
             if (!saveFile.exists()) {

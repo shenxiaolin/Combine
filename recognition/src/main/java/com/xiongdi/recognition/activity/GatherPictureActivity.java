@@ -140,8 +140,8 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
     private void setCameraParams() {
         try {
             Camera.Parameters parameters = mCamera.getParameters();
-            mCamera.setDisplayOrientation(180);
-            parameters.setRotation(180);
+            mCamera.setDisplayOrientation(90);
+            parameters.setRotation(90);
 
             parameters.setPictureSize(480, 320);
             parameters.setPreviewSize(480, 320);

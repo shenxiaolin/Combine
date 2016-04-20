@@ -24,7 +24,8 @@
             android:layout_below="@id/password_img"
             android:imeOptions="actionNext|flagNoFullscreen"
             android:inputType="textPersonName"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:text="userc"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -47,6 +48,7 @@
             android:imeOptions="actionDone|flagNoFullscreen"
             android:inputType="textPassword"
             android:singleLine="true"
+            android:text="123"
             android:textColor="@android:color/holo_red_dark"/>
     </RelativeLayout>
 

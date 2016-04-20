@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:keepScreenOn="true"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/EditTextReception"
+        android:layout_width="fill_parent"
+        android:layout_height="70dip"
+        android:gravity="top" 
+        android:editable="false"
+        android:isScrollContainer="true"
+		android:visibility="gone"        
+        android:scrollbarStyle="insideOverlay" 
+        >
+    </EditText>
+
+    <EditText
+        android:id="@+id/EditTextEmission"
+        android:layout_width="fill_parent"
+        android:layout_height="70dip"
+        android:gravity="top" 
+        android:editable="false"
+        android:isScrollContainer="true"
+        android:visibility="gone"
+        android:scrollbarStyle="insideOverlay" >
+    </EditText>
+    
+     <RelativeLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="460dip"
+		android:layout_marginRight="4dip"
+		android:layout_marginLeft="4dip"
+	    android:background="@drawable/passport_bg" >
+	        <TextView
+	        	android:id="@+id/type"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="20dip"
+			    android:layout_marginLeft="2dip"
+			    android:text="@string/fieldname"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+	    	<TextView
+	        	android:id="@+id/content_type"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@android:color/black"
+			    android:layout_alignLeft="@+id/type"
+			    android:layout_below="@+id/type"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+
+	        <TextView
+	        	android:id="@+id/country_code"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignTop="@+id/type"
+			    android:layout_toRightOf="@+id/type"			    
+			    android:layout_marginLeft="30dip"
+			    android:text="@string/fieldname7"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+	    	<TextView
+	        	android:id="@+id/content_country_code"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@android:color/black"
+			    android:layout_alignLeft="@+id/country_code"
+			    android:layout_below="@+id/country_code"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+			    
+
+	        <TextView
+	        	android:id="@+id/passport_no"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignTop="@+id/type"
+			    android:layout_toRightOf="@+id/country_code"				    
+			    android:layout_marginLeft="40dip"
+			    android:text="@string/fieldname13"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+	    	<TextView
+	        	android:id="@+id/content_passport_no"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@android:color/black"
+			    android:layout_alignLeft="@+id/passport_no"
+			    android:layout_below="@+id/passport_no"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+
+			    
+
+	        <TextView
+	        	android:id="@+id/name1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_below="@+id/content_type"
+			    android:layout_marginTop="15dip"
+			    android:text="@string/fieldname9"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+			    
+		    
+	        <TextView
+			    android:id="@+id/content_name1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignLeft="@+id/name1"
+			    android:layout_below="@+id/name1"
+			    android:textColor="@android:color/black"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" /> 
+
+
+	        <TextView
+	        	android:id="@+id/name2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+        		android:layout_alignTop="@+id/name1"
+			    android:layout_toRightOf="@+id/name1"
+			    android:layout_alignLeft="@+id/country_code"
+			    android:text="@string/fieldname8"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+			    
+		    
+	        <TextView
+			    android:id="@+id/content_name2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignLeft="@+id/name2"
+			    android:layout_below="@+id/name2"
+			    android:textColor="@android:color/black"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" /> 
+
+
+	        <TextView
+	        	android:id="@+id/sex"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_below="@+id/content_name1"
+			    android:layout_marginTop="15dip"
+			    
+			    android:text="@string/fieldname4"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+			    
+	        <TextView
+			    android:id="@+id/content_sex"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignLeft="@+id/sex"
+			    android:layout_below="@+id/sex"
+			    android:textColor="@android:color/black"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+
+
+	        <TextView
+	        	android:id="@+id/nationality"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="30dip"
+        		android:layout_alignTop="@+id/sex"
+			    android:layout_toRightOf="@+id/sex"
+			    android:text="@string/fieldname15"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+			    
+	        <TextView
+			    android:id="@+id/content_nationality"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignLeft="@+id/nationality"
+			    android:layout_below="@+id/nationality"
+			    android:textColor="@android:color/black"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+
+
+	        <TextView
+	        	android:id="@+id/date_of_birth"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginLeft="45dip"
+        		android:layout_alignTop="@+id/sex"
+			    android:layout_toRightOf="@+id/nationality"
+			    android:text="@string/fieldname5"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+			    
+	        <TextView
+			    android:id="@+id/content_date_of_birth"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignLeft="@+id/date_of_birth"
+			    android:layout_below="@+id/date_of_birth"
+			    android:textColor="@android:color/black"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+
+ 
+ 
+	        <TextView
+		    	android:id="@+id/Discretionary"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+		        android:layout_below="@+id/content_sex"
+			    android:layout_marginTop="15dip"
+		        android:visibility="gone"
+			    android:text="@string/fieldname14"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+			    
+	        <TextView
+			    android:id="@+id/content_Discretionary"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignLeft="@+id/Discretionary"
+			    android:visibility="gone"
+			    android:layout_below="@+id/Discretionary"
+			    android:textColor="@android:color/black"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+
+
+
+	        <TextView
+		   		android:id="@+id/Discretionary2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:text="@string/fieldname16"
+			    android:layout_marginLeft="80dip"
+			    android:visibility="gone"
+			    android:layout_alignTop="@+id/Discretionary"
+		   		android:layout_toRightOf="@+id/Discretionary"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+			    
+
+	        <TextView
+			    android:id="@+id/content_Discretionary2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:textColor="@android:color/black"
+			    android:layout_alignLeft="@+id/Discretionary2"
+			    android:layout_below="@+id/Discretionary2"
+			    android:visibility="gone"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+
+
+	        <TextView
+		   	 	android:id="@+id/date_of_expiry"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+		    	android:layout_below="@+id/content_Discretionary"
+			    android:layout_marginTop="15dip"
+			    android:text="@string/fieldname6"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+			    
+	        <TextView
+			    android:id="@+id/content_date_of_expiry"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignLeft="@+id/date_of_expiry"
+			    android:layout_below="@+id/date_of_expiry"
+			    android:textColor="@android:color/black"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+
+			    
+	        <TextView
+		   	 	android:id="@+id/mrz_code1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="15dip"
+			    android:layout_alignLeft="@+id/content_date_of_expiry"
+		    	android:layout_below="@+id/content_date_of_expiry"
+			    android:text="@string/fieldname10"
+			    android:textColor="#ffcc0000"
+			    android:visibility="gone"
+			    android:textSize="15dp" />
+			    
+	        <TextView
+			    android:id="@+id/content_mrz_code1"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_below="@+id/mrz_code1"
+			    android:layout_alignLeft="@+id/mrz_code1"
+			    android:textColor="@android:color/black"
+			    android:visibility="gone"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+ 
+	        <TextView
+		   	 	android:id="@+id/mrz_code2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_marginTop="15dip"
+			    android:layout_alignLeft="@+id/content_date_of_expiry"
+		    	android:layout_below="@+id/content_mrz_code1"
+			    android:text="@string/fieldname11"
+			    android:visibility="gone"
+			    android:textColor="#ffcc0000"
+			    android:textSize="15dp" />
+			    
+	        <TextView
+			    android:id="@+id/content_mrz_code2"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:layout_alignLeft="@+id/mrz_code2"
+			    android:layout_below="@+id/mrz_code2"
+			    android:textColor="@android:color/black"
+			    android:visibility="gone"
+			    android:textStyle= "bold"
+			    android:textSize="15dp" />
+	        
+    </RelativeLayout>
+
+    
+        <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="60dip"
+		        android:keepScreenOn="true" 
+		        android:layout_gravity="bottom" 
+		        android:gravity="bottom"
+		        android:visibility="gone"
+		        android:orientation="horizontal" >
+	
+		        <ImageView
+		            android:id="@+id/button_clean"
+		            android:layout_width="60dp"
+		            android:layout_height="60dp"/>		
+    	</LinearLayout>
+    	
+</LinearLayout>

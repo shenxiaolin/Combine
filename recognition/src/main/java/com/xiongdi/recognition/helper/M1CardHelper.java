@@ -8,6 +8,8 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.xd.rfid;
+import com.xiongdi.recognition.util.FileUtil;
+import com.yzq.OpenJpeg;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,6 +24,7 @@ import java.util.Arrays;
  * 操作M1卡的帮助类
  */
 public class M1CardHelper {
+    private static String TAG = "moubiao";
     private static int BLOCK_LENGTH = 16;
 
     private Context mContext;
@@ -37,7 +40,6 @@ public class M1CardHelper {
 
     //Mode：0 表示 ISO14443-A；1 表示 ISO14443-B；2 表示 Felica C；
     private static int RFID_PROTOCOL_A = 0;
-    private static String TAG = "moubiao";
 
     public M1CardHelper(Context mContext) {
         this.mContext = mContext;
@@ -188,7 +190,7 @@ public class M1CardHelper {
         }
 
         for (int i = 1; i < 3; i++) {
-            if (!readBlock(readBaseData, readBaseOffset * 16, i)) {
+            if (!readBlock(readBaseData, readBaseOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -201,7 +203,7 @@ public class M1CardHelper {
         }
 
         for (int i = 4; i < 7; i++) {
-            if (!readBlock(readBaseData, readBaseOffset * 16, i)) {
+            if (!readBlock(readBaseData, readBaseOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -213,7 +215,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 8; i < 10; i++) {
-            if (!readBlock(readBaseData, readBaseOffset * 16, i)) {
+            if (!readBlock(readBaseData, readBaseOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -291,6 +293,12 @@ public class M1CardHelper {
      * 读取卡里的照片
      */
     private boolean readPicture(byte[] serialNo) {
+        //先检查外部存储是否可用，如果不可用则不保存
+        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+            Log.d(TAG, "storage mounted failed, save fingerprint failed!");
+            return false;
+        }
+
         byte[] picData = new byte[960];
         Arrays.fill(picData, (byte) 0x00);
 
@@ -301,7 +309,7 @@ public class M1CardHelper {
         }
 
         for (int i = 192; i < 207; i++) {
-            if (!readBlock(picData, readOffset * 16, i)) {
+            if (!readBlock(picData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -314,13 +322,12 @@ public class M1CardHelper {
         }
 
         for (int i = 208; i < 223; i++) {
-            if (!readBlock(picData, readOffset * 16, i)) {
+            if (!readBlock(picData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
             readOffset++;
         }
-
 
         //验证扇区38
         if (!authenticateCard(56, serialNo)) {
@@ -328,13 +335,12 @@ public class M1CardHelper {
         }
 
         for (int i = 224; i < 239; i++) {
-            if (!readBlock(picData, readOffset * 16, i)) {
+            if (!readBlock(picData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
             readOffset++;
         }
-
 
         //验证扇区39
         if (!authenticateCard(60, serialNo)) {
@@ -342,7 +348,7 @@ public class M1CardHelper {
         }
 
         for (int i = 240; i < 255; i++) {
-            if (!readBlock(picData, readOffset * 16, i)) {
+            if (!readBlock(picData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -358,10 +364,37 @@ public class M1CardHelper {
             }
         }
 
-        if (realPicData != null) {
-            cardImg = BitmapFactory.decodeByteArray(realPicData, 0, realPicData.length);
-        } else {
-            cardImg = null;
+        OpenJpeg opj2k = new OpenJpeg();
+        opj2k.GetLibVersion();
+        FileOutputStream fos = null;
+        try {
+            File file = mContext.getExternalFilesDir("card");
+            if (file != null && !file.exists()) {
+                if (!file.mkdirs()) {
+                    Log.e(TAG, "readPicture: create card directory failed");
+                    return false;
+                }
+            }
+            if (file != null) {
+                fos = new FileOutputStream(file.getPath() + "/decodePic.png");
+                if (realPicData != null) {
+                    fos.write(realPicData);
+                    fos.flush();
+                    String bitmapPath = opj2k.DecompressJ2KtoImage(file.getPath() + "/decodePic.png");
+                    cardImg = BitmapFactory.decodeFile(bitmapPath);
+                    new FileUtil().deleteFile(file.getPath() + "/decodePic.png");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return true;
@@ -386,7 +419,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 12; i < 15; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -399,7 +432,7 @@ public class M1CardHelper {
         }
 
         for (int i = 16; i < 19; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -412,7 +445,7 @@ public class M1CardHelper {
         }
 
         for (int i = 20; i < 23; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -425,7 +458,7 @@ public class M1CardHelper {
         }
 
         for (int i = 24; i < 27; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -437,7 +470,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 28; i < 31; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -450,7 +483,7 @@ public class M1CardHelper {
         }
 
         for (int i = 32; i < 35; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -463,7 +496,7 @@ public class M1CardHelper {
         }
 
         for (int i = 36; i < 39; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -476,7 +509,7 @@ public class M1CardHelper {
         }
 
         for (int i = 40; i < 43; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -488,7 +521,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 44; i < 47; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -501,7 +534,7 @@ public class M1CardHelper {
         }
 
         for (int i = 48; i < 51; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -514,7 +547,7 @@ public class M1CardHelper {
         }
 
         for (int i = 52; i < 55; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -527,7 +560,7 @@ public class M1CardHelper {
         }
 
         for (int i = 56; i < 59; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -539,7 +572,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 60; i < 63; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -552,7 +585,7 @@ public class M1CardHelper {
         }
 
         for (int i = 64; i < 67; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -565,7 +598,7 @@ public class M1CardHelper {
         }
 
         for (int i = 68; i < 71; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -578,7 +611,7 @@ public class M1CardHelper {
         }
 
         for (int i = 72; i < 75; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -590,7 +623,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 76; i < 79; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -603,7 +636,7 @@ public class M1CardHelper {
         }
 
         for (int i = 80; i < 83; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -616,7 +649,7 @@ public class M1CardHelper {
         }
 
         for (int i = 84; i < 87; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -629,7 +662,7 @@ public class M1CardHelper {
         }
 
         for (int i = 88; i < 91; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -641,7 +674,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 92; i < 95; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -654,7 +687,7 @@ public class M1CardHelper {
         }
 
         for (int i = 96; i < 99; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -667,7 +700,7 @@ public class M1CardHelper {
         }
 
         for (int i = 100; i < 103; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -680,7 +713,7 @@ public class M1CardHelper {
         }
 
         for (int i = 104; i < 107; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -692,7 +725,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 108; i < 111; i++) {
-            if (!readBlock(readFingerData, readOffset * 16, i)) {
+            if (!readBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -705,7 +738,7 @@ public class M1CardHelper {
 //        }
 //
 //        for (int i = 112; i < 115; i++) {
-//            if (!writeBlock(readFingerData, readOffset * 16, i)) {
+//            if (!writeBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
 //                return;
 //            }
 //
@@ -718,7 +751,7 @@ public class M1CardHelper {
 //        }
 //
 //        for (int i = 116; i < 119; i++) {
-//            if (!writeBlock(readFingerData, readOffset * 16, i)) {
+//            if (!writeBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
 //                return;
 //            }
 //
@@ -731,7 +764,7 @@ public class M1CardHelper {
 //        }
 //
 //        for (int i = 120; i < 123; i++) {
-//            if (!writeBlock(readFingerData, readOffset * 16, i)) {
+//            if (!writeBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
 //                return;
 //            }
 //
@@ -743,7 +776,7 @@ public class M1CardHelper {
 //            return;
 //        }
 //        for (int i = 124; i < 127; i++) {
-//            if (!writeBlock(readFingerData, readOffset * 16, i)) {
+//            if (!writeBlock(readFingerData, readOffset * BLOCK_LENGTH, i)) {
 //                return;
 //            }
 //
@@ -817,13 +850,13 @@ public class M1CardHelper {
      * @param block   块
      */
     private boolean readBlock(byte[] desData, int offset, int block) {
-        byte[] readTemp = new byte[16];
+        byte[] readTemp = new byte[BLOCK_LENGTH];
         int readRet = rfid.MifRead(block, readTemp);
         if (readRet != 0) {
             Log.d(TAG, "read block " + block + " failed!");
             return false;
         }
-        System.arraycopy(readTemp, 0, desData, offset, 16);
+        System.arraycopy(readTemp, 0, desData, offset, BLOCK_LENGTH);
 
         return true;
     }
@@ -881,7 +914,7 @@ public class M1CardHelper {
         }
 
         for (int i = 1; i < 3; i++) {
-            if (!writeBlock(writeBaseData, writeBaseOffset * 16, i)) {
+            if (!writeBlock(writeBaseData, writeBaseOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -894,7 +927,7 @@ public class M1CardHelper {
         }
 
         for (int i = 4; i < 7; i++) {
-            if (!writeBlock(writeBaseData, writeBaseOffset * 16, i)) {
+            if (!writeBlock(writeBaseData, writeBaseOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -906,7 +939,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 8; i < 10; i++) {
-            if (!writeBlock(writeBaseData, writeBaseOffset * 16, i)) {
+            if (!writeBlock(writeBaseData, writeBaseOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -925,20 +958,28 @@ public class M1CardHelper {
             return false;
         }
 
-        String picPath = imgUrlCard;
-        File file = new File(picPath);
+        File file = new File(imgUrlCard);
         if (!file.exists()) {
             return false;
         }
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        options.inSampleSize = 4;
-        Bitmap bitmap = BitmapFactory.decodeFile(picPath, options);
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 2, baos);
-        byte[] bitmapData = baos.toByteArray();
+        int fileLen = (int) file.length();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(fileLen);
+        FileInputStream fis;
+        byte[] readData = new byte[fileLen];
+        int readLen;
+        try {
+            fis = new FileInputStream(file);
+            while ((readLen = fis.read(readData)) != -1) {
+                bos.write(readData, 0, readLen);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        byte[] bitmapData = bos.toByteArray();
         int length = bitmapData.length;
-        int needBlock = (int) Math.ceil(length / 16);
+        int needBlock = (int) Math.ceil(length / BLOCK_LENGTH);
         if (needBlock > 60) {
             Log.d(TAG, "picture too large!");
             return false;
@@ -954,7 +995,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 192; i < 207; i++) {
-            if (!writeBlock(writePicData, writeOffset * 16, i)) {
+            if (!writeBlock(writePicData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -967,7 +1008,7 @@ public class M1CardHelper {
         }
 
         for (int i = 208; i < 223; i++) {
-            if (!writeBlock(writePicData, writeOffset * 16, i)) {
+            if (!writeBlock(writePicData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -980,7 +1021,7 @@ public class M1CardHelper {
         }
 
         for (int i = 224; i < 239; i++) {
-            if (!writeBlock(writePicData, writeOffset * 16, i)) {
+            if (!writeBlock(writePicData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -993,7 +1034,7 @@ public class M1CardHelper {
         }
 
         for (int i = 240; i < 255; i++) {
-            if (!writeBlock(writePicData, writeOffset * 16, i)) {
+            if (!writeBlock(writePicData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1012,9 +1053,7 @@ public class M1CardHelper {
             return false;
         }
 
-        String picPath = fingerUrlCard;
-
-        File file = new File(picPath);
+        File file = new File(fingerUrlCard);
         if (!file.exists()) {
             return false;
         }
@@ -1060,7 +1099,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 12; i < 15; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1073,7 +1112,7 @@ public class M1CardHelper {
         }
 
         for (int i = 16; i < 19; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1086,7 +1125,7 @@ public class M1CardHelper {
         }
 
         for (int i = 20; i < 23; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1099,7 +1138,7 @@ public class M1CardHelper {
         }
 
         for (int i = 24; i < 27; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1111,7 +1150,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 28; i < 31; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1124,7 +1163,7 @@ public class M1CardHelper {
         }
 
         for (int i = 32; i < 35; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1137,7 +1176,7 @@ public class M1CardHelper {
         }
 
         for (int i = 36; i < 39; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1150,7 +1189,7 @@ public class M1CardHelper {
         }
 
         for (int i = 40; i < 43; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1162,7 +1201,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 44; i < 47; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1175,7 +1214,7 @@ public class M1CardHelper {
         }
 
         for (int i = 48; i < 51; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1188,7 +1227,7 @@ public class M1CardHelper {
         }
 
         for (int i = 52; i < 55; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1201,7 +1240,7 @@ public class M1CardHelper {
         }
 
         for (int i = 56; i < 59; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1213,7 +1252,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 60; i < 63; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1221,12 +1260,12 @@ public class M1CardHelper {
         }
 
         //验证扇区16(64-67)
-        if (!authenticateCard(16, serialNo)) {
+        if (!authenticateCard(BLOCK_LENGTH, serialNo)) {
             return false;
         }
 
         for (int i = 64; i < 67; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1239,7 +1278,7 @@ public class M1CardHelper {
         }
 
         for (int i = 68; i < 71; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1252,7 +1291,7 @@ public class M1CardHelper {
         }
 
         for (int i = 72; i < 75; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1264,7 +1303,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 76; i < 79; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1277,7 +1316,7 @@ public class M1CardHelper {
         }
 
         for (int i = 80; i < 83; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1290,7 +1329,7 @@ public class M1CardHelper {
         }
 
         for (int i = 84; i < 87; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1303,7 +1342,7 @@ public class M1CardHelper {
         }
 
         for (int i = 88; i < 91; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1315,7 +1354,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 92; i < 95; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1328,7 +1367,7 @@ public class M1CardHelper {
         }
 
         for (int i = 96; i < 99; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1341,7 +1380,7 @@ public class M1CardHelper {
         }
 
         for (int i = 100; i < 103; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1354,7 +1393,7 @@ public class M1CardHelper {
         }
 
         for (int i = 104; i < 107; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1366,7 +1405,7 @@ public class M1CardHelper {
             return false;
         }
         for (int i = 108; i < 111; i++) {
-            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
                 return false;
             }
 
@@ -1379,7 +1418,7 @@ public class M1CardHelper {
 //        }
 //
 //        for (int i = 112; i < 115; i++) {
-//            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+//            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
 //                return;
 //            }
 //
@@ -1392,7 +1431,7 @@ public class M1CardHelper {
 //        }
 //
 //        for (int i = 116; i < 119; i++) {
-//            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+//            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
 //                return;
 //            }
 //
@@ -1405,7 +1444,7 @@ public class M1CardHelper {
 //        }
 //
 //        for (int i = 120; i < 123; i++) {
-//            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+//            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
 //                return;
 //            }
 //
@@ -1417,7 +1456,7 @@ public class M1CardHelper {
 //            return;
 //        }
 //        for (int i = 124; i < 127; i++) {
-//            if (!writeBlock(writeFingerData, writeOffset * 16, i)) {
+//            if (!writeBlock(writeFingerData, writeOffset * BLOCK_LENGTH, i)) {
 //                return;
 //            }
 //
@@ -1437,8 +1476,8 @@ public class M1CardHelper {
      * @param block     要写的块
      */
     private boolean writeBlock(byte[] srcData, int srcOffset, int block) {
-        byte[] writeTemp = new byte[16];
-        System.arraycopy(srcData, srcOffset, writeTemp, 0, 16);
+        byte[] writeTemp = new byte[BLOCK_LENGTH];
+        System.arraycopy(srcData, srcOffset, writeTemp, 0, BLOCK_LENGTH);
         int writeRet = rfid.MifWrite(block, writeTemp);
         if (writeRet != 0) {
             Log.d(TAG, "write block " + block + " failed!");

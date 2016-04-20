@@ -1,26 +1,35 @@
 package com.xiongdi.recognition.application;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.j256.ormlite.dao.Dao;
 import com.xiongdi.recognition.bean.Account;
 import com.xiongdi.recognition.db.AccountDao;
-import com.xiongdi.recognition.db.DatabaseHelper;
+import com.xiongdi.recognition.util.CrashHandlerUtil;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by moubiao on 2016/3/22.
  * 自定义的application
  */
 public class RecognitionApplication extends Application {
+    private List<Activity> mActivityList;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
+        initData();
         initDatabase();
+    }
+
+    private void initData() {
+        mActivityList = new ArrayList<>();
+        CrashHandlerUtil.getInstance().initCrashHandlerUtil(this);
     }
 
     private void initDatabase() {
@@ -40,4 +49,12 @@ public class RecognitionApplication extends Application {
         }
     }
 
+
+    public List<Activity> getActivityList() {
+        return mActivityList;
+    }
+
+    public void addActivity(Activity activity) {
+        mActivityList.add(activity);
+    }
 }

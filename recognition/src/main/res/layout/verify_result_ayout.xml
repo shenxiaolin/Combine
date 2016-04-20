@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/verify_img"
-        android:layout_width="@dimen/dp_size_100"
-        android:layout_height="@dimen/dp_size_120"
+        android:layout_width="@dimen/dp_size_140"
+        android:layout_height="@dimen/dp_size_160"
         android:layout_marginTop="@dimen/dp_size_3"
         android:src="@mipmap/person_photo"/>
 

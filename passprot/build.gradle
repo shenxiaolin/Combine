@@ -1,0 +1,32 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        applicationId "com.example.mrzdemo"
+        minSdkVersion 14
+        targetSdkVersion 17
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:18.+'
+    compile files('libs/android-openssl.jar')
+    compile files('libs/android-ximage.jar')
+    compile files('libs/android_auth.jar')
+    compile files('libs/bcprov-ext-jdk15-146.jar')
+    compile files('libs/DecodeWlt.jar')
+    compile files('libs/idcard_sdk.jar')
+    compile files('libs/ksoap2-android-assembly-2.4-jar-with-dependencies.jar')
+    compile files('libs/microlog4android-1.0.0.jar')
+    compile files('libs/pki.jar')
+}
