@@ -1,15 +1,10 @@
 package com.xiongdi.recognition.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,15 +23,13 @@ import com.xiongdi.recognition.adapter.GatherInfoVpAdapter;
 import com.xiongdi.recognition.fragment.LeftHandFragment;
 import com.xiongdi.recognition.fragment.PictureFragment;
 import com.xiongdi.recognition.fragment.RightHandFragment;
-import com.xiongdi.recognition.media.CropOption;
-import com.xiongdi.recognition.media.CropOptionAdapter;
 import com.xiongdi.recognition.util.FileUtil;
+import com.xiongdi.recognition.util.ToastUtil;
 import com.xiongdi.recognition.widget.ProgressDialogFragment;
+import com.xiongdi.recognition.widget.crop.Crop;
 import com.yzq.OpenJpeg;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +40,7 @@ import java.util.List;
 public class GatherActivity extends AppCompatActivity implements View.OnClickListener {
     public final static int PICTURE_ACTIVITY = 0;//采集照片
     public final static int FINGERPRINT_ACTIVITY = 1;//采集指纹
-    private static final int CROP_FROM_CAMERA = 2;//裁剪照片
+    private static final int CROP_FROM_CAMERA = 6709;//裁剪照片
 
     public static String fingerPrint_pic_path = "";
 
@@ -198,8 +191,7 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
                     haveInformation = true;
                     break;
                 case CROP_FROM_CAMERA:
-                    pictureFg.setPicture(pictureUrl);
-                    compressPicture();
+                    new CompressTask().execute();
                     break;
                 default:
                     break;
@@ -244,101 +236,56 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
                 + gatherID + "/" + gatherID + "_" + fingerNUM + ".xyt");
     }
 
-    private void compressPicture() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Bitmap bitmap = BitmapFactory.decodeFile(pictureUrl);
-                try {
-                    String path = getExternalFilesDir(null) + "/" + getResources().getString(R.string.app_name) + "/" + gatherID + "/"
-                            + gatherID + ".png";
-                    FileOutputStream fosOne = new FileOutputStream(path);
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 50, fosOne);
-                    fosOne.flush();
-                    fosOne.close();
+    private class CompressTask extends AsyncTask<String, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return compressPicture();
+        }
 
-                    OpenJpeg opj2k = new OpenJpeg();
-                    opj2k.GetLibVersion();
-                    compressPicUrl = opj2k.CompressImageToJ2K(path);
-                    fileUtil.deleteFile(path);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if (success) {
+                pictureFg.setPicture(pictureUrl);
+            } else {
+                ToastUtil.getInstance().showToast(GatherActivity.this, "compress picture failed");
             }
-        }).start();
+        }
+    }
+
+    /**
+     * 将照片压缩为.jp2格式
+     */
+    private boolean compressPicture() {
+        compressPicUrl = pictureUrl.substring(0, pictureUrl.length() - 4) + ".jp2";
+        OpenJpeg opj2k = new OpenJpeg();
+        opj2k.GetLibVersion();
+        if (0 != opj2k.CompressImage(pictureUrl, compressPicUrl, String.valueOf(25))) {
+            compressPicUrl = null;
+            return false;
+        }
+
+        return true;
+    }
+
+    private void beginCrop(Uri source) {
+        Uri destination = Uri.fromFile(new File(pictureUrl));
+        Crop.of(source, destination).asSquare().start(this);
     }
 
     /**
      * 裁剪照片
      */
     private void doCrop() {
-        final ArrayList<CropOption> cropOptions = new ArrayList<>();
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setType("image/*");
 
         List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
         int size = list.size();
         if (size == 0) {
-            Toast.makeText(this, "Can not find image crop app",
-                    Toast.LENGTH_SHORT).show();
-            return;
+            ToastUtil.getInstance().showToast(this, "Can not find image crop app");
         } else {
             mImageCaptureUri = Uri.fromFile(new File(pictureUrl));
-            intent.setData(mImageCaptureUri);
-//			intent.putExtra("outputX", 320);
-//			intent.putExtra("outputY", 480);
-            intent.putExtra("crop", "true");
-//			intent.putExtra("aspectX", 1);
-//			intent.putExtra("aspectY", 1);
-//			intent.putExtra("scale", true);
-//			intent.putExtra("return-data", true);
-            intent.putExtra("scale", true);
-            intent.putExtra("return-data", false);
-            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-            intent.putExtra("noFaceDetection", true);
-            intent.putExtra("output", Uri.fromFile(new File(pictureUrl)));
-
-            if (size == 1) {
-                Intent i = new Intent(intent);
-                ResolveInfo res = list.get(0);
-                i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-                startActivityForResult(i, CROP_FROM_CAMERA);
-            } else {
-                for (ResolveInfo res : list) {
-                    final CropOption co = new CropOption();
-                    co.title = getPackageManager().getApplicationLabel(
-                            res.activityInfo.applicationInfo);
-                    co.icon = getPackageManager().getApplicationIcon(
-                            res.activityInfo.applicationInfo);
-                    co.appIntent = new Intent(intent);
-                    co.appIntent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
-                    cropOptions.add(co);
-                }
-
-                CropOptionAdapter adapter = new CropOptionAdapter(getApplicationContext(), cropOptions);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Choose Crop App");
-                builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        startActivityForResult(
-                                cropOptions.get(item).appIntent,
-                                CROP_FROM_CAMERA);
-                    }
-                });
-                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        if (mImageCaptureUri != null) {
-                            getContentResolver().delete(mImageCaptureUri, null, null);
-                            mImageCaptureUri = null;
-                        }
-                    }
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
+            beginCrop(mImageCaptureUri);
         }
     }
 
