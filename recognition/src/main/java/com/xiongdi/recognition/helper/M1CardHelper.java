@@ -368,21 +368,25 @@ public class M1CardHelper {
         opj2k.GetLibVersion();
         FileOutputStream fos = null;
         try {
-            File file = mContext.getExternalFilesDir("card");
-            if (file != null && !file.exists()) {
-                if (!file.mkdirs()) {
+            File directory = mContext.getExternalFilesDir("card");
+            if (directory != null && !directory.exists()) {
+                if (!directory.mkdirs()) {
                     Log.e(TAG, "readPicture: create card directory failed");
                     return false;
                 }
             }
-            if (file != null) {
-                fos = new FileOutputStream(file.getPath() + "/decodePic.png");
+            if (directory != null) {
+                String filePath = directory.getPath() + "/decodePic.jp2";
+                String decompressPath = directory.getPath() + "/decodePic.png";
+                fos = new FileOutputStream(filePath);
                 if (realPicData != null) {
                     fos.write(realPicData);
                     fos.flush();
-                    String bitmapPath = opj2k.DecompressJ2KtoImage(file.getPath() + "/decodePic.png");
-                    cardImg = BitmapFactory.decodeFile(bitmapPath);
-                    new FileUtil().deleteFile(file.getPath() + "/decodePic.png");
+                    if(0 == opj2k.DecompressImage(filePath, decompressPath)){
+                        cardImg = BitmapFactory.decodeFile(decompressPath);
+                        new FileUtil().deleteFile(filePath);
+                    }
+
                 }
             }
         } catch (IOException e) {
