@@ -51,6 +51,11 @@
             android:name=".activity.GatherPictureActivity"
             android:screenOrientation="sensor"/>
 
+        <!-- 裁剪照片的界面-->
+        <activity
+            android:name=".widget.crop.CropImageActivity"
+            android:screenOrientation="sensor"/>
+
         <!-- 验证结果界面-->
         <activity
             android:name=".activity.VerifyResultActivity"

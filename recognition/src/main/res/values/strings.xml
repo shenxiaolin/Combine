@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Recognition</string>
 
     <!-- 通用字符串-->
@@ -41,5 +41,12 @@
     <string name="reading_from_card">reading...</string>
     <string name="save_failed_message">save failed, try again?</string>
     <string name="read_failed_message">read failed</string>
+
+    <!--裁剪图片界面-->
+    <string name="crop_cancel" tools:ignore="ButtonCase">CANCEL</string>
+    <string name="crop_done">DONE</string>
+    <string name="crop_pick_error">No image sources available</string>
+    <string name="crop_saving">Saving picture…</string>
+    <string name="crop_wait">Please wait…</string>
 
 </resources>

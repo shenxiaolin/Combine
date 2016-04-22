@@ -143,8 +143,8 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
             mCamera.setDisplayOrientation(90);
             parameters.setRotation(90);
 
-            parameters.setPictureSize(480, 320);
-            parameters.setPreviewSize(480, 320);
+            parameters.setPictureSize(264, 198);//192 144  160 120 240 180 264 198
+            parameters.setPreviewSize(264, 198);
 
             mCamera.setParameters(parameters);
             mCamera.startPreview();
@@ -163,7 +163,7 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
 
     private void savePicture(byte[] data) {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            String pictureName = gatherID + ".jpg";
+            String pictureName = gatherID + ".png";
             String savePath = getExternalFilesDir(null) + "/" + getResources().getString(R.string.app_name) + "/" + gatherID + "/";
             pictureUrl = savePath + pictureName;
             File saveFolder = new File(savePath);

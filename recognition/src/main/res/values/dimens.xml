@@ -19,4 +19,6 @@
     <dimen name="dp_size_10">10dp</dimen>
     <dimen name="dp_size_5">10dp</dimen>
     <dimen name="dp_size_3">3dp</dimen>
+
+    <dimen name="crop__bar_height">56dp</dimen>
 </resources>

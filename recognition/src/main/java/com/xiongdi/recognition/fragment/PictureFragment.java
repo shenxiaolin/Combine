@@ -31,7 +31,7 @@ public class PictureFragment extends Fragment {
     public void setPicture(String imgUrl) {
         if (pictureIMG != null) {
             BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 2;
+            options.inSampleSize = 1;
             Bitmap bitmap = BitmapFactory.decodeFile(imgUrl, options);
             pictureIMG.setImageBitmap(bitmap);
         }
