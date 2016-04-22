@@ -232,7 +232,7 @@ public class CropImageActivity extends MonitoredActivity {
             Rect imageRect = new Rect(0, 0, width, height);
 
             // Make the default size about 4/5 of the width or height
-            int cropWidth = Math.min(width, height) * 4 / 5;
+            int cropWidth = Math.min(width, height) * 1 / 2;//moubiao设置裁剪框的大小
             @SuppressWarnings("SuspiciousNameCombination")
             int cropHeight = cropWidth;
 
