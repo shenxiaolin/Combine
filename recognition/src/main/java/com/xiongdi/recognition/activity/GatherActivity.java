@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.jy.demo.fingerprint.CallDecoder;
 import com.example.jy.demo.fingerprint.CallFprint;
+import com.xiongdi.OpenJpeg;
 import com.xiongdi.recognition.R;
 import com.xiongdi.recognition.adapter.GatherInfoVpAdapter;
 import com.xiongdi.recognition.fragment.LeftHandFragment;
@@ -27,7 +28,6 @@ import com.xiongdi.recognition.util.FileUtil;
 import com.xiongdi.recognition.util.ToastUtil;
 import com.xiongdi.recognition.widget.ProgressDialogFragment;
 import com.xiongdi.recognition.widget.crop.Crop;
-import com.yzq.OpenJpeg;
 
 import java.io.File;
 import java.util.ArrayList;
