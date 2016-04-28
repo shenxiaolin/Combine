@@ -125,8 +125,6 @@ public class BmpUtil {
                     buffer.put(write24BitForPixel(pixels[i]));
                     if (hasDummy) {
                         if (i == endPosition - 1) {
-                            Log.d("moubiao", "save: buffer + capacity = " + +buffer.capacity() + " limit = " + buffer.limit()
-                                    + " position = " + buffer.position());
                             buffer.put(dummyBytesPerRow);
                         }
                     }
