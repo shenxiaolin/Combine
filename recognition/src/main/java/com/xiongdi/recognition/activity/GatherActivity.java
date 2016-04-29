@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import com.xiongdi.recognition.adapter.GatherInfoVpAdapter;
 import com.xiongdi.recognition.fragment.LeftHandFragment;
 import com.xiongdi.recognition.fragment.PictureFragment;
 import com.xiongdi.recognition.fragment.RightHandFragment;
+import com.xiongdi.recognition.util.BmpUtil;
 import com.xiongdi.recognition.util.FileUtil;
 import com.xiongdi.recognition.util.ToastUtil;
 import com.xiongdi.recognition.widget.ProgressDialogFragment;
@@ -256,10 +259,13 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
      * 将照片压缩为.jp2格式
      */
     private boolean compressPicture() {
+        Bitmap croppedImage = BitmapFactory.decodeFile(pictureUrl);
+        BmpUtil bmpUtilTwo = new BmpUtil();
+        String pictureUrlTwo = getExternalFilesDir(null) + File.separator + "crop.bmp";
+        bmpUtilTwo.save(croppedImage, pictureUrlTwo);
         compressPicUrl = pictureUrl.substring(0, pictureUrl.length() - 4) + ".jp2";
-        OpenJpeg opj2k = new OpenJpeg();
-        opj2k.GetLibVersion();
-        if (0 != opj2k.CompressImage(pictureUrl, compressPicUrl, String.valueOf(25))) {
+        OpenJpeg.GetLibVersion();
+        if (0 != OpenJpeg.CompressImage(pictureUrl, compressPicUrl, String.valueOf(44))) {
             compressPicUrl = null;
             return false;
         }
