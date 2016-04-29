@@ -67,8 +67,8 @@ public class Crop {
      * Crop area with fixed 1:1 aspect ratio
      */
     public Crop asSquare() {
-        cropIntent.putExtra(Extra.ASPECT_X, 3);
-        cropIntent.putExtra(Extra.ASPECT_Y, 4);
+        cropIntent.putExtra(Extra.ASPECT_X, 125);
+        cropIntent.putExtra(Extra.ASPECT_Y, 142);
         return this;
     }
 
