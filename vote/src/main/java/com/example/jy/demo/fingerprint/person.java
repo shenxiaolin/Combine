@@ -8,7 +8,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -60,8 +59,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class person extends Activity {
-    String LOG_TAG = "vote";
-    String TAG = "vote";
+    String TAG = "moubiao";
 
     private Button mbuttonback, mbuttonquery, mbuttonread, mbuttonfp;
     private TextView mTextView_result;
@@ -229,7 +227,8 @@ public class person extends Activity {
                                     Bitmap bm = Bitmap.createBitmap(bmp, 50, 50, bmp.getWidth() - 100, bmp.getHeight() - 100, m, true);
 
                                     Drawable drawable = new BitmapDrawable(bm);
-                                    imagefinger.setBackground(drawable);
+//                                    imagefinger.setBackground(drawable);
+                                    imagefinger.setBackgroundDrawable(drawable);
                                     if (fp_is_ok) {
                                         imagefinger.setImageResource(R.drawable.fp_ok);
                                     } else {
@@ -333,7 +332,8 @@ public class person extends Activity {
                 mEditText_code.setText("");
                 mRusultLayout.setVisibility(View.VISIBLE);
                 imagepic.setImageDrawable(getResources().getDrawable(R.drawable.logo));
-                imagefinger.setBackground(getResources().getDrawable(R.drawable.vote_example));
+//                imagefinger.setBackground(getResources().getDrawable(R.drawable.vote_example));
+                imagefinger.setBackgroundResource(R.drawable.vote_example);
                 imagefinger.setImageResource(R.drawable.fp_null);
                 mRusultLayout.setBackgroundColor((0xAA9BC032));
                 mTextView_result.setText(R.string.personscreen_text_dialog_readcard);
@@ -414,11 +414,11 @@ public class person extends Activity {
 
             file = new RandomAccessFile(mfile2 + "/pic1.jp2", "r");
             int len = (int) file.length(); // 取得文件长度（字节数）
-            Log.v("crjlog", "len = " + len);
+            Log.v(TAG, "len = " + len);
             byte[] b = new byte[len];
             file.readFully(b);
             file.close();
-            Log.v("crjlog", "b = " + b);
+            Log.v(TAG, "b = " + b);
             CallDecoder cd = new CallDecoder();
             cd.DecodeMj2Data(b, len, mfile2 + "/pic1.bmp");
 
@@ -446,7 +446,6 @@ public class person extends Activity {
     protected void onResume() {
         super.onResume();
         LockVoteStatus = is_LockVoteStatus();
-        Log.v("crjlog", "onResume = ");
         com.io.io.IoOpen();
 
     }
@@ -474,34 +473,33 @@ public class person extends Activity {
         mEditText_code.setText("");
         mRusultLayout.setVisibility(View.VISIBLE);
         imagepic.setImageDrawable(getResources().getDrawable(R.drawable.logo));
-        imagefinger.setBackground(getResources().getDrawable(R.drawable.vote_example));
+//        imagefinger.setBackground(getResources().getDrawable(R.drawable.vote_example));
+        imagefinger.setBackgroundResource(R.drawable.vote_example);
         imagefinger.setImageResource(R.drawable.fp_null);
         mRusultLayout.setBackgroundColor((0xAA9BC032));
 
         mTextView_result.setTextColor(0xFF800000);
-        mTextView_result
-                .setText(R.string.personscreen_text_dialog_hint);
+        mTextView_result.setText(R.string.personscreen_text_dialog_hint);
 
 
     }
 
     private void get_finger_img(Intent data) {
-
         String sdStatus = Environment.getExternalStorageState();// 获取sd卡路径
         if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
-            Log.v("crjlog", "SD card is not avaiable/writeable right now.");
+            Log.d(TAG, "SD card is not avaiable/writeable right now.");
             return;
         }
 
         Bundle bundle = data.getExtras();
         Bitmap bitmap = (Bitmap) bundle.get("data");// 获取相机返回的数据，并转换为Bitmap图片格式
-        Log.v("crjlog", "bitmap = " + bitmap);
+        Log.v(TAG, "bitmap = " + bitmap);
 
         String filePath = Environment.getExternalStorageDirectory().toString()
                 + "/" + getResources().getString(R.string.app_name) + "/"
                 + 111111 + ".bmp";
 
-        Log.v("crjlog", "filePath = " + filePath);
+        Log.v(TAG, "filePath = " + filePath);
 
         int[] pix = new int[bitmap.getWidth() * bitmap.getHeight()];
         bitmap.getPixels(pix, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(),
@@ -509,7 +507,7 @@ public class person extends Activity {
         int resut = LibImgFun.mySaveImage(pix, bitmap.getWidth(),
                 bitmap.getHeight(), filePath);
 
-        Log.v("crjlog", "resut = " + resut);
+        Log.v(TAG, "resut = " + resut);
 
         FileOutputStream outStream = null;
         File file = new File("/sdcard/myImage/");// 创建照片存放的位置
@@ -543,7 +541,7 @@ public class person extends Activity {
 
         if (resultCode == Activity.RESULT_OK) {
 
-            Log.v("crjlog", "resultCode == data =  " + data);
+            Log.v(TAG, "resultCode == data =  " + data);
 
             // init thread
             mthreadRun = true;
@@ -556,7 +554,6 @@ public class person extends Activity {
 
     // xiong di yugong code
     public static final String KEY_INFO = "key_Info";
-
     public static final int MSG_TEST = 1;
     public static final int MSG_UPDATE_GEN = 2;
     public static final int MSG_UPDATE_BIRTH = 3;
@@ -585,64 +582,44 @@ public class person extends Activity {
             Bundle bundle = msg.getData();
             String info = bundle.getString(KEY_INFO);
             if (msg.what == MSG_TEST) {
-                // mEditText_code.setText(info);
                 if (msg.arg1 == HANDLE_VOTER_ACCREDITATION_SUCCESSFUL) {
-                    // mHint.setTextColor(Color.GREEN);
-
                     mRusultLayout.setVisibility(View.VISIBLE);
                     mRusultLayout.setBackgroundColor((0xAA9BC032));
-                    mTextView_result
-                            .setText(R.string.personscreen_text_result_success);
+                    mTextView_result.setText(R.string.personscreen_text_result_success);
                 } else if (msg.arg1 == HANDLE_FINGER_AUTHENTICATION_FAIL) {
-                    // mHint.setTextColor(Color.RED);
-
                     mRusultLayout.setVisibility(View.VISIBLE);
                     mRusultLayout.setBackgroundColor((0xAACB1D04));
-                    mTextView_result
-                            .setText(R.string.personscreen_text_result_fail);
+                    mTextView_result.setText(R.string.personscreen_text_result_fail);
                 } else if (msg.arg1 == HANDLE_READCARD_SUCCESSFUL) {// read nfc success
-                    // mHint.setTextColor(Color.BLUE);
-
                     mRusultLayout.setVisibility(View.VISIBLE);
                     mRusultLayout.setBackgroundColor((0xAA9BC032));
-                    mTextView_result
-                            .setText(R.string.personscreen_text_readnfc_success);
+                    mTextView_result.setText(R.string.personscreen_text_readnfc_success);
 
-                    //判断 pucode 不一致 ，语音提示
+                    //判断 pu code 不一致 ，语音提示
                     judgePucode();
 
                     //判断VIN是否已被验证过
                     //12.19
-                    android.util.Log.d("huangmin", "LockVoteStatus= " + LockVoteStatus);
+                    android.util.Log.d(TAG, "LockVoteStatus= " + LockVoteStatus);
                     if (!LockVoteStatus) {
                         judgeVin();
                     }
-
                 } else if (msg.arg1 == HANDLE_READCARD_FAIL) {    // read nfc fail
-                    // mHint.setTextColor(Color.BLUE);
-
                     mRusultLayout.setVisibility(View.VISIBLE);
                     mRusultLayout.setBackgroundColor((0xAACB1D04));
                     mTextView_result.setText(info);
-                    //.setText(R.string.personscreen_text_readnfc_fail);
                 } else if (msg.arg1 == HANDLE_READCARD_REPEAT_TEXT) {    // read nfc Repeat
-                    // mHint.setTextColor(Color.BLUE);
                     mRusultLayout.setVisibility(View.VISIBLE);
                     mRusultLayout.setBackgroundColor((0xAA9BC032));
                     mTextView_result
                             .setText(R.string.personscreen_text_dialog_hint);
                 }
 
-                // mHint.setText(info);
             } else if (msg.what == MSG_UPDATE_GEN) {
                 mEditText_gender.setText(info);
             } else if (msg.what == MSG_UPDATE_BIRTH) {
-//				mEditText_birthday.setText(info);
                 mEditText_name.setText(info);
-            } else if (msg.what == MSG_UPDATE_OCC) {
-                //mEditText_occ.setText(info);
             } else if (msg.what == MSG_UPDATE_NAME) {
-                //mEditText_name.setText(info);
                 mEditText_surname.setText(info);
             } else if (msg.what == MSG_UPDATE_VIN) {
                 mEditText_vin.setText(info);
@@ -651,81 +628,45 @@ public class person extends Activity {
             } else if (msg.what == MSG_UPDATE_IMAGE) {
                 RandomAccessFile file;
                 try {
-
-//					String mfile1 = "/sdcard";
                     String mfile1 = getFilesDir().getParent().toString() + "/";
 
                     file = new RandomAccessFile(mfile1 + "image.jp2", "r");
                     int len = (int) file.length();
-                    Log.v("crjlog", "len = " + len);
+                    Log.e(TAG, "image.jp2 length = " + len);
                     // °üº¬ jp2 ÎÄ¼þÍ· 208 ×Ö½Ú
                     byte[] b = new byte[len];
                     file.readFully(b);
                     file.close();
-                    Log.v("crjlog", "b = " + b);
+                    Log.v(TAG, "b = " + b);
                     CallDecoder cd = new CallDecoder();
                     cd.DecodeMj2Data(b, len, mfile1 + "image.bmp");
 
-                    FileInputStream fis = new FileInputStream(mfile1
-                            + "/image.bmp");
+                    FileInputStream fis = new FileInputStream(mfile1 + "/image.bmp");
                     Bitmap bmp = BitmapFactory.decodeStream(fis);
 
                     Drawable drawable = new BitmapDrawable(bmp);
 
                     imagepic.setImageDrawable(drawable);//moubiao
-                    imagefinger.setBackground(getResources().getDrawable(R.drawable.vote_example));
+                    imagefinger.setBackgroundResource(R.drawable.vote_example);
                     imagefinger.setImageResource(R.drawable.fp_null);
-
                 } catch (FileNotFoundException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
 
             }
-            /*
-             * else if (msg.what == MSG_CLOSE_RFID) {
-			 * 
-			 * }
-			 */
-
         }
     };
 
-    private void writeFile(String fileName, String msg)
-            throws java.io.IOException {
-        /*
-         * ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		 *
-		 * OutputStreamWriter osw = new OutputStreamWriter(bos, "UTF-8");
-		 *
-		 * osw.write(msg, 0, msg.length());
-		 *
-		 * osw.flush();
-		 *
-		 * osw.close();
-		 *
-		 * // encode string to utf8 byte stream BufferedOutputStream buf = new
-		 * BufferedOutputStream( new FileOutputStream(new File(path, fileName),
-		 * true)); buf.write(bos.toByteArray()); //buf.write("\n".getBytes());
-		 * buf.close();
-		 */
-    }
-
-    private void writeFileCover(String fileName, String msg)
-            throws java.io.IOException {
-        // File newPath = File ("/sdcard/");
-        String baseDir = Environment.getExternalStorageDirectory()
-                .getAbsolutePath();
+    private void writeToFile(String fileName, String msg) throws java.io.IOException {
+        String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         OutputStreamWriter osw = new OutputStreamWriter(bos, "UTF-8");
         osw.write(msg, 0, msg.length());
         osw.flush();
         osw.close();
-        BufferedOutputStream buf = new BufferedOutputStream(
-                new FileOutputStream(new File(baseDir, fileName), false));
+        BufferedOutputStream buf = new BufferedOutputStream(new FileOutputStream(new File(baseDir, fileName), false));
         buf.write(bos.toByteArray());
         buf.close();
     }
@@ -756,295 +697,262 @@ public class person extends Activity {
 
     boolean rfidsucess = false;
 
+    /**
+     * 读卡的线程
+     */
     private class doTestRfid extends Thread {
+        @Override
+        public void run() {
+            String info;
+            if (com.xd.rfid.RFIDInit() != 0) {
+                info = "init RFID failed!";
+                Log.d(TAG, info);
+                updateInfo(info, HANDLE_READCARD_FAIL);
 
+                return;
+            }
+
+            if (com.xd.rfid.RFIDTypeSet(0) != 0) {
+                Log.d(TAG, "run: RFID type set failed! ");
+
+                return;
+            }
+
+            String cardData = readCardData();
+            showMessageInfo(cardData);
+        }
+    }
+
+    /**
+     * 读卡
+     */
+    private String readCardData() {
         byte[] bIdLen = new byte[1];
         byte[] bSNR = new byte[64];
+        byte sak;
+        short atqa;
+        String cardType;
+        String cardAllData = null;
 
-        private int nSector = 16;
-        private int nBlock = 4;
-        private long t0, t1;
-
-        private String readblockdata() {
-            byte sak = 0;
-            short atqa = 0;
-            String cardType = null;
-            String m1para = null;
-            byte[] bId = new byte[4];
-            String blockdata = null;
-            StringBuffer strAllBlockData = new StringBuffer();
-            String strOut = "SNR=" + com.xd.Converter.printHexLenString(bSNR, bIdLen[0]) + ",  len=" + com.xd.Converter.printHexLenString(bIdLen, 1) +
-                    ", time=";
-
-            t0 = System.currentTimeMillis();
-            int nRet = com.xd.rfid.RFIDGetSNR(0, bIdLen, bSNR);
-            Log.d("huangmin", "readblockdata nRet= " + nRet);
-            if (nRet == 0) {
-                mProgresshandler.sendEmptyMessage(1);
-                sak = bSNR[bIdLen[0] - 3];
-                atqa = (short) (bSNR[bIdLen[0] - 1] * 256 + bSNR[bIdLen[0] - 2]);
-                if (((sak & 0x20) == 0x20) || (sak == 0x53)) {
-                    if (atqa == 0x0344) {
-                        //Desfire
-                        cardType = ", Desfire card";
-                    } else {
-                        //CPU
-                        cardType = ", CPU card";
-                    }
-                } else if (atqa == 0x0044) {
-                    cardType = ", UL card";
-                } else if ((sak == 0x08) || (sak == 0x18)) {
-                    //M1 S50 / S70
-                    if (sak == 0x08) {
-                        cardType = ", S50 card";
-                    } else {
-                        cardType = ", S70 card";
-                    }
-                    m1para = "SNR=" + com.xd.Converter.printHexLenString(bSNR, 7) + cardType;
-                    bId[0] = bSNR[0];
-                    bId[1] = bSNR[1];
-                    bId[2] = bSNR[2];
-                    bId[3] = bSNR[3];
-                    if (m1para.indexOf("S70 card") > 0) {
-                        nSector = 40;
-                    }
-                    byte[] bKey = new byte[6];
-                    byte[] bOutData = new byte[16];
-                    byte errflag = 0;
-                    int blockIndex = 0, sectorNumber = 0;
-
-
-                    // S50 քߨ, 16 ʈȸ;  S70քߨ, 40ʈȸ
-                    for (int i = 0; i < nSector; i++) {
-                        Arrays.fill(bKey, (byte) 0xFF);
-                        if (i > 31) {
-                            sectorNumber = 32 + (i - 32) * 4;
-                            nRet = com.xd.rfid.MifAuthen((byte) 0x0A, (byte) sectorNumber, bKey, bId);
-                        } else {
-                            if (i == 0) {
-                                System.arraycopy(bId, 0, bKey, 0, 4);
-                                bKey[4] = 0x20;
-                                bKey[5] = 0x12;
-                                nRet = com.xd.rfid.MifAuthen((byte) 0x0A, (byte) i, bKey, bId);
-                            } else {
-                                nRet = com.xd.rfid.MifAuthen((byte) 0x0A, (byte) i, bKey, bId);
-                            }
-                        }
-
-                        long t4 = System.currentTimeMillis();
-
-                        if (nRet != 0) {
-                            strOut = "MifAuthen sector(" + i + ") failed, nRet=" + nRet;
-                            errflag = 1;
-
-                            updateInfo(strOut, HANDLE_READCARD_FAIL);
-                            break;
-                        } else {
-                            if (i > 31) {
-                                nBlock = 16;
-                            }
-
-                            StringBuffer sbBlockData = new StringBuffer();
-                            for (int j = 0; j < nBlock; j++) {
-                                blockIndex = (i * nBlock + j);
-                                if (i > 31) {
-                                    blockIndex = 32 * 4 + (i - 32) * nBlock + j;
-                                }
-
-                                long t5 = System.currentTimeMillis();
-                                nRet = com.xd.rfid.MifRead(blockIndex, bOutData);
-                                long t6 = System.currentTimeMillis();
-                                Log.i("huangmin", "MifRead time=" + (t6 - t5) + "(ms)");
-
-                                if (nRet != 0) {
-                                    strOut = "MifRead block(" + blockIndex + ") failed, nRet=" + nRet;
-                                    errflag = 2;
-
-                                    updateInfo(strOut, HANDLE_READCARD_FAIL);
-                                    break;
-                                }
-                                DecimalFormat df = new DecimalFormat();
-                                String style = "000";
-                                df.applyPattern(style);
-                                String outString = com.xd.Converter.printHexLenString(bOutData, 16);
-                                sbBlockData.append(outString);
-                                Log.d("huangmin", "sbBlockData.toString()= " + sbBlockData.toString());
-                                sbBlockData.append("\n");
-
-                            }//for j
-
-                            strAllBlockData.append(sbBlockData);
-                            if (errflag != 0) break;
-                            blockdata = strAllBlockData.toString();
-
-                        }
-
-                    }//for i
-
-                    if (errflag == 0) {
-                        t1 = System.currentTimeMillis();
-                        Log.i(TAG, "readdata Total Time=" + (t1 - t0) + "(ms)");
-                    }
-                    ///////
-                } else {
-                    cardType = ", Unknown card";
-                }
-                Log.d("huangmin", "cardType= " + cardType);
-            }
-            return blockdata;
+        int nRet = com.xd.rfid.RFIDGetSNR(0, bIdLen, bSNR);
+        if (nRet != 0) {
+            return null;
         }
 
-        private String getcurractvity() {
-            ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-            ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
-
-            return cn.getClassName();
-
-        }
-
-        private void showmessageinfo(String data) {
-            if (data != null) {
-
-                rfidsucess = true;
-                try {
-                    writeFileCover(FILE_NAME, data);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-                try {
-
-                    char[] mac = new char[8];
-                    char[] mac2 = new char[8];
-                    char[] vin = new char[32];
-                    char[] BirthDay = new char[10];
-                    char[] code = new char[12];
-                    char[] occ = new char[32];
-                    char[] gender = new char[16];
-                    char[] name = new char[32];
-                    String info = null;
-                    int nRet = 0;
-                    info = "Read Card Successfully !";
-
-                    DataParser.OpenCardFile("/sdcard/card.bin");
-
-                    char[] csn = new char[8];
-                    DataParser.GetCSN(csn);
-
-
-                    DataParser.GetMAC(mac);
-                    Log.i("huangmin", "mac =  " + String.valueOf(mac));
-
-                    DataParser.GetMAC(mac2);
-                    Log.i("huangmin", "mac2 =  " + String.valueOf(mac2));
-
-
-                    int vinl = DataParser.GetVIN(vin);
-                    vin[vinl] = 0;
-                    strvin = String.valueOf(vin).toUpperCase();
-                    Log.i("huangmin", "strvin=" + strvin);
-
-                    DataParser.GetBirthDay(BirthDay);
-                    Log.i("huangmin", "BirthDay=" + String.valueOf(BirthDay));
-
-                    DataParser.GetCODE(code);
-                    Log.i("huangmin", "code=" + String.valueOf(code));
-
-                    int occLen = DataParser.GetOCCUPATION(occ);
-                    occ[occLen] = 0;
-                    Log.i("huangmin", "occ=" + String.valueOf(occ) + "occLen=" + occLen);
-
-                    int genLen = DataParser.GetGENDER(gender);
-                    gender[genLen] = 0;
-                    Log.i("huangmin", "gender =  " + String.valueOf(gender));
-
-                    int nameLen = DataParser.GetNAME(name);
-                    name[nameLen] = 0;
-                    Log.i("huangmin", "name =  " + String.valueOf(name));
-
-                    int r = 0;
-                    String mfile1 = getFilesDir().getParent().toString() + "/";
-                    r = DataParser.GetJP2IMAGE(mfile1 + "image.jp2");
-
-                    if (r != 0) {
-                        Log.i("huangmin", "Get JP2 file error");
-                        nRet = 14;
-                    }
-
-                    r = DataParser.GetFingerXYT(mfile1);
-                    if (r != 0) {
-                        Log.i("huangmin", "Get FingerXYT file error");
-                        nRet = 15;
-                    }
-
-                    //������ݽ������, �ر� card.bin
-                    DataParser.CloseCardFile();
-
-                    mProgresshandler.sendEmptyMessage(0);
-                    updatePersonInfo(MSG_UPDATE_GEN, String.valueOf(gender));
-                    updatePersonInfo(MSG_UPDATE_BIRTH, String.valueOf(BirthDay));
-                    updatePersonInfo(MSG_UPDATE_OCC, String.valueOf(occ));
-                    updatePersonInfo(MSG_UPDATE_NAME, String.valueOf(name));
-                    updatePersonInfo(MSG_UPDATE_VIN, String.valueOf(vin).toUpperCase());
-                    updatePersonInfo(MSG_UPDATE_CODE, String.valueOf(code));
-                    updatePersonInfo(MSG_UPDATE_IMAGE, "image");
-                    dataPuCode = String.valueOf(code);
-                    dataVin = String.valueOf(vin).toUpperCase();
-                    updateInfo(info, HANDLE_READCARD_SUCCESSFUL);
-                    String Actvityname = getcurractvity();
-                    if (Actvityname.equals("com.example.jy.demo.fingerprint.person")) {
-                        Intent it = new Intent(person.this, CameraOpen_Automatic.class);
-                        startActivityForResult(it, 1);
-                    }
-                    bReadOk = true;
-                } catch (Exception ex) {
-                    //ׁߨʧќ
-
-                    mProgresshandler.sendEmptyMessage(0);
-
-                    ex.printStackTrace();
-                    Log.d("huangmin", "Exception");
-                }
+        mProgresshandler.sendEmptyMessage(1);
+        sak = bSNR[bIdLen[0] - 3];
+        atqa = (short) (bSNR[bIdLen[0] - 1] * 256 + bSNR[bIdLen[0] - 2]);
+        if (((sak & 0x20) == 0x20) || (sak == 0x53)) {
+            if (atqa == 0x0344) {
+                cardType = ", DesFire card";
             } else {
-
-                rfidsucess = false;
-                mProgresshandler.sendEmptyMessage(0);
-                Log.d("huangmin", "show error");
+                cardType = ", CPU card";
             }
+        } else if (atqa == 0x0044) {
+            cardType = ", UL card";
+        } else if ((sak == 0x08) || (sak == 0x18)) {
+            if (sak == 0x08) {
+                cardType = ", S50 card";
+            } else {
+                cardType = ", S70 card";
+            }
+            cardAllData = readM1Card(bSNR, cardType);
         }
 
-        public void run() {
-            String info = null;
-            int nRet = com.xd.rfid.RFIDInit();
+        return cardAllData;
+    }
 
-            if (nRet == 0) {
-                Log.d("huangmin", "init ok !");
-                int nset = com.xd.rfid.RFIDTypeSet(0);
-                if (nset != 0) {
-                    info = "Init failed, nRet=" + nRet;
-                    //updateInfo(info, HANDLE_READCARD_FAIL);
+    /**
+     * 读M1卡
+     *
+     * @param SNR
+     * @param cardType
+     * @return
+     */
+    private String readM1Card(byte[] SNR, String cardType) {
+        String M1Para = "SNR=" + com.xd.Converter.printHexLenString(SNR, 7) + cardType;
+        byte[] bId = new byte[4];
+        bId[0] = SNR[0];
+        bId[1] = SNR[1];
+        bId[2] = SNR[2];
+        bId[3] = SNR[3];
+        int nSector = 16;
+        int nRet;
+        if (M1Para.indexOf("S70 card") > 0) {
+            nSector = 40;
+        }
+        int sectorIndex;
+        int blockIndex;
+        byte[] bKey = new byte[6];
+        byte[] bOutData = new byte[16];
+        byte errFlag = 0;
+        String updateInfo;
+        int nBlock = 4;
+        String cardAllData = null;
+        StringBuilder sectorData = new StringBuilder();
+        long startTime, endTime;
+
+        //验证扇区并读块 S50, 16扇区;  S70, 40扇区
+        int cycleIndex = 0;
+        startTime = System.currentTimeMillis();
+        for (int i = 0; i < nSector; i++) {
+            Arrays.fill(bKey, (byte) 0xFF);
+            //验证扇区
+            if (i > 31) {//前32扇区
+                sectorIndex = 32 + (i - 32) * 4;
+                nRet = com.xd.rfid.MifAuthen((byte) 0x0A, (byte) sectorIndex, bKey, bId);
+            } else {//后8扇区
+                if (i == 0) {
+                    System.arraycopy(bId, 0, bKey, 0, 4);
+                    bKey[4] = 0x20;
+                    bKey[5] = 0x12;
+                    nRet = com.xd.rfid.MifAuthen((byte) 0x0A, (byte) i, bKey, bId);
                 } else {
-                    String blockdata = readblockdata();
-                    showmessageinfo(blockdata);
+                    nRet = com.xd.rfid.MifAuthen((byte) 0x0A, (byte) i, bKey, bId);
                 }
-            } else {
-                info = "Init failed, nRet=" + nRet;
-                updateInfo(info, HANDLE_READCARD_FAIL);
             }
 
-        }//doTestRfid.run()
+            if (nRet != 0) {//验证扇区失败
+                updateInfo = "Mi authenticate sector(" + i + ") failed, nRet=" + nRet;
+                errFlag = 1;
+                updateInfo(updateInfo, HANDLE_READCARD_FAIL);
 
-    }//doTestRfid
+                break;
+            }
+
+            //读一个扇区里的所有块
+            if (i > 31) {
+                nBlock = 16;
+            }
+            StringBuilder blockData = new StringBuilder();
+            for (int j = 0; j < nBlock; j++) {
+                blockIndex = (i * nBlock + j);
+                if (i > 31) {
+                    blockIndex = 32 * 4 + (i - 32) * nBlock + j;
+                }
+
+                nRet = com.xd.rfid.MifRead(blockIndex, bOutData);
+                if (nRet != 0) {//读块失败
+                    updateInfo = "MifRead block(" + blockIndex + ") failed, nRet=" + nRet;
+                    errFlag = 2;
+                    Log.d(TAG, "readCardData: failed " + updateInfo);
+                    updateInfo(updateInfo, HANDLE_READCARD_FAIL);
+
+                    break;
+                }
+                DecimalFormat df = new DecimalFormat();
+                String style = "000";
+                df.applyPattern(style);
+                String outString = com.xd.Converter.printHexLenString(bOutData, 16);
+                blockData.append(outString);
+                Log.d(TAG, "block index = " + cycleIndex + " blockData = " + blockData.toString());
+                cycleIndex++;
+                blockData.append("\n");
+            }
+
+            sectorData.append(blockData);
+            if (errFlag != 0) {
+                break;
+            }
+            cardAllData = sectorData.toString();
+        }
+
+        if (errFlag == 0) {
+            endTime = System.currentTimeMillis();
+            Log.i(TAG, "read data total Time=" + (endTime - startTime) + "(ms)");
+        }
+
+        return cardAllData;
+    }
+
+    private void showMessageInfo(String data) {
+        if (data == null) {
+            rfidsucess = false;
+            mProgresshandler.sendEmptyMessage(0);
+            Log.d(TAG, "show error");
+            return;
+        }
+
+        rfidsucess = true;
+        try {
+            writeToFile(FILE_NAME, data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            char[] mac = new char[8];
+            char[] mac2 = new char[8];
+            char[] vin = new char[32];
+            char[] BirthDay = new char[10];
+            char[] code = new char[12];
+            char[] occ = new char[32];
+            char[] gender = new char[16];
+            char[] name = new char[32];
+            String info = "Read Card Successfully !";
+
+            DataParser.OpenCardFile("/sdcard/card.bin");
+
+            char[] csn = new char[8];
+            DataParser.GetCSN(csn);
+            DataParser.GetMAC(mac);
+            DataParser.GetMAC(mac2);
+            int vinL = DataParser.GetVIN(vin);
+            vin[vinL] = 0;
+            strvin = String.valueOf(vin).toUpperCase();
+            DataParser.GetBirthDay(BirthDay);
+            DataParser.GetCODE(code);
+            int occLen = DataParser.GetOCCUPATION(occ);
+            occ[occLen] = 0;
+            int genLen = DataParser.GetGENDER(gender);
+            gender[genLen] = 0;
+            int nameLen = DataParser.GetNAME(name);
+            name[nameLen] = 0;
+
+            String jp2Path = getFilesDir().getParent().toString() + "/";
+            if (DataParser.GetJP2IMAGE(jp2Path + "image.jp2") != 0) {
+                Log.e(TAG, "Get JP2 file error");
+            }
+            if (DataParser.GetFingerXYT(jp2Path) != 0) {
+                Log.e(TAG, "Get FingerXYT file error");
+            }
+            DataParser.CloseCardFile();
+
+            mProgresshandler.sendEmptyMessage(0);
+            updatePersonInfo(MSG_UPDATE_GEN, String.valueOf(gender));
+            updatePersonInfo(MSG_UPDATE_BIRTH, String.valueOf(BirthDay));
+            updatePersonInfo(MSG_UPDATE_OCC, String.valueOf(occ));
+            updatePersonInfo(MSG_UPDATE_NAME, String.valueOf(name));
+            updatePersonInfo(MSG_UPDATE_VIN, String.valueOf(vin).toUpperCase());
+            updatePersonInfo(MSG_UPDATE_CODE, String.valueOf(code));
+            updatePersonInfo(MSG_UPDATE_IMAGE, "image");
+            dataPuCode = String.valueOf(code);
+            dataVin = String.valueOf(vin).toUpperCase();
+            updateInfo(info, HANDLE_READCARD_SUCCESSFUL);
+
+            //验证指纹
+            String activityName = getCurrActivity();
+            if (activityName.equals("com.example.jy.demo.fingerprint.person")) {
+                Intent it = new Intent(person.this, CameraOpen_Automatic.class);
+                startActivityForResult(it, 1);
+            }
+            bReadOk = true;
+        } catch (Exception ex) {
+            mProgresshandler.sendEmptyMessage(0);
+            ex.printStackTrace();
+        }
+    }
+
+    private String getCurrActivity() {
+        ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
+
+        return cn.getClassName();
+    }
 
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        String info = null;
-        Log.d("huangmin", "keyCode= " + keyCode);
-
-        if (keyCode == 57) {
-            info = "keyCode: read card";
-        } else if ((keyCode == 251 || keyCode == 252) && (event.getRepeatCount() == 0)) {     //扫描指纹，entry camera    level  up
+        if ((keyCode == 251 || keyCode == 252) && (event.getRepeatCount() == 0)) {     //扫描指纹，entry camera    level  up
             if (bReadOk) {
                 if (pucode_is_ok) {
                     if (!LockVoteStatus) {
@@ -1085,7 +993,7 @@ public class person extends Activity {
             }
 
             return true;
-        } else if ((keyCode == 250 || keyCode == 249) && (event.getRepeatCount() == 0)) {    // 读卡     level down
+        } else if ((keyCode == 250 || keyCode == 249) && (event.getRepeatCount() == 0)) {//moubiao 从这里开始读卡
             bReadOk = false;
             if (MyDialog != null) {
                 MyDialog.dismiss();
@@ -1094,14 +1002,12 @@ public class person extends Activity {
             }
             mEditText_surname.setText("");
             mEditText_gender.setText("");
-            //mEditText_birthday.setText("");
-            //mEditText_occ.setText("");
             mEditText_name.setText("");
             mEditText_vin.setText("");
             mEditText_code.setText("");
             mRusultLayout.setVisibility(View.VISIBLE);
             imagepic.setImageDrawable(getResources().getDrawable(R.drawable.logo));
-            imagefinger.setBackground(getResources().getDrawable(R.drawable.vote_example));
+            imagefinger.setBackgroundResource(R.drawable.vote_example);
             imagefinger.setImageResource(R.drawable.fp_null);
             mRusultLayout.setBackgroundColor((0xAA9BC032));
             mTextView_result.setText(R.string.personscreen_text_dialog_readcard);
@@ -1117,12 +1023,11 @@ public class person extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.d("huangmin", "mRFID_open");
-            mRFID_open();
+
+            mRFID_open();//读卡
 
             return true;
         } else if (keyCode == 134 || keyCode == 135 || keyCode == 136) {
-            info = "keyCode=" + keyCode;
             if (keyCode == 134) {
             } else if (keyCode == 135) {
                 bVinCode[0] = 0x00;
@@ -1148,15 +1053,6 @@ public class person extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            try {
-            } catch (java.lang.IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (SecurityException e) {
-                e.printStackTrace();
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-            }
         }
 
         return super.onKeyDown(keyCode, event);
@@ -1176,7 +1072,6 @@ public class person extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v("crjlog", "onDestroy ");
         if (ap != null)
             ap.PlayRelease();
 
@@ -1251,16 +1146,16 @@ public class person extends Activity {
 
         //未验证
         if (mCursor.getCount() == 0) {
-            Log.v("crjlog", "judgeVin insert = ");
+            Log.v(TAG, "judgeVin insert = ");
             insert_db(false);
         } else {//已存在
-            Log.v("crjlog", "judgeVin11111 ");
+            Log.v(TAG, "judgeVin11111 ");
             //判断状态
             if (mCursor.getString(3).equals("N")) {
 //				bExist = false;
-                Log.v("crjlog", "judgeVin2222222222 ");
+                Log.v(TAG, "judgeVin2222222222 ");
             } else {
-                Log.v("crjlog", "judgeVin33333333333333 ");
+                Log.v(TAG, "judgeVin33333333333333 ");
                 mRusultLayout.setVisibility(View.VISIBLE);
                 mRusultLayout.setBackgroundColor((0xAAECD00D));
                 mTextView_result.setText(R.string.personscreen_text_result_fail2);
@@ -1361,7 +1256,7 @@ public class person extends Activity {
                 String strOut = "Open failed, nRet=" + nRet;
                 updateInfo(strOut, HANDLE_READCARD_FAIL);
             }
-            Rifhandler.postDelayed(mopenrfid, 500);//֢ٶʱݤҪճԚׁߨʱݤ
+            Rifhandler.postDelayed(mopenrfid, 500);
         }
     };
     int opencount = 0;
@@ -1423,7 +1318,7 @@ public class person extends Activity {
         if (i == xytFiles.length) {
             fMatch = 0;    // 四个指纹均不匹配
             fp_is_ok = false;
-            Log.v("crjlog", "fMatch = 000000 = ");
+            Log.v(TAG, "fMatch = 000000 = ");
 
             mRusultLayout.setVisibility(View.VISIBLE);
             mRusultLayout.setBackgroundColor((0xAACB1D04));
@@ -1448,7 +1343,7 @@ public class person extends Activity {
         } else {
             fMatch = 1;    //匹配
             fp_is_ok = true;
-            Log.v("crjlog", "fMatch =111111 = ");
+            Log.v(TAG, "fMatch =111111 = ");
 
             if (!judgeVin_status() && pucode_is_ok == true) {
                 mVoteDB.update_vintable(dataVin, "Y");
