@@ -2,6 +2,8 @@ package com.xiongdi.recognition.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
@@ -69,7 +71,6 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
         Intent data = getIntent();
         gatherID = data.getStringExtra("pictureName");
     }
-
 
     private boolean focus = false;
 
@@ -143,8 +144,8 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
             mCamera.setDisplayOrientation(90);
             parameters.setRotation(90);
 
-            parameters.setPictureSize(264, 198);//192 144  160 120 240 180 264 198
-            parameters.setPreviewSize(264, 198);
+            parameters.setPictureSize(320, 240);//192 144  160 120 240 180 264 198 320 240
+            parameters.setPreviewSize(320, 240);
 
             mCamera.setParameters(parameters);
             mCamera.startPreview();
@@ -173,7 +174,9 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
             File pictureFile = new File(saveFolder, pictureName);
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.flush();
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();
