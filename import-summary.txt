@@ -7,8 +7,7 @@ The following files were *not* copied into the new Gradle project; you
 should evaluate whether these are still needed in your project and if
 so manually move them:
 
-* .gitignore
-* README.md
+* ic_launcher-web.png
 * proguard-project.txt
 
 Replaced Jars with Dependencies:
@@ -28,9 +27,20 @@ Moved Files:
 Android Gradle projects use a different directory structure than ADT
 Eclipse projects. Here's how the projects were restructured:
 
-* AndroidManifest.xml => bitmap2bmp\src\main\AndroidManifest.xml
-* res\ => bitmap2bmp\src\main\res\
-* src\ => bitmap2bmp\src\main\java\
+* AndroidManifest.xml => rftest\src\main\AndroidManifest.xml
+* assets\ => rftest\src\main\assets
+* libs\armeabi\libemp5500drv.so => rftest\src\main\jniLibs\armeabi\libemp5500drv.so
+* libs\armeabi\libfprint.so => rftest\src\main\jniLibs\armeabi\libfprint.so
+* libs\armeabi\libglib-2.0.so => rftest\src\main\jniLibs\armeabi\libglib-2.0.so
+* libs\armeabi\libiconv.so => rftest\src\main\jniLibs\armeabi\libiconv.so
+* libs\armeabi\libImgFun.so => rftest\src\main\jniLibs\armeabi\libImgFun.so
+* libs\armeabi\libintl.so => rftest\src\main\jniLibs\armeabi\libintl.so
+* libs\armeabi\libjp2dec.so => rftest\src\main\jniLibs\armeabi\libjp2dec.so
+* libs\armeabi\libopenjp2.so => rftest\src\main\jniLibs\armeabi\libopenjp2.so
+* libs\armeabi\libopenmj2.so => rftest\src\main\jniLibs\armeabi\libopenmj2.so
+* libs\armeabi\libparser.so => rftest\src\main\jniLibs\armeabi\libparser.so
+* res\ => rftest\src\main\res\
+* src\ => rftest\src\main\java\
 
 Missing Android Support Repository:
 -----------------------------------
