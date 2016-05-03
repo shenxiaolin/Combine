@@ -38,7 +38,7 @@ public class RfidTestActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.rfidtest);
 
-        //根据id获取对象  
+		//鏍规嵁id鑾峰彇瀵硅薄
         btn_RfidOpen = (Button) this.findViewById(R.id.button_rfidopen);
         btn_RfidInit = (Button) this.findViewById(R.id.button_rfidinit);
         btn_GetSnr = (Button) this.findViewById(R.id.button_getsnr);
@@ -56,8 +56,8 @@ public class RfidTestActivity extends Activity {
         tv_RfApdu = (TextView) this.findViewById(R.id.textView_rfapduecho);
         tv_RfidClose = (TextView) this.findViewById(R.id.textView_rfidclose);
         tv_RfClose = (TextView) this.findViewById(R.id.textView_rfcloseEcho);
-        
-        //设置获取焦点
+
+		//璁剧疆鑾峰彇鐒︾偣
         btn_RfidOpen.setFocusable(true);
         btn_RfidOpen.setFocusableInTouchMode(true);
         btn_RfidOpen.requestFocus();
@@ -256,7 +256,7 @@ public class RfidTestActivity extends Activity {
 	    et_apdu.setText("00A4040007A0000002471001");
 		
 		tv_RfApdu = (TextView) findViewById(R.id.textView_rfapduecho);
-		tv_RfApdu.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);	//下划线
+		tv_RfApdu.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);	//锟铰伙拷锟斤拷
 		tv_RfApdu.setTextColor(Color.BLUE);		
 
 

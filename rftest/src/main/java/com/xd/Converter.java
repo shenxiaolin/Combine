@@ -10,16 +10,13 @@
 //--------------------------------- PACKAGE ------------------------------------
 package com.xd;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.lang.String;
+import android.util.Log;
+
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
-
-import android.util.Log;
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 //[------------------------------ MAIN CLASS ----------------------------------]
@@ -28,282 +25,281 @@ import android.util.Log;
 //--------   -------------------  -------------      --------------------------
 //13SEP2011  James Shen                 	         Initial Creation
 ////////////////////////////////////////////////////////////////////////////////
+
 /**
-* Convert help class.
-* <hr>
-* <b>&copy; Copyright 2011 Guidebee, Inc. All Rights Reserved.</b>
-* 
-* @version 1.00, 13/09/11
-* @author Guidebee Pty Ltd.
-*/
+ * Convert help class.
+ * <hr>
+ * <b>&copy; Copyright 2011 Guidebee, Inc. All Rights Reserved.</b>
+ *
+ * @author Guidebee Pty Ltd.
+ * @version 1.00, 13/09/11
+ */
 public class Converter {
 
-	// Hex help
-	private static final byte[] HEX_CHAR_TABLE = { (byte) '0', (byte) '1',
-			(byte) '2', (byte) '3', (byte) '4', (byte) '5', (byte) '6',
-			(byte) '7', (byte) '8', (byte) '9', (byte) 'A', (byte) 'B',
-			(byte) 'C', (byte) 'D', (byte) 'E', (byte) 'F' };
+    // Hex help
+    private static final byte[] HEX_CHAR_TABLE = {(byte) '0', (byte) '1',
+            (byte) '2', (byte) '3', (byte) '4', (byte) '5', (byte) '6',
+            (byte) '7', (byte) '8', (byte) '9', (byte) 'A', (byte) 'B',
+            (byte) 'C', (byte) 'D', (byte) 'E', (byte) 'F'};
 
-	////////////////////////////////////////////////////////////////////////////
-	//--------------------------------- REVISIONS ------------------------------
-	// Date       Name                 Tracking #         Description
-	// ---------  -------------------  -------------      ----------------------
-	// 13SEP2011  James Shen                 	          Initial Creation
-	////////////////////////////////////////////////////////////////////////////
-	/**
-	 * convert a byte arrary to hex string
-	 * @param raw byte arrary
-	 * @param len lenght of the arrary.
-	 * @return hex string.
-	 */
-	public static String getHexString(byte[] raw, int len) {
-		byte[] hex = new byte[2 * len];
-		int index = 0;
-		int pos = 0;
+    ////////////////////////////////////////////////////////////////////////////
+    //--------------------------------- REVISIONS ------------------------------
+    // Date       Name                 Tracking #         Description
+    // ---------  -------------------  -------------      ----------------------
+    // 13SEP2011  James Shen                 	          Initial Creation
+    ////////////////////////////////////////////////////////////////////////////
 
-		for (byte b : raw) {
-			if (pos >= len)
-				break;
+    /**
+     * convert a byte arrary to hex string
+     *
+     * @param raw byte arrary
+     * @param len lenght of the arrary.
+     * @return hex string.
+     */
+    public static String getHexString(byte[] raw, int len) {
+        byte[] hex = new byte[2 * len];
+        int index = 0;
+        int pos = 0;
 
-			pos++;
-			int v = b & 0xFF;
-			hex[index++] = HEX_CHAR_TABLE[v >>> 4];
-			hex[index++] = HEX_CHAR_TABLE[v & 0xF];
-		}
+        for (byte b : raw) {
+            if (pos >= len)
+                break;
 
-		return new String(hex);
-	}
+            pos++;
+            int v = b & 0xFF;
+            hex[index++] = HEX_CHAR_TABLE[v >>> 4];
+            hex[index++] = HEX_CHAR_TABLE[v & 0xF];
+        }
 
-	/**
-	 * convert a Asc byte arrary to Hex byte arrary, ex. [0x00, 0x00, 0x34, 0x4E] -> [4E]
-	 * @param raw Asc byte arrary
-	 * @param len lenght of the arrary.
-	 * @return hex byte arrary.
-	 */ 
-	public static int AscToHex(int raw) {
-		int value = 0;
+        return new String(hex);
+    }
 
-		int v = (raw & 0xFF00) >> 8;
-		if (v >= '0' && v<= '9')
-		{
-			v -= '0';
-		}
-		else if (v >= 'A' && v <= 'F')
-		{
-			v -= '7';
-		}
-		else
-		{
-			Log.i("AscToHex", "**** asc num illegal ****");
-		}
-		value = v << 4;
-		
-		v = (raw & 0x00FF);
-		if (v >= '0' && v<= '9')
-		{
-			v -= '0';
-		}
-		else if (v >= 'A' && v <= 'F')
-		{
-			v -= '7';
-		}
-		value |= v;
-		return (value);
-	}	
-	
-	/**
-	  * ½«intÀàÐÍµÄÊý¾Ý×ª»»ÎªbyteÊý×é
-	  * @param n intÊý¾Ý
-	  * @return Éú³ÉµÄbyteÊý×é
-	  */
-	 public static byte[] intToBytes(int n){
-	  String s = String.valueOf(n);
-	  return s.getBytes(); 
-	 }
-	 
-	 /**
-	  * ½«byteÊý×é×ª»»ÎªintÊý¾Ý
-	  * @param b ×Ö½ÚÊý×é
-	  * @return Éú³ÉµÄintÊý¾Ý
-	  */
-	 public static int bytesToInt(byte[] b){
-	  String s = new String(b);
-	  return Integer.parseInt(s); 
-	 }
-	 
-	 /**
-	  * ½«intÀàÐÍµÄÊý¾Ý×ª»»ÎªbyteÊý×é
-	  * Ô­Àí£º½«intÊý¾ÝÖÐµÄËÄ¸öbyteÈ¡³ö£¬·Ö±ð´æ´¢
-	  * @param n intÊý¾Ý
-	  * @return Éú³ÉµÄbyteÊý×é
-	  */
-	 public static byte[] intToBytes2(int n){
-	  byte[] b = new byte[4];
-	  for(int i = 0;i < 4;i++){
-	   b[i] = (byte)(n >> (24 - i * 8)); 
-	  }
-	  return b;
-	 }
-	 
-	 /**
-	  * ½«byteÊý×é×ª»»ÎªintÊý¾Ý
-	  * @param b ×Ö½ÚÊý×é
-	  * @return Éú³ÉµÄintÊý¾Ý
-	  */
-	 public static int byteToInt2(byte[] b){
+    /**
+     * convert a Asc byte arrary to Hex byte arrary, ex. [0x00, 0x00, 0x34, 0x4E] -> [4E]
+     *
+     * @param raw Asc byte arrary
+     * @param len lenght of the arrary.
+     * @return hex byte arrary.
+     */
+    public static int AscToHex(int raw) {
+        int value = 0;
+
+        int v = (raw & 0xFF00) >> 8;
+        if (v >= '0' && v <= '9') {
+            v -= '0';
+        } else if (v >= 'A' && v <= 'F') {
+            v -= '7';
+        } else {
+            Log.i("AscToHex", "**** asc num illegal ****");
+        }
+        value = v << 4;
+
+        v = (raw & 0x00FF);
+        if (v >= '0' && v <= '9') {
+            v -= '0';
+        } else if (v >= 'A' && v <= 'F') {
+            v -= '7';
+        }
+        value |= v;
+        return (value);
+    }
+
+    /**
+     * ï¿½ï¿½intï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªbyteï¿½ï¿½ï¿½ï¿½
+     *
+     * @param n intï¿½ï¿½ï¿½ï¿½
+     * @return ï¿½ï¿½ï¿½Éµï¿½byteï¿½ï¿½ï¿½ï¿½
+     */
+    public static byte[] intToBytes(int n) {
+        String s = String.valueOf(n);
+        return s.getBytes();
+    }
+
+    /**
+     * ï¿½ï¿½byteï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªintï¿½ï¿½ï¿½ï¿½
+     *
+     * @param b ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½
+     * @return ï¿½ï¿½ï¿½Éµï¿½intï¿½ï¿½ï¿½ï¿½
+     */
+    public static int bytesToInt(byte[] b) {
+        String s = new String(b);
+        return Integer.parseInt(s);
+    }
+
+    /**
+     * ï¿½ï¿½intï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªbyteï¿½ï¿½ï¿½ï¿½
+     * Ô­ï¿½ï¿½ï¿½ï¿½intï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½Ä¸ï¿½byteÈ¡ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½æ´¢
+     *
+     * @param n intï¿½ï¿½ï¿½ï¿½
+     * @return ï¿½ï¿½ï¿½Éµï¿½byteï¿½ï¿½ï¿½ï¿½
+     */
+    public static byte[] intToBytes2(int n) {
+        byte[] b = new byte[4];
+        for (int i = 0; i < 4; i++) {
+            b[i] = (byte) (n >> (24 - i * 8));
+        }
+        return b;
+    }
+
+    /**
+     * ï¿½ï¿½byteï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªintï¿½ï¿½ï¿½ï¿½
+     *
+     * @param b ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½
+     * @return ï¿½ï¿½ï¿½Éµï¿½intï¿½ï¿½ï¿½ï¿½
+     */
+    public static int byteToInt2(byte[] b) {
 //	  return (((int)b[0]) << 24) + (((int)b[1]) << 16) + (((int)b[2]) << 8) + b[3];
 //	  return (( (int)b[0]) << 8) + b[1];
-		 int n = (int)b[0];
-		 Log.i("Converter", "n=" + n);
+        int n = (int) b[0];
+        Log.i("Converter", "n=" + n);
 //	  return ((int)b[0]);
-	  return ((int)b[0]);
-	 }
+        return ((int) b[0]);
+    }
 
 //	static public void sprintf (StringBuffer result, String format, String...replace)
 //	{
 //		result.append(String.format(format, replace));
 //	}
-	
-	////////////////////////////////////////////////////////////////////////////
-	//--------------------------------- REVISIONS ------------------------------
-	// Date       Name                 Tracking #         Description
-	// ---------  -------------------  -------------      ----------------------
-	// 13SEP2011  James Shen                 	          Initial Creation
-	////////////////////////////////////////////////////////////////////////////
-	/**
-	 * calculate the MD5 hash value.
-	 * @param input input bytes
-	 * @return MD5 hash value.
-	 * @throws NoSuchAlgorithmException
-	 */
-	public static byte[] calculateHash(byte[] input)
-			throws NoSuchAlgorithmException {
-		MessageDigest digester = MessageDigest.getInstance("MD5");
-		digester.update(input, 0, input.length);
-		byte[] digest = digester.digest();
-		return digest;
-	}
 
-	
+    ////////////////////////////////////////////////////////////////////////////
+    //--------------------------------- REVISIONS ------------------------------
+    // Date       Name                 Tracking #         Description
+    // ---------  -------------------  -------------      ----------------------
+    // 13SEP2011  James Shen                 	          Initial Creation
+    ////////////////////////////////////////////////////////////////////////////
 
-	// char[] ×ª byte[]
-	public byte[] getBytes (char[] chars) {
-	   Charset cs = Charset.forName ("UTF-8");
-	   CharBuffer cb = CharBuffer.allocate (chars.length);
-	   //´æÈëÊý¾Ý
-	   cb.put (chars);
-	   //»º³åÇøµÄÎ»ÖÃ ¡°µ¹´ø¡±
-	   cb.flip();
-	   ByteBuffer bb = cs.encode (cb);
-	   return bb.array();
-	}
+    /**
+     * calculate the MD5 hash value.
+     *
+     * @param input input bytes
+     * @return MD5 hash value.
+     * @throws NoSuchAlgorithmException
+     */
+    public static byte[] calculateHash(byte[] input)
+            throws NoSuchAlgorithmException {
+        MessageDigest digester = MessageDigest.getInstance("MD5");
+        digester.update(input, 0, input.length);
+        byte[] digest = digester.digest();
+        return digest;
+    }
 
-	// byte[] ×ª char[]
-	public char[] getChars (byte[] bytes) {
-	   Charset cs = Charset.forName ("UTF-8");
-	   ByteBuffer bb = ByteBuffer.allocate (bytes.length);
-	   bb.put (bytes);
-	   bb.flip();
-	   CharBuffer cb = cs.decode (bb);
-	   return cb.array();
-	}
-	
-	//byte[] Êý×é×ª 16½øÖÆ×Ö·û´®
-	public static String printHexString( byte[] b) { 
-		String result = "";
 
-		for (int i = 0; i < b.length; i++) { 
-			String hex = Integer.toHexString(b[i] & 0xFF); 
-			if (hex.length() == 1) {
-				//°ë×Ö½ÚµÄÇéÐÎÇ°Ãæ²¹ "0"
-				hex = '0' + hex; 
-			} 
-			result = result + hex.toUpperCase(); 
-		} 
-		return result;
-	}
+    // char[] ×ª byte[]
+    public byte[] getBytes(char[] chars) {
+        Charset cs = Charset.forName("UTF-8");
+        CharBuffer cb = CharBuffer.allocate(chars.length);
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        cb.put(chars);
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        cb.flip();
+        ByteBuffer bb = cs.encode(cb);
+        return bb.array();
+    }
 
-	//byte[] Êý×é×ª Ö¸¶¨³¤¶ÈµÄ16½øÖÆ×Ö·û´®, ³¤¶È bLen Ð¡ÓÚµÈÓÚ byteÊý×éµÄÔ­±¾´óÐ¡
-	//Óë¸Ãº¯Êý¶ÔÓ¦µÄÊÇ hexStringToBytes()
-	public static String printHexLenString( byte[] b, int bLen) { 
-		String result = "";
+    // byte[] ×ª char[]
+    public char[] getChars(byte[] bytes) {
+        Charset cs = Charset.forName("UTF-8");
+        ByteBuffer bb = ByteBuffer.allocate(bytes.length);
+        bb.put(bytes);
+        bb.flip();
+        CharBuffer cb = cs.decode(bb);
+        return cb.array();
+    }
 
-		for (int i = 0; i < bLen; i++) { 
-			String hex = Integer.toHexString(b[i] & 0xFF); 
-			if (hex.length() == 1) {
-				//°ë×Ö½ÚµÄÇéÐÎÇ°Ãæ²¹ "0"
-				hex = '0' + hex; 
-			} 
-			result = result + hex.toUpperCase(); 
-		} 
-		return result;
-	}
-	//½«×Ö·û´® hex À©Õ¹µ½ size ´óÐ¡, ×ó±ß²»×ã²¿·ÖÌî³ä×Ö·û c
+    //byte[] ï¿½ï¿½ï¿½ï¿½×ª 16ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
+    public static String printHexString(byte[] b) {
+        String result = "";
+
+        for (int i = 0; i < b.length; i++) {
+            String hex = Integer.toHexString(b[i] & 0xFF);
+            if (hex.length() == 1) {
+                //ï¿½ï¿½ï¿½Ö½Úµï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½æ²¹ "0"
+                hex = '0' + hex;
+            }
+            result = result + hex.toUpperCase();
+        }
+        return result;
+    }
+
+    //byte[] ï¿½ï¿½ï¿½ï¿½×ª Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Èµï¿½16ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ bLen Ð¡ï¿½Úµï¿½ï¿½ï¿½ byteï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ï¿½Ð¡
+    //ï¿½ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½ hexStringToBytes()
+    public static String printHexLenString(byte[] b, int bLen) {
+        String result = "";
+
+        for (int i = 0; i < bLen; i++) {
+            String hex = Integer.toHexString(b[i] & 0xFF);
+            if (hex.length() == 1) {
+                //ï¿½ï¿½ï¿½Ö½Úµï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½æ²¹ "0"
+                hex = '0' + hex;
+            }
+            result = result + hex.toUpperCase();
+        }
+        return result;
+    }
+    //ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ hex ï¿½ï¿½Õ¹ï¿½ï¿½ size ï¿½ï¿½Ð¡, ï¿½ï¿½ß²ï¿½ï¿½ã²¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ c
 //	public static String leftPad(String hex, char c, int size) {
 //		char[] cs = new char[size];
 //		Arrays.fill( cs, c);
-//		//×Ö·û´®×ªchar[] ¿½±´µ½ char[] cs
+//		//ï¿½Ö·ï¿½ï¿½ï¿½×ªchar[] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ char[] cs
 //		System.arraycopy(hex.toCharArray(), 0, cs, cs.length-hex.length(), hex.length());
 //		//char[] ×ªÎª String
 //		return new String(cs);
 //	}
 
 
-	//byte[] Êý×é×ª 16½øÖÆ×Ö·û´® ---> ¹¦ÄÜÓë printHexString() / bytesToHexString() ÀàËÆ
+    //byte[] ï¿½ï¿½ï¿½ï¿½×ª 16ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ ---> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ printHexString() / bytesToHexString() ï¿½ï¿½ï¿½ï¿½
 //	public static String toHexString(byte[] data) {
 //		StringBuilder buf = new StringBuilder();
-//		//Öð¸öÈ¡³ö data[] ÔªËØ±£´æµ½ b
+//		//ï¿½ï¿½ï¿½È¡ï¿½ï¿½ data[] Ôªï¿½Ø±ï¿½ï¿½æµ½ b
 //		for (byte b : data) {
 //			buf.append(leftPad( Integer.toHexString(b&0xff), '0', 2));
 //		}
-//		//StringBuilder ×ª ×Ö·û´®
+//		//StringBuilder ×ª ï¿½Ö·ï¿½ï¿½ï¿½
 //		return buf.toString();
 //	}	
-	
-	
-	//char ×ª byte
-	private static byte charToByte(char c) { 
-		return (byte) "0123456789ABCDEF".indexOf(c); 
-	}
 
-	//16½øÖÆ×Ö·û´®×ª byte[] Êý×é
-	//Óë¸Ãº¯Êý¶ÔÓ¦µÄÊÇ     printHexString() or printHexLenString()
-	public static byte[] hexStringToBytes(String hexString) { 
-		if (hexString == null || hexString.equals("")) { 
-			return null; 
-		} 
-		hexString = hexString.toUpperCase(); 
-		int length = hexString.length() / 2;
-		if ( (hexString.length()%2) != 0)
-		{//ÆæÊý¸ö×Ö·û, ÓÒ²¹"0" ´Õ³ÉÅ¼Êý×Ö½Ú
-			length += 1;
-			hexString = hexString + "0";
-		}
-		Log.i("CommonFunc", "CommonFunc lenth=" + length);
-		//×Ö·û´®×ª char[] Êý×é
-		char[] hexChars = hexString.toCharArray(); 
-		byte[] d = new byte[length];
-		int i, pos;
-		for (i = 0; i < length; i++) {
-			pos = i * 2;
-			Log.i("CommonFunc", "CommonFunc i=" + i + " pos=" + pos );
-			d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1])); 
-		} 
-		return d; 
-	} 
 
-	
-	//byte[] Êý×éÒì»ò¼Ó½âÃÜ
-	public static int dataEncDec( byte[] b, int v) { 
-		int nRet = 0;
+    //char ×ª byte
+    private static byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
+    }
 
-		for (int i = 0; i < b.length; i++) {
-			if ( b[i] != 0 && b[i] != (byte)v)
-			{
-				b[i] ^= v;
-			}
-		} 
-		return nRet;
-	}	
-	
+    //16ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½×ª byte[] ï¿½ï¿½ï¿½ï¿½
+    //ï¿½ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½ï¿½     printHexString() or printHexLenString()
+    public static byte[] hexStringToBytes(String hexString) {
+        if (hexString == null || hexString.equals("")) {
+            return null;
+        }
+        hexString = hexString.toUpperCase();
+        int length = hexString.length() / 2;
+        if ((hexString.length() % 2) != 0) {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½, ï¿½Ò²ï¿½"0" ï¿½Õ³ï¿½Å¼ï¿½ï¿½ï¿½Ö½ï¿½
+            length += 1;
+            hexString = hexString + "0";
+        }
+        Log.i("CommonFunc", "CommonFunc lenth=" + length);
+        //ï¿½Ö·ï¿½ï¿½ï¿½×ª char[] ï¿½ï¿½ï¿½ï¿½
+        char[] hexChars = hexString.toCharArray();
+        byte[] d = new byte[length];
+        int i, pos;
+        for (i = 0; i < length; i++) {
+            pos = i * 2;
+            Log.i("CommonFunc", "CommonFunc i=" + i + " pos=" + pos);
+            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+        }
+        return d;
+    }
+
+
+    //byte[] ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½
+    public static int dataEncDec(byte[] b, int v) {
+        int nRet = 0;
+
+        for (int i = 0; i < b.length; i++) {
+            if (b[i] != 0 && b[i] != (byte) v) {
+                b[i] ^= v;
+            }
+        }
+        return nRet;
+    }
+
 }

@@ -1,24 +1,14 @@
 package com.example.jy.demo.passport;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import com.example.jy.demo.passport.R;
-import com.opencv.LibImgFun;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
@@ -30,258 +20,266 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.opencv.LibImgFun;
+
+import java.io.IOException;
+
 public class CameraOpen extends Activity implements SurfaceHolder.Callback {
-	/** Called when the activity is first created. */
-	private Camera mCamera;
-	private ImageButton mButton;
-	// private Button returnTomainmenu;
-	private SurfaceView mSurfaceView;
-	private SurfaceHolder holder;
-	private AutoFocusCallback mAutoFocusCallback = new AutoFocusCallback();
-	private Bitmap bmp = null;
-	private Bitmap bmp2 = null;
-	private int count;
-	private String filePath,filePath2;
-	
-	private boolean is_camaeraperview = false;
+    /**
+     * Called when the activity is first created.
+     */
+    private Camera mCamera;
+    private ImageButton mButton;
+    // private Button returnTomainmenu;
+    private SurfaceView mSurfaceView;
+    private SurfaceHolder holder;
+    private AutoFocusCallback mAutoFocusCallback = new AutoFocusCallback();
+    private Bitmap bmp = null;
+    private Bitmap bmp2 = null;
+    private int count;
+    private String filePath, filePath2;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		/* “˛≤ÿ±ÍÃ‚¿∏ */
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		/* …Ë∂®∆¡ƒªœ‘ æŒ™∫·œÚ */
-		setContentView(R.layout.camera_test_main);
-		
-		mSurfaceView = (SurfaceView) findViewById(R.id.mSurfaceView);
-		mButton = (ImageButton) findViewById(R.id.myButton);
+    private boolean is_camaeraperview = false;
 
-		/* ≈ƒ’’Buttonµƒ ¬º˛¥¶¿Ì */
-		mButton.setOnClickListener(new Button.OnClickListener() {
-			// @Override
-			public void onClick(View arg0) {
-				/* πÿ±’…¡π‚µ∆≤¢≈ƒ’’ */
-				if(!is_camaeraperview){
-					is_camaeraperview = true;
-					mCamera.autoFocus(mAutoFocusCallback);
-				}
-			}
-		});
-	}
-	
-	@SuppressLint("NewApi")
-	@Override
-	protected void onResume() {
-		// TODO Auto-generated method stub
-		super.onResume();
-		
-		filePath = getFilesDir().getParent().toString() + "/"
-				+ getResources().getString(R.string.app_name) + ".bmp";
-		
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        /* ÈöêËóèÊ†áÈ¢òÊ†è */
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+		/* ËÆæÂÆöÂ±èÂπïÊòæÁ§∫‰∏∫Ê®™Âêë */
+        setContentView(R.layout.camera_test_main);
+
+        mSurfaceView = (SurfaceView) findViewById(R.id.mSurfaceView);
+        mButton = (ImageButton) findViewById(R.id.myButton);
+
+		/* ÊãçÁÖßButtonÁöÑ‰∫ã‰ª∂Â§ÑÁêÜ */
+        mButton.setOnClickListener(new Button.OnClickListener() {
+            // @Override
+            public void onClick(View arg0) {
+				/* ÂÖ≥Èó≠Èó™ÂÖâÁÅØÂπ∂ÊãçÁÖß */
+                if (!is_camaeraperview) {
+                    is_camaeraperview = true;
+                    mCamera.autoFocus(mAutoFocusCallback);
+                }
+            }
+        });
+    }
+
+    @SuppressLint("NewApi")
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+
+        filePath = getFilesDir().getParent().toString() + "/"
+                + getResources().getString(R.string.app_name) + ".bmp";
+
 //		filePath2 = getFilesDir().getParent().toString() + "/"
 //				+ getResources().getString(R.string.app_name) + "2" + ".bmp"; 
+
+        holder = mSurfaceView.getHolder();
+        holder.addCallback(CameraOpen.this);
+        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
-		holder = mSurfaceView.getHolder();
-		holder.addCallback(CameraOpen.this);
-		holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		
-		/* ¥Úø™œ‡ª˙ */
-		try {
-			mCamera = mCamera.open(1);
-		} catch (Exception e) {
-			// TODO: handle exception
-			finish();
-			Toast.makeText(CameraOpen.this, "Open Camera fail !",
-					Toast.LENGTH_SHORT).show();
-		}
-		
-		surfaceCreated(holder);
-		initCamera();
-	}
-	
+		/* ÔøΩÔøΩÔøΩÔøΩÔøΩ */
+        try {
+            mCamera = mCamera.open(1);
+        } catch (Exception e) {
+            // TODO: handle exception
+            finish();
+            Toast.makeText(CameraOpen.this, "Open Camera fail !",
+                    Toast.LENGTH_SHORT).show();
+        }
 
-	public void surfaceCreated(SurfaceHolder surfaceholder) {
-		
-		try {
+        surfaceCreated(holder);
+        initCamera();
+    }
 
-			if (mCamera != null)
-				mCamera.setPreviewDisplay(holder);
-			else {
-				finish();
-				Toast.makeText(CameraOpen.this, "Open Camera fail !",
-						Toast.LENGTH_SHORT).show();
-			}
 
-		} catch (IOException exception) {
-			mCamera.release();
-			mCamera = null;
-		}
-	}
+    public void surfaceCreated(SurfaceHolder surfaceholder) {
 
-	public void surfaceChanged(SurfaceHolder surfaceholder, int format, int w,int h) {
-		
-		try {
-			/* œ‡ª˙≥ı ºªØ */
-			initCamera();
-			count++;
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-			finish();
-			Toast.makeText(CameraOpen.this, "Open Camera fail !",
-					Toast.LENGTH_SHORT).show();
-			
-			if(mCamera != null){
-				mCamera.release();
-				mCamera = null;
-			}
-		}
-	}
-	
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		
-		stopCamera();
-		
-		if (mCamera != null) {
-			
-			mCamera.stopPreview();
-			mCamera.release();
-			mCamera = null;
-			
-			surfaceDestroyed(holder);
-		}
-	}
+        try {
 
-	// @Override
-	public void surfaceDestroyed(SurfaceHolder surfaceholder) {
-		stopCamera();
-		if (mCamera != null) {
-			mCamera.release();
-			mCamera = null;
-		}
-	}
+            if (mCamera != null)
+                mCamera.setPreviewDisplay(holder);
+            else {
+                finish();
+                Toast.makeText(CameraOpen.this, "Open Camera fail !",
+                        Toast.LENGTH_SHORT).show();
+            }
 
-	private void takePicture() {
-		if (mCamera != null) {
-			mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
-		}
-	}
+        } catch (IOException exception) {
+            mCamera.release();
+            mCamera = null;
+        }
+    }
 
-	private ShutterCallback shutterCallback = new ShutterCallback() {
-		public void onShutter() {
-			/* ∞¥ÿ£øÏ√≈À≤º‰ª·∫Ù?’‚¿Ôµƒ≥Ã–Ú */
-		}
-	};
+    public void surfaceChanged(SurfaceHolder surfaceholder, int format, int w, int h) {
 
-	private PictureCallback rawCallback = new PictureCallback() {
-		public void onPictureTaken(byte[] _data, Camera _camera) {
-			/* “™¥¶¿Ìraw data?–¥?∑Ò */
-		}
-	};
+        try {
+			/* Áõ∏Êú∫ÂàùÂßãÂåñ */
+            initCamera();
+            count++;
 
-	private PictureCallback jpegCallback = new PictureCallback() {
-		public void onPictureTaken(byte[] _data, Camera _camera) {
-			/* »°µ√œ‡∆¨ */
-			try {
+        } catch (Exception e) {
+            // TODO: handle exception
+            finish();
+            Toast.makeText(CameraOpen.this, "Open Camera fail !",
+                    Toast.LENGTH_SHORT).show();
 
-				int w = _camera.getParameters().getPictureSize().width;
-				int h = _camera.getParameters().getPictureSize().height;
+            if (mCamera != null) {
+                mCamera.release();
+                mCamera = null;
+            }
+        }
+    }
 
-				bmp = BitmapFactory.decodeByteArray(_data, 0, _data.length);
-				bmp2 = BitmapFactory.decodeByteArray(_data, 0, _data.length);
+    @Override
+    protected void onStop() {
+        // TODO Auto-generated method stub
+        super.onStop();
 
-				int[] pix = new int[w * h];
-				bmp.getPixels(pix, 0, w, 0, 0, w, h);
-				bmp2.getPixels(pix, 0, w, 0, 0, w, h);
-				// int resut = LibImgFun.Eyes(pix, w, h);
-				int resut = LibImgFun.mySaveImage(pix, w, h, filePath);
+        stopCamera();
+
+        if (mCamera != null) {
+
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+
+            surfaceDestroyed(holder);
+        }
+    }
+
+    // @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceholder) {
+        stopCamera();
+        if (mCamera != null) {
+            mCamera.release();
+            mCamera = null;
+        }
+    }
+
+    private void takePicture() {
+        if (mCamera != null) {
+            mCamera.takePicture(shutterCallback, rawCallback, jpegCallback);
+        }
+    }
+
+    private ShutterCallback shutterCallback = new ShutterCallback() {
+        public void onShutter() {
+			/* ÊåâÂÖÄÂø´Èó®Áû¨Èó¥‰ºöÂëº?ËøôÈáåÁöÑÁ®ãÂ∫è */
+        }
+    };
+
+    private PictureCallback rawCallback = new PictureCallback() {
+        public void onPictureTaken(byte[] _data, Camera _camera) {
+			/* Ë¶ÅÂ§ÑÁêÜraw data?ÂÜô?Âê¶ */
+        }
+    };
+
+    private PictureCallback jpegCallback = new PictureCallback() {
+        public void onPictureTaken(byte[] _data, Camera _camera) {
+			/* ÂèñÂæóÁõ∏Áâá */
+            try {
+
+                int w = _camera.getParameters().getPictureSize().width;
+                int h = _camera.getParameters().getPictureSize().height;
+
+                bmp = BitmapFactory.decodeByteArray(_data, 0, _data.length);
+                bmp2 = BitmapFactory.decodeByteArray(_data, 0, _data.length);
+
+                int[] pix = new int[w * h];
+                bmp.getPixels(pix, 0, w, 0, 0, w, h);
+                bmp2.getPixels(pix, 0, w, 0, 0, w, h);
+                // int resut = LibImgFun.Eyes(pix, w, h);
+                int resut = LibImgFun.mySaveImage(pix, w, h, filePath);
 //				int resut2 = LibImgFun.mySaveImage2(pix, w, h, filePath2);
-				Log.v("crjlog", "resut = " + resut + "filePath = " + filePath);
-				setResult(Activity.RESULT_OK);
-				finish();
-				/* »°µ√œ‡∆¨Bitmap∂‘œÛ */ 
-			} catch (Exception e) {
-				e.printStackTrace();
-				
+                Log.v("crjlog", "resut = " + resut + "filePath = " + filePath);
+                setResult(Activity.RESULT_OK);
+                finish();
+				/* ÂèñÂæóÁõ∏ÁâáBitmapÂØπË±° */
+            } catch (Exception e) {
+                e.printStackTrace();
 
-			}
-		}
-	};
 
-	public final class AutoFocusCallback implements
-			android.hardware.Camera.AutoFocusCallback {
-		public void onAutoFocus(boolean focused, Camera camera) {
-			/* ∂‘µΩΩπµ„≈ƒ’’ */
-			if (focused) {
-				takePicture();
-			} else
-				mButton.setVisibility(View.VISIBLE);
-		}
-	};
+            }
+        }
+    };
 
-	/* œ‡ª˙≥ı ºªØµƒmethod */
-	@SuppressLint("NewApi") 
-	private void initCamera() {
-		if (mCamera != null) {
-			try {
-				Camera.Parameters parameters = mCamera.getParameters();
-				parameters.setPictureFormat(PixelFormat.RGB_565);
+    public final class AutoFocusCallback implements
+            android.hardware.Camera.AutoFocusCallback {
+        public void onAutoFocus(boolean focused, Camera camera) {
+			/* ÂØπÂà∞ÁÑ¶ÁÇπÊãçÁÖß */
+            if (focused) {
+                takePicture();
+            } else
+                mButton.setVisibility(View.VISIBLE);
+        }
+    }
 
-				mCamera.setDisplayOrientation(180);
-				parameters.setRotation(180);
+    ;
 
-				parameters.setPictureSize(640, 480);
-				parameters.setPreviewSize(640, 480);
+    /* Áõ∏Êú∫ÂàùÂßãÂåñÁöÑmethod */
+    @SuppressLint("NewApi")
+    private void initCamera() {
+        if (mCamera != null) {
+            try {
+                Camera.Parameters parameters = mCamera.getParameters();
+                parameters.setPictureFormat(PixelFormat.RGB_565);
 
-				// parameters.set("rotation",180);
-				// parameters.setPictureSize(256, 360);
-				// parameters.setPreviewSize(256, 360);
+                mCamera.setDisplayOrientation(180);
+                parameters.setRotation(180);
 
-				// parameters.setPictureSize(360, 256);
-				// parameters.setPreviewSize(360, 256);
+                parameters.setPictureSize(640, 480);
+                parameters.setPreviewSize(640, 480);
 
-				mCamera.setParameters(parameters);
-				mCamera.startPreview();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+                // parameters.set("rotation",180);
+                // parameters.setPictureSize(256, 360);
+                // parameters.setPreviewSize(256, 360);
 
-	/* Õ£÷πœ‡ª˙µƒmethod */
-	private void stopCamera() {
-		
-		if (mCamera != null) {
-			try {
-				/* Õ£÷π‘§¿¿ */
-				mCamera.stopPreview();
-				is_camaeraperview = false;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
-		if ((keyCode == 251 || keyCode == 252) && (event.getRepeatCount() == 0) && is_camaeraperview == false) {
-			
-			if(!is_camaeraperview){
-				
-				is_camaeraperview = true;
-				if(mCamera != null)
-				mCamera.autoFocus(mAutoFocusCallback); 
-				return true;
-			}
-		}
-		
-		return super.onKeyDown(keyCode, event);
-	}
+                // parameters.setPictureSize(360, 256);
+                // parameters.setPreviewSize(360, 256);
+
+                mCamera.setParameters(parameters);
+                mCamera.startPreview();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /* ÂÅúÊ≠¢Áõ∏Êú∫ÁöÑmethod */
+    private void stopCamera() {
+
+        if (mCamera != null) {
+            try {
+				/* ÂÅúÊ≠¢È¢ÑËßà */
+                mCamera.stopPreview();
+                is_camaeraperview = false;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // TODO Auto-generated method stub
+        if ((keyCode == 251 || keyCode == 252) && (event.getRepeatCount() == 0) && is_camaeraperview == false) {
+
+            if (!is_camaeraperview) {
+
+                is_camaeraperview = true;
+                if (mCamera != null)
+                    mCamera.autoFocus(mAutoFocusCallback);
+                return true;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
 }
