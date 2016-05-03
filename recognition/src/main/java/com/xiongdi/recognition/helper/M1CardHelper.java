@@ -299,10 +299,50 @@ public class M1CardHelper {
             return false;
         }
 
-        byte[] picData = new byte[960];
+        byte[] head = new byte[]{
+                0x00, 0x00, 0x00, 0x0c, 0x6a, 0x50, 0x20, 0x20, 0x0d, 0x0a, (byte) 0x87, 0x0a, 0x00, 0x00, 0x00, 0x14,
+                0x66, 0x74, 0x79, 0x70, 0x6a, 0x70, 0x32, 0x20, 0x00, 0x00, 0x00, 0x00, 0x6a, 0x70, 0x32, 0x20,
+                0x00, 0x00, 0x00, 0x2d, 0x6a, 0x70, 0x32, 0x68, 0x00, 0x00, 0x00, 0x16, 0x69, 0x68, 0x64, 0x72,
+                0x00, 0x00, 0x00, (byte) 0x8e, 0x00, 0x00, 0x00, 0x7d, 0x00, 0x04, 0x07, 0x07, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x0f, 0x63, 0x6f, 0x6c, 0x72, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x06,
+                0x11, 0x6a, 0x70, 0x32, 0x63, (byte) 0xff, 0x4f, (byte) 0xff, 0x51, 0x00, 0x32, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x7d, 0x00, 0x00, 0x00, (byte) 0x8e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x7d, 0x00, 0x00, 0x00, (byte) 0x8e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x07,
+                0x01, 0x01, 0x07, 0x01, 0x01, 0x07, 0x01, 0x01, 0x07, 0x01, 0x01, (byte) 0xff, 0x52, 0x00, 0x0c, 0x00,
+                0x00, 0x00, 0x01, 0x01, 0x05, 0x04, 0x04, 0x00, 0x01, (byte) 0xff, 0x5c, 0x00, 0x13, 0x40, 0x40, 0x48,
+                0x48, 0x50, 0x48, 0x48, 0x50, 0x48, 0x48, 0x50, 0x48, 0x48, 0x50, 0x48, 0x48, 0x50, (byte) 0xff, 0x64,
+                0x00, 0x25, 0x00, 0x01, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x20, 0x62, 0x79, 0x20, 0x4f,
+                0x70, 0x65, 0x6e, 0x4a, 0x50, 0x45, 0x47, 0x20, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x20
+        };
+        byte[] picData = new byte[1648];
         Arrays.fill(picData, (byte) 0x00);
+        System.arraycopy(head, 0, picData, 0, head.length);
 
-        int readOffset = 0;
+        int readOffset = 13;
+        //验证扇区34(160-175)
+        if (!authenticateCard(40, serialNo)) {
+            return false;
+        }
+        for (int i = 160; i < 175; i++) {
+            if (!readBlock(picData, readOffset * BLOCK_LENGTH, i)) {
+                return false;
+            }
+
+            readOffset++;
+        }
+
+        //验证扇区35(176-191)
+        if (!authenticateCard(44, serialNo)) {
+            return false;
+        }
+        for (int i = 176; i < 191; i++) {
+            if (!readBlock(picData, readOffset * BLOCK_LENGTH, i)) {
+                return false;
+            }
+
+            readOffset++;
+        }
+
         //验证扇区36
         if (!authenticateCard(48, serialNo)) {
             return false;
@@ -364,8 +404,7 @@ public class M1CardHelper {
             }
         }
 
-        OpenJpeg opj2k = new OpenJpeg();
-        opj2k.GetLibVersion();
+        OpenJpeg.GetLibVersion();
         FileOutputStream fos = null;
         try {
             File directory = mContext.getExternalFilesDir("card");
@@ -382,7 +421,7 @@ public class M1CardHelper {
                 if (realPicData != null) {
                     fos.write(realPicData);
                     fos.flush();
-                    if(0 == opj2k.DecompressImage(filePath, decompressPath)){
+                    if (0 == OpenJpeg.DecompressImage(filePath, decompressPath)) {
                         cardImg = BitmapFactory.decodeFile(decompressPath);
                         new FileUtil().deleteFile(filePath);
                     }
@@ -982,18 +1021,42 @@ public class M1CardHelper {
         }
 
         byte[] bitmapData = bos.toByteArray();
-        int length = bitmapData.length;
+        int length = bitmapData.length - 208;//除去头的长度
         int needBlock = (int) Math.ceil(length / BLOCK_LENGTH);
-        if (needBlock > 60) {
+        if (needBlock > 90) {
             Log.d(TAG, "picture too large!");
             return false;
         }
 
-        byte[] writePicData = new byte[960];
+        byte[] writePicData = new byte[1440];
         Arrays.fill(writePicData, (byte) 0x00);
-        System.arraycopy(bitmapData, 0, writePicData, 0, bitmapData.length);
+        System.arraycopy(bitmapData, 208, writePicData, 0, length);
 
         int writeOffset = 0;
+        //验证扇区34(160-175)
+        if (!authenticateCard(40, serialNo)) {
+            return false;
+        }
+        for (int i = 160; i < 175; i++) {
+            if (!writeBlock(writePicData, writeOffset * BLOCK_LENGTH, i)) {
+                return false;
+            }
+
+            writeOffset++;
+        }
+
+        //验证扇区35(176-191)
+        if (!authenticateCard(44, serialNo)) {
+            return false;
+        }
+        for (int i = 176; i < 191; i++) {
+            if (!writeBlock(writePicData, writeOffset * BLOCK_LENGTH, i)) {
+                return false;
+            }
+
+            writeOffset++;
+        }
+
         //验证扇区36(192-206)
         if (!authenticateCard(48, serialNo)) {
             return false;
