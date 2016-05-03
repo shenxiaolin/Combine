@@ -260,15 +260,16 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
      */
     private boolean compressPicture() {
         Bitmap croppedImage = BitmapFactory.decodeFile(pictureUrl);
-        BmpUtil bmpUtilTwo = new BmpUtil();
-        String pictureUrlTwo = getExternalFilesDir(null) + File.separator + "crop.bmp";
-        bmpUtilTwo.save(croppedImage, pictureUrlTwo);
+        BmpUtil bmpUtil = new BmpUtil();
+        String bmpPictureUrl = pictureUrl.substring(0, pictureUrl.length() - 4) + ".bmp";
+        bmpUtil.save(croppedImage, bmpPictureUrl);
         compressPicUrl = pictureUrl.substring(0, pictureUrl.length() - 4) + ".jp2";
         OpenJpeg.GetLibVersion();
-        if (0 != OpenJpeg.CompressImage(pictureUrl, compressPicUrl, String.valueOf(50))) {
+        if (0 != OpenJpeg.CompressImage(bmpPictureUrl, compressPicUrl, String.valueOf(50))) {
             compressPicUrl = null;
             return false;
         }
+        fileUtil.deleteFile(bmpPictureUrl);
 
         return true;
     }
