@@ -48,7 +48,6 @@ public class Converter {
      * convert a Asc byte arrary to Hex byte arrary, ex. [0x00, 0x00, 0x34, 0x4E] -> [4E]
      *
      * @param raw Asc byte arrary
-     * @param len lenght of the arrary.
      * @return hex byte arrary.
      */
     public static int AscToHex(int raw) {
@@ -122,14 +121,9 @@ public class Converter {
 //	  return (( (int)b[0]) << 8) + b[1];
         int n = (int) b[0];
         Log.i("Converter", "n=" + n);
-//	  return ((int)b[0]);
+
         return ((int) b[0]);
     }
-
-//	static public void sprintf (StringBuffer result, String format, String...replace)
-//	{
-//		result.append(String.format(format, replace));
-//	}
 
     /**
      * calculate the MD5 hash value.
@@ -184,9 +178,10 @@ public class Converter {
         return result;
     }
 
-    //byte[] 数组转 指定长度的16进制字符串, 长度 bLen 小于等于 byte数组的原本大小
-    //与该函数对应的是 hexStringToBytes()
-    public static String printHexLenString(byte[] b, int bLen) {
+    /**
+     * hex转换为String
+     */
+    public static String hex2String(byte[] b, int bLen) {
         String result = "";
 
         for (int i = 0; i < bLen; i++) {
@@ -199,37 +194,11 @@ public class Converter {
         }
         return result;
     }
-    //将字符串 hex 扩展到 size 大小, 左边不足部分填充字符 c
-//	public static String leftPad(String hex, char c, int size) {
-//		char[] cs = new char[size];
-//		Arrays.fill( cs, c);
-//		//字符串转char[] 拷贝到 char[] cs
-//		System.arraycopy(hex.toCharArray(), 0, cs, cs.length-hex.length(), hex.length());
-//		//char[] 转为 String
-//		return new String(cs);
-//	}
 
-
-    //byte[] 数组转 16进制字符串 ---> 功能与 printHexString() / bytesToHexString() 类似
-//	public static String toHexString(byte[] data) {
-//		StringBuilder buf = new StringBuilder();
-//		//逐个取出 data[] 元素保存到 b
-//		for (byte b : data) {
-//			buf.append(leftPad( Integer.toHexString(b&0xff), '0', 2));
-//		}
-//		//StringBuilder 转 字符串
-//		return buf.toString();
-//	}	
-
-
-    //char 转 byte
-    private static byte charToByte(char c) {
-        return (byte) "0123456789ABCDEF".indexOf(c);
-    }
-
-    //16进制字符串转 byte[] 数组
-    //与该函数对应的是     printHexString() or printHexLenString()
-    public static byte[] hexStringToBytes(String hexString) {
+    /**
+     * String转hex
+     */
+    public static byte[] string2Hex(String hexString) {
         if (hexString == null || hexString.equals("")) {
             return null;
         }
@@ -239,19 +208,22 @@ public class Converter {
             length += 1;
             hexString = hexString + "0";
         }
-        Log.i("CommonFunc", "CommonFunc lenth=" + length);
+
         //字符串转 char[] 数组
         char[] hexChars = hexString.toCharArray();
         byte[] d = new byte[length];
         int i, pos;
         for (i = 0; i < length; i++) {
             pos = i * 2;
-            Log.i("CommonFunc", "CommonFunc i=" + i + " pos=" + pos);
             d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
         }
         return d;
     }
 
+    //char 转 byte
+    private static byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
+    }
 
     //byte[] 数组异或加解密
     public static int dataEncDec(byte[] b, int v) {
@@ -263,5 +235,29 @@ public class Converter {
             }
         }
         return nRet;
+    }
+
+    /**
+     * short型数据转化为byte[]数组
+     */
+    public static byte[] short2ByteArray(short data) {
+        byte[] targets = new byte[2];
+        for (int i = 0; i < 2; i++) {
+            int offset = (targets.length - 1 - i) * 8;
+            targets[i] = (byte) ((data >>> offset) & 0xff);
+        }
+        return targets;
+    }
+
+    /**
+     * byte[]数组转换为short
+     */
+    public static short byteArray2Short(byte[] bytes) {
+        short target;
+        short s0 = (short) (bytes[0] & 0xff);// 最低位
+        short s1 = (short) (bytes[1] & 0xff);
+        s1 <<= 8;
+        target = (short) (s0 | s1);
+        return target;
     }
 }
