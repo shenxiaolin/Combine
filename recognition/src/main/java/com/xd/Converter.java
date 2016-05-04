@@ -253,11 +253,6 @@ public class Converter {
      * byte[]数组转换为short
      */
     public static short byteArray2Short(byte[] bytes) {
-        short target;
-        short s0 = (short) (bytes[0] & 0xff);// 最低位
-        short s1 = (short) (bytes[1] & 0xff);
-        s1 <<= 8;
-        target = (short) (s0 | s1);
-        return target;
+        return (short) (bytes[1] & 0xff | (bytes[0] & 0xff) << 8);
     }
 }
