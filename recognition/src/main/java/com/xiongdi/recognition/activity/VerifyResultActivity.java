@@ -125,7 +125,7 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                 } else {
                     pictureIMG.setImageResource(R.mipmap.person_photo);
                 }
-                if(!StringUtil.hasLength(cardData[1])){
+                if (!StringUtil.hasLength(cardData[1])) {
                     ToastUtil.getInstance().showToast(getApplicationContext(), getString(R.string.common_no_data));
                 }
             } else {
@@ -145,7 +145,7 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                     Long recordCount = personDao.getQuantity();
                     Person person = personDao.queryById(Integer.parseInt(String.valueOf(recordCount)));
                     if (person != null) {
-                        personIDTV.setText(String.valueOf(person.getPersonID()));
+                        personIDTV.setText(String.format("%1$,05d", person.getPersonID()));
                         personNameTV.setText(person.getName());
                         personGenderTV.setText(person.getGender());
                         personBirthdayTV.setText(person.getBirthday());
