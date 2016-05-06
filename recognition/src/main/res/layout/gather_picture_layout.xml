@@ -20,10 +20,9 @@
     <ImageButton
         android:id="@+id/take_picture_bt"
         android:layout_width="60dp"
-        android:layout_height="40dip"
+        android:layout_height="60dp"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:background="@mipmap/camera_click"
-        android:src="@mipmap/camera_bt"/>
+        android:background="@drawable/take_photo_bt_bg"/>
 
 </LinearLayout>

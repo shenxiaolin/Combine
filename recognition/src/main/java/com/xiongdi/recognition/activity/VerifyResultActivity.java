@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,7 +29,7 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
 
     private ImageView pictureIMG;
     private TextView personIDTV, personNameTV, personGenderTV, personBirthdayTV, personAddressTV;
-    private Button backTB, readCardBT, verifyBT;
+    private ImageButton backTB, readCardBT, verifyBT;
 
     private M1CardHelper m1CardHelper;
 
@@ -62,11 +62,11 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
         personBirthdayTV = (TextView) findViewById(R.id.verify_birthday).findViewById(R.id.verify_content_tv);
         personAddressTV = (TextView) findViewById(R.id.verify_address).findViewById(R.id.verify_content_tv);
 
-        backTB = (Button) findViewById(R.id.bottom_left_bt);
-        verifyBT = (Button) findViewById(R.id.bottom_right_bt);
-        verifyBT.setText(R.string.verify);
-        readCardBT = (Button) findViewById(R.id.bottom_middle_bt);
-        readCardBT.setText(R.string.read_card);
+        backTB = (ImageButton) findViewById(R.id.bottom_left_bt);
+        verifyBT = (ImageButton) findViewById(R.id.bottom_right_bt);
+        verifyBT.setBackgroundResource(R.drawable.common_gather_fingerprint);
+        readCardBT = (ImageButton) findViewById(R.id.bottom_middle_bt);
+        readCardBT.setBackgroundResource(R.drawable.common_read_card_bg);
     }
 
     private void setListener() {
