@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@mipmap/main_green_bg"
-              android:gravity="center"
-              android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@mipmap/main_green_bg"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/user_name_margin_top"
         android:gravity="center_horizontal">
 
         <ImageView
@@ -16,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/editText_name"
+            android:layout_alignStart="@+id/editText_name"
             android:src="@mipmap/name"/>
 
         <EditText
@@ -29,8 +32,10 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/login"
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal">
 
@@ -48,17 +53,31 @@
             android:imeOptions="actionDone|flagNoFullscreen"
             android:inputType="textPassword"
             android:singleLine="true"
-            android:text="123"
-            android:textColor="@android:color/holo_red_dark"/>
+            android:text="123"/>
     </RelativeLayout>
 
     <Button
         android:id="@+id/login_bt"
         style="@style/CommonTextStyle"
-        android:layout_width="100dip"
-        android:layout_height="56dip"
+        android:layout_width="@dimen/login_bt_width"
+        android:layout_height="@dimen/login_bt_height"
+        android:layout_below="@+id/password"
+        android:layout_centerInParent="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dip"
+        android:layout_marginEnd="@dimen/login_bt_margin_side"
+        android:layout_marginLeft="@dimen/login_bt_margin_side"
+        android:layout_marginRight="@dimen/login_bt_margin_side"
+        android:layout_marginStart="@dimen/login_bt_margin_side"
+        android:layout_marginTop="@dimen/login_bt_margin_side"
         android:background="@drawable/login_bt_bg"/>
 
-</LinearLayout>
+    <TextView
+        style="@style/CommonTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_size_20"
+        android:gravity="center"
+        android:text="@string/web_url"/>
+
+</RelativeLayout>

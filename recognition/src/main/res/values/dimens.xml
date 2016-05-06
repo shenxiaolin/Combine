@@ -28,4 +28,14 @@
 
     <dimen name="bottom_bar_margin_left_right">10dp</dimen>
     <dimen name="vf_take_photo_bt_margin_bottom">20dp</dimen>
+    <dimen name="rectangle_corner">6dp</dimen>
+    <dimen name="rectangle_stroke">2dp</dimen>
+
+    <!--登录界面-->
+    <dimen name="user_name_margin_top">40dp</dimen>
+    <dimen name="login_bt_margin_side">30dp</dimen>
+    <dimen name="input_font_size">22sp</dimen>
+    <dimen name="input_padding">5dp</dimen>
+    <dimen name="login_bt_width">120dp</dimen>
+    <dimen name="login_bt_height">60dp</dimen>
 </resources>

@@ -6,6 +6,10 @@
     <string name="common_cancel">cancel</string>
     <string name="common_tips">tips</string>
     <string name="common_no_data">no data</string>
+    <string name="web_url">http://www.xiongdi.cn/</string>
+
+    <!--登录界面-->
+    <string name="login">Login</string>
 
     <!-- 填写登记信息界面-->
     <string name="write_info_title">INFORMATION</string>
