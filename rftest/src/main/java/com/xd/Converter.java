@@ -302,4 +302,39 @@ public class Converter {
         return nRet;
     }
 
+    /**
+     * short型数据转化为byte[]数组
+     */
+    public static byte[] short2ByteArray(short data) {
+        byte[] targets = new byte[2];
+        for (int i = 0; i < 2; i++) {
+            int offset = (targets.length - 1 - i) * 8;
+            targets[i] = (byte) ((data >>> offset) & 0xff);
+        }
+        return targets;
+    }
+
+    /**
+     * byte[]数组转换为short
+     */
+    public static short byteArray2Short(byte[] bytes) {
+        return (short) (bytes[1] & 0xff | (bytes[0] & 0xff) << 8);
+    }
+
+    /**
+     * hex转换为String
+     */
+    public static String hex2String(byte[] b, int bLen) {
+        String result = "";
+
+        for (int i = 0; i < bLen; i++) {
+            String hex = Integer.toHexString(b[i] & 0xFF);
+            if (hex.length() == 1) {
+                //半字节的情形前面补 "0"
+                hex = '0' + hex;
+            }
+            result = result + hex.toUpperCase();
+        }
+        return result;
+    }
 }
