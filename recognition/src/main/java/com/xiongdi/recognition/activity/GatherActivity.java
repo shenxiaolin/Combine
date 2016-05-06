@@ -15,7 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.jy.demo.fingerprint.CallDecoder;
@@ -49,7 +49,7 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
 
     private TabLayout gatherTab;
     private ViewPager gatherVP;
-    private Button backBT, takePictureBT, saveBT;
+    private ImageButton backBT, takePictureBT, saveBT;
     private GatherInfoVpAdapter gatherAdapter;
     private List<Fragment> gatherData;
 
@@ -81,9 +81,9 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
-        backBT = (Button) findViewById(R.id.bottom_left_bt);
-        takePictureBT = (Button) findViewById(R.id.bottom_middle_bt);
-        saveBT = (Button) findViewById(R.id.bottom_right_bt);
+        backBT = (ImageButton) findViewById(R.id.bottom_left_bt);
+        takePictureBT = (ImageButton) findViewById(R.id.bottom_middle_bt);
+        saveBT = (ImageButton) findViewById(R.id.bottom_right_bt);
 
         gatherTab = (TabLayout) findViewById(R.id.gather_tab);
         gatherVP = (ViewPager) findViewById(R.id.gather_viewpager);

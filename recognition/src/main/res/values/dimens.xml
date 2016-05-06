@@ -18,7 +18,13 @@
     <dimen name="dp_size_15">15dp</dimen>
     <dimen name="dp_size_10">10dp</dimen>
     <dimen name="dp_size_5">10dp</dimen>
+    <dimen name="dp_size_4">4dp</dimen>
     <dimen name="dp_size_3">3dp</dimen>
+    <dimen name="dp_size_2">2dp</dimen>
+    <dimen name="dp_size_1">1dp</dimen>
+    <dimen name="dp_size_0.5">0.5dp</dimen>
 
     <dimen name="crop__bar_height">56dp</dimen>
+
+    <dimen name="bottom_bar_margin_left_right">10dp</dimen>
 </resources>

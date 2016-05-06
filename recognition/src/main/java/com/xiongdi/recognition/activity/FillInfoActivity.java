@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.xiongdi.recognition.R;
@@ -46,7 +46,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
 
     private EditText nameET, addressET, ID_NO_ET;
     private TextView fill_ID_tx, genderTX, birthdayTX;
-    private Button backBT, entryBT;
+    private ImageButton backBT, entryBT;
     private PersonDao personDao;
 
     FragmentManager fgManager;
@@ -86,9 +86,8 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
         genderTX = (TextView) findViewById(R.id.gender_tv);
         birthdayTX = (TextView) findViewById(R.id.birthday_tv);
 
-        backBT = (Button) findViewById(R.id.bottom_left_bt);
-        entryBT = (Button) findViewById(R.id.bottom_right_bt);
-        entryBT.setText(getString(R.string.bottom_gather));
+        backBT = (ImageButton) findViewById(R.id.bottom_left_bt);
+        entryBT = (ImageButton) findViewById(R.id.bottom_right_bt);
         View view = findViewById(R.id.bottom_middle_bt);
         if (view != null) {
             view.setVisibility(View.GONE);
