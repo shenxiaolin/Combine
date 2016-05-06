@@ -27,4 +27,5 @@
     <dimen name="crop__bar_height">56dp</dimen>
 
     <dimen name="bottom_bar_margin_left_right">10dp</dimen>
+    <dimen name="vf_take_photo_bt_margin_bottom">20dp</dimen>
 </resources>
