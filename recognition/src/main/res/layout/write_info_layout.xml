@@ -34,8 +34,7 @@
             <TextView
                 android:id="@+id/fill_ID_tx"
                 style="@style/WriteInfoItemContentStyle"
-                android:text="00000"
-                />
+                android:text="00000"/>
         </LinearLayout>
 
         <LinearLayout

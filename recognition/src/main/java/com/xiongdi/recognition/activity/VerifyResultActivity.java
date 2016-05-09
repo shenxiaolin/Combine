@@ -21,6 +21,8 @@ import com.xiongdi.recognition.util.StringUtil;
 import com.xiongdi.recognition.util.ToastUtil;
 import com.xiongdi.recognition.widget.ProgressDialogFragment;
 
+import java.util.Locale;
+
 /**
  * Created by moubiao on 2016/3/25.
  * 验证身份信息界面
@@ -172,7 +174,7 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                     Long recordCount = personDao.getQuantity();
                     Person person = personDao.queryById(Integer.parseInt(String.valueOf(recordCount)));
                     if (person != null) {
-                        personIDTV.setText(String.format("%1$,05d", person.getPersonID()));
+                        personIDTV.setText(String.format(Locale.getDefault(), "%1$,05d", person.getPersonID()));
                         personNameTV.setText(person.getName());
                         personGenderTV.setText(person.getGender());
                         personBirthdayTV.setText(person.getBirthday());

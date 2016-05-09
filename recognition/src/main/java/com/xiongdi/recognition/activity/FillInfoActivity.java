@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Created by moubiao on 2016/3/22.
@@ -108,10 +109,10 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
 
     private void refreshView() {
         ++gatherID;
-        fill_ID_tx.setText(String.format("%1$,05d", gatherID));
+        fill_ID_tx.setText(String.format(Locale.getDefault(), "%1$,05d", gatherID));
         nameET.setText("");
         addressET.setText("");
-        ID_NO_ET.setText(String.format("%1$,05d", gatherID));
+        ID_NO_ET.setText(String.format(Locale.getDefault(), "%1$,05d", gatherID));
     }
 
     private void setListener() {
@@ -191,7 +192,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onPreExecute() {
             String[] saveData = new String[]{
-                    String.format("%1$,05d", (gatherID - 1)),
+                    String.format(Locale.getDefault(), "%1$,05d", (gatherID - 1)),
                     gatherName,
                     gatherGender,
                     gatherBirthday,
@@ -302,7 +303,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     private void saveFileToDevice(String toSaveString) {
         try {
             String filePath = getExternalFilesDir(null) + "/" + getResources().getString(R.string.app_name) + "/" +
-                    String.format("%1$,05d", gatherID) + "/" + TXT_NAME + ".ini";
+                    String.format(Locale.getDefault(), "%1$,05d", gatherID) + "/" + TXT_NAME + ".ini";
 
             File saveFile = new File(filePath);
             if (!saveFile.exists()) {

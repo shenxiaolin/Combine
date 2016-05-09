@@ -84,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         if (isSave) {
             Editor editor = sp.edit();
             editor.putString("userName", nameET.getText().toString());
-            editor.commit();
+            editor.apply();
         } else {
             String userName = sp.getString("userName", null);
             if (userName != null) {
