@@ -16,7 +16,7 @@ import java.util.List;
  * Created by moubiao on 2016/3/22.
  * 自定义的application
  */
-public class RecognitionApplication extends Application {
+public class MainApplication extends Application {
     private List<Activity> mActivityList;
 
     @Override
