@@ -15,4 +15,8 @@
     <color name="crop_button_text">#666666</color>
     <color name="crop_selector_pressed">#1a000000</color>
     <color name="crop_selector_focused">#77000000</color>
+
+    <!--登录框-->
+    <color name="login_box_color">#cccccc</color>
+    <color name="web_url_color">#666666</color>
 </resources>

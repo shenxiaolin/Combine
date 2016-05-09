@@ -34,12 +34,15 @@
     <dimen name="rectangle_stroke">2dp</dimen>
 
     <!--登录界面-->
-    <dimen name="user_name_margin_top">40dp</dimen>
+    <dimen name="user_name_margin_top">185dp</dimen>
     <dimen name="login_bt_margin_side">30dp</dimen>
     <dimen name="input_font_size">22sp</dimen>
     <dimen name="input_padding">5dp</dimen>
     <dimen name="login_bt_width">120dp</dimen>
     <dimen name="login_bt_height">60dp</dimen>
+    <dimen name="icon_padding">10dp</dimen>
+    <dimen name="user_padding_top_bottom">6.5dp</dimen>
+    <dimen name="user_padding_left">7dp</dimen>
 
     <!--填写基本信息界面-->
     <dimen name="fill_information_row_margin_top">15dp</dimen>

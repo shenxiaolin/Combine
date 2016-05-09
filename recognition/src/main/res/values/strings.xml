@@ -11,6 +11,8 @@
     <!--登录界面-->
     <string name="login">Login</string>
     <string name="login_failed_tips">username or password incorrect</string>
+    <string name="login_default_user">userc</string>
+    <string name="login_default_password">123</string>
 
     <!-- 填写登记信息界面-->
     <string name="write_info_title">Information</string>
