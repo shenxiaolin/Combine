@@ -95,8 +95,10 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
         }
 
         fgManager = getSupportFragmentManager();
-        progressDialog = new ProgressDialogFragment(getString(R.string.saving_to_card));
-        askDialog = new AskDialogFragment(getString(R.string.common_tips), getString(R.string.save_to_card_message));
+        progressDialog = new ProgressDialogFragment();
+        progressDialog.setData(getString(R.string.saving_to_card));
+        askDialog = new AskDialogFragment();
+        askDialog.setData(getString(R.string.common_tips), getString(R.string.save_to_card_message));
     }
 
     private void iniData() {

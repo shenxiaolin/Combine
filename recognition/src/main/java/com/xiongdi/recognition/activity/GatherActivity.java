@@ -167,10 +167,11 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private class SaveTask extends AsyncTask<Void, Void, Void> {
-        ProgressDialogFragment progressDialog = new ProgressDialogFragment(getString(R.string.saving_to_card));
+        ProgressDialogFragment progressDialog = new ProgressDialogFragment();
 
         @Override
         protected void onPreExecute() {
+            progressDialog.setData(getString(R.string.saving_to_card));
             progressDialog.show(getSupportFragmentManager(), "save");
         }
 

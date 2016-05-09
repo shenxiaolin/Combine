@@ -115,10 +115,11 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
      * 读卡
      */
     private class ReadTask extends AsyncTask<Void, Void, Boolean> {
-        ProgressDialogFragment progressDialog = new ProgressDialogFragment(getString(R.string.reading_from_card));
+        ProgressDialogFragment progressDialog = new ProgressDialogFragment();
 
         @Override
         protected void onPreExecute() {
+            progressDialog.setData(getString(R.string.reading_from_card));
             progressDialog.show(getSupportFragmentManager(), "save");
             m1CardHelper.openRFSignal();
         }

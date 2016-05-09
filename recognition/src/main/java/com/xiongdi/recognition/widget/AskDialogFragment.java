@@ -18,12 +18,7 @@ public class AskDialogFragment extends DialogFragment {
     private String title;
     private String message;
 
-    public AskDialogFragment(String title, String message) {
-        this.title = title;
-        this.message = message;
-    }
-
-    public void setData(String title, String message){
+    public void setData(String title, String message) {
         this.title = title;
         this.message = message;
     }
