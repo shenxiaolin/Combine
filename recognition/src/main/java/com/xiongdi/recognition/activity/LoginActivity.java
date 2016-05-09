@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         nameET.setSelection(nameET.getText().length());
         passwordET = (EditText) this.findViewById(R.id.editText_psw);
         passwordET.setSelection(passwordET.getText().length());
+        nameET.requestFocus();
         loginBT = (Button) this.findViewById(R.id.login_bt);
     }
 
