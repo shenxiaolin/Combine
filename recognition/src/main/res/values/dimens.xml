@@ -46,4 +46,7 @@
 
     <!--填写基本信息界面-->
     <dimen name="fill_information_row_margin_top">15dp</dimen>
+    <dimen name="fill_information_row_margin_left">25dp</dimen>
+    <dimen name="fill_information_row_margin_right">25dp</dimen>
+    <dimen name="fill_information_column_gap">10dp</dimen>
 </resources>

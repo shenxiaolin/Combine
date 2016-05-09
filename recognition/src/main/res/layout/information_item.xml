@@ -11,21 +11,21 @@
         android:layout_marginLeft="@dimen/dp_size_5"
         android:layout_marginStart="@dimen/dp_size_5"
         android:minWidth="100dp"
-        android:textColor="@color/colorWhite"
+        android:textColor="@android:color/black"
         android:textSize="@dimen/font_size_20"/>
 
     <TextView
         android:id="@+id/verify_content_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp_size_5"
-        android:paddingRight="@dimen/dp_size_5"
         android:layout_marginEnd="@dimen/dp_size_5"
         android:layout_marginLeft="@dimen/dp_size_5"
         android:layout_marginRight="@dimen/dp_size_5"
         android:layout_marginStart="@dimen/dp_size_5"
         android:layout_marginTop="@dimen/dp_size_3"
-        android:background="@color/colorGray"
-        android:textColor="@android:color/holo_red_dark"
+        android:background="@drawable/rectangle_gray"
+        android:paddingLeft="@dimen/dp_size_5"
+        android:paddingRight="@dimen/dp_size_5"
+        android:textColor="@android:color/black"
         android:textSize="@dimen/font_size_20"/>
 </LinearLayout>

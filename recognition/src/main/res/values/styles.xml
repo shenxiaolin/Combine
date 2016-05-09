@@ -30,20 +30,17 @@
     <!-- 填写录入信息界面-->
     <style name="WriteInfoItemTitleStyle">
         <item name="android:textSize">@dimen/font_size_20</item>
-        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/common_title_gray</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">30dp</item>
     </style>
 
     <style name="WriteInfoItemContentStyle">
         <item name="android:textSize">@dimen/font_size_20</item>
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:background">@color/colorGray</item>
+        <item name="android:background">@drawable/rectangle_gray</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">30dp</item>
-        <item name="android:layout_marginRight">30dp</item>
         <item name="android:padding">5dp</item>
         <item name="android:singleLine">true</item>
     </style>

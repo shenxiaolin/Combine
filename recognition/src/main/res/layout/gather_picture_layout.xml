@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@mipmap/main_green_bg"
+              android:background="@color/common_blue"
               android:orientation="vertical">
 
     <SurfaceView
@@ -23,6 +23,7 @@
         android:layout_height="60dp"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/take_photo_bt_bg"/>
+        android:background="@drawable/take_photo_bt_bg"
+        android:contentDescription="@string/app_name"/>
 
 </LinearLayout>
