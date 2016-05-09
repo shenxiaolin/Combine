@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -28,7 +29,12 @@ import java.io.IOException;
  * Created by moubiao on 2016/3/25.
  * 验证指纹界面
  */
-public class VerifyActivity extends AppCompatActivity implements View.OnClickListener, SurfaceHolder.Callback, Camera.AutoFocusCallback {
+public class VerifyFingerprintActivity extends AppCompatActivity implements View.OnClickListener, SurfaceHolder.Callback, Camera.AutoFocusCallback {
+    private int KEY_CODE_RIGHT_BOTTOM = 249;
+    private int KEY_CODE_LEFT_BOTTOM = 250;
+    private int KEY_CODE_LEFT_TOP = 251;
+    private int KEY_CODE_RIGHT_TOP = 252;
+
     private SurfaceView previewSFV;
     private ImageButton takeBT;
 
@@ -93,13 +99,22 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
     private boolean focus = false;
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
+                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode && !focus) {
+            verifyCamera.autoFocus(this);
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.take_fingerprint_bt:
-                if (focus) {
-                    return;
+                if (!focus) {
+                    verifyCamera.autoFocus(this);
                 }
-                verifyCamera.autoFocus(this);
                 break;
             default:
                 break;

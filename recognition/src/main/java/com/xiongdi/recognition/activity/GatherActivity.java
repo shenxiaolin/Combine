@@ -14,6 +14,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -41,6 +42,11 @@ import java.util.List;
  * 采集指纹和头像的activity
  */
 public class GatherActivity extends AppCompatActivity implements View.OnClickListener {
+    private int KEY_CODE_RIGHT_BOTTOM = 249;
+    private int KEY_CODE_LEFT_BOTTOM = 250;
+    private int KEY_CODE_LEFT_TOP = 251;
+    private int KEY_CODE_RIGHT_TOP = 252;
+
     public final static int PICTURE_ACTIVITY = 0;//采集照片
     public final static int FINGERPRINT_ACTIVITY = 1;//采集指纹
     private static final int CROP_FROM_CAMERA = 6709;//裁剪照片
@@ -128,10 +134,7 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.bottom_middle_bt:
-                Intent intent = new Intent();
-                intent.setClass(GatherActivity.this, GatherPictureActivity.class);
-                intent.putExtra("pictureName", gatherID);
-                startActivityForResult(intent, PICTURE_ACTIVITY);
+                startGatherPictureActivity();
                 break;
             case R.id.bottom_right_bt:
                 if (haveInformation) {
@@ -144,6 +147,23 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
+                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) {
+            startGatherPictureActivity();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void startGatherPictureActivity() {
+        Intent intent = new Intent();
+        intent.setClass(GatherActivity.this, GatherPictureActivity.class);
+        intent.putExtra("pictureName", gatherID);
+        startActivityForResult(intent, PICTURE_ACTIVITY);
     }
 
     private class SaveTask extends AsyncTask<Void, Void, Void> {

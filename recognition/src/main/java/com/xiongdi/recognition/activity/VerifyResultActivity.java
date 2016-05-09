@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,7 +26,12 @@ import com.xiongdi.recognition.widget.ProgressDialogFragment;
  * 验证身份信息界面
  */
 public class VerifyResultActivity extends AppCompatActivity implements View.OnClickListener {
+    private final String TAG = "moubiao";
     private final int VERIFY_ACTIVITY = 0;
+    private final int KEY_CODE_SCAN_CARD_RIGHT = 249;
+    private final int KEY_CODE_SCAN_CARD_LEFT = 250;
+    private final int KEY_CODE_VERIFY_FINGERPRINT_LEFT = 251;
+    private final int KEY_CODE_VERIFY_FINGERPRINT_RIGHT = 252;
 
     private ImageView pictureIMG;
     private TextView personIDTV, personNameTV, personGenderTV, personBirthdayTV, personAddressTV;
@@ -82,8 +88,7 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                 finish();
                 break;
             case R.id.bottom_right_bt:
-                Intent intent = new Intent(VerifyResultActivity.this, VerifyActivity.class);
-                startActivityForResult(intent, VERIFY_ACTIVITY);
+                verifyFingerPrint();
                 break;
             case R.id.bottom_middle_bt:
                 new ReadTask().execute();
@@ -93,6 +98,20 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KEY_CODE_SCAN_CARD_LEFT == keyCode || KEY_CODE_SCAN_CARD_RIGHT == keyCode) {
+            new ReadTask().execute();
+        } else if (KEY_CODE_VERIFY_FINGERPRINT_LEFT == keyCode || KEY_CODE_VERIFY_FINGERPRINT_RIGHT == keyCode) {
+            verifyFingerPrint();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 读卡
+     */
     private class ReadTask extends AsyncTask<Void, Void, Boolean> {
         ProgressDialogFragment progressDialog = new ProgressDialogFragment(getString(R.string.reading_from_card));
 
@@ -132,6 +151,14 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                 ToastUtil.getInstance().showToast(getApplicationContext(), getString(R.string.read_failed_message));
             }
         }
+    }
+
+    /**
+     * 验证指纹
+     */
+    private void verifyFingerPrint() {
+        Intent intent = new Intent(VerifyResultActivity.this, VerifyFingerprintActivity.class);
+        startActivityForResult(intent, VERIFY_ACTIVITY);
     }
 
     @Override

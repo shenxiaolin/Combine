@@ -63,7 +63,7 @@
 
         <!-- 验证指纹界面-->
         <activity
-            android:name=".activity.VerifyActivity"
+            android:name=".activity.VerifyFingerprintActivity"
             android:screenOrientation="sensor"/>
 
     </application>
