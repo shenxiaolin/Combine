@@ -317,7 +317,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
 
             showToast(getString(R.string.save_success));
         } catch (FileNotFoundException e) {
-            showToast(getString(R.string.file_no_eixt));
+            showToast(getString(R.string.file_no_exit));
             e.printStackTrace();
         } catch (IOException e) {
             showToast(getString(R.string.save_failed));

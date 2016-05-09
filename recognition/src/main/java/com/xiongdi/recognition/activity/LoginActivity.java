@@ -25,7 +25,7 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements OnClickListener {
     private Button loginBT;
-    private EditText nameTX, passwordTX;
+    private EditText nameET, passwordET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +38,12 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
     }
 
     private void initView() {
-        nameTX = (EditText) this.findViewById(R.id.editText_name);
-        passwordTX = (EditText) this.findViewById(R.id.editText_psw);
+        nameET = (EditText) this.findViewById(R.id.editText_name);
+        nameET.setSelection(nameET.getText().length());
+        passwordET = (EditText) this.findViewById(R.id.editText_psw);
+        passwordET.setSelection(passwordET.getText().length());
         loginBT = (Button) this.findViewById(R.id.login_bt);
     }
-
 
     private void setListener() {
         loginBT.setOnClickListener(this);
@@ -54,9 +55,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
             case R.id.login_bt:
                 if (verifyAccount()) {
                     Intent intent = new Intent();
-                    if ("userc".equals(nameTX.getText().toString())) {
+                    if ("userc".equals(nameET.getText().toString())) {
                         intent.setClass(LoginActivity.this, FillInfoActivity.class);
-                    } else if ("userv".equals(nameTX.getText().toString())) {
+                    } else if ("userv".equals(nameET.getText().toString())) {
                         intent.setClass(LoginActivity.this, VerifyResultActivity.class);
                         intent.putExtra("haveData", false);
                     }
@@ -64,7 +65,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
                     saveOrReadAccount(true);
                     startActivity(intent);
                 } else {
-                    Toast toast = Toast.makeText(getApplicationContext(), "用户名或密码不正确", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.login_failed_tips), Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.BOTTOM, 0, 0);
                     toast.show();
                 }
@@ -81,12 +82,12 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
         SharedPreferences sp = getSharedPreferences("account", Activity.MODE_PRIVATE);
         if (isSave) {
             Editor editor = sp.edit();
-            editor.putString("userName", nameTX.getText().toString());
+            editor.putString("userName", nameET.getText().toString());
             editor.commit();
         } else {
             String userName = sp.getString("userName", null);
             if (userName != null) {
-                nameTX.setText(userName);
+                nameET.setText(userName);
             }
         }
 
@@ -96,8 +97,8 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener 
      * 验证账户
      */
     private boolean verifyAccount() {
-        String userName = nameTX.getText().toString();
-        String password = passwordTX.getText().toString();
+        String userName = nameET.getText().toString();
+        String password = passwordET.getText().toString();
 
         if (0 == userName.length() || 0 == password.length()) {
             return false;

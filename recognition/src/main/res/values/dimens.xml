@@ -4,6 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <!-- 填写登记信息界面-->
+    <dimen name="fill_information_title_font_size">25sp</dimen>
+    <dimen name="fill_information_title_height">43dp</dimen>
     <dimen name="font_size_20">20sp</dimen>
 
     <dimen name="dp_size_220">220dp</dimen>
@@ -38,4 +40,7 @@
     <dimen name="input_padding">5dp</dimen>
     <dimen name="login_bt_width">120dp</dimen>
     <dimen name="login_bt_height">60dp</dimen>
+
+    <!--填写基本信息界面-->
+    <dimen name="fill_information_row_margin_top">15dp</dimen>
 </resources>
