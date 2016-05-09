@@ -42,8 +42,8 @@
     <!-- 关于卡的字符串-->
     <string name="read_card">read card</string>
     <string name="save_to_card_message">save this information to card?</string>
-    <string name="saving_to_card">saving...</string>
-    <string name="reading_from_card">reading...</string>
+    <string name="saving_to_card">saving…</string>
+    <string name="reading_from_card">reading…</string>
     <string name="save_failed_message">save failed, try again?</string>
     <string name="read_failed_message">read failed</string>
 
