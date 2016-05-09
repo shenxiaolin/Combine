@@ -1,6 +1,5 @@
 package com.xiongdi.recognition.widget;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -12,15 +11,13 @@ import android.support.v4.app.DialogFragment;
  * Created by moubiao on 2016/3/22.
  * 单选对话框
  */
-@SuppressLint("ValidFragment")
 public class SingleChoiceDialogFragment extends DialogFragment {
     private String dialogTitle;
     private String[] dialogItems;
     private int selectedID;
     DialogInterface.OnClickListener clickListener;
 
-    @SuppressLint("ValidFragment")
-    public SingleChoiceDialogFragment(String dialogTitle, String[] dialogItems, int selectID) {
+    public void setData(String dialogTitle, String[] dialogItems, int selectID) {
         this.dialogTitle = dialogTitle;
         this.dialogItems = dialogItems;
         this.selectedID = selectID;

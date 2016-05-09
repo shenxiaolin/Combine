@@ -133,7 +133,8 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.gender_tv:
-                SingleChoiceDialogFragment singleDialog = new SingleChoiceDialogFragment("gender", new String[]{"Male", "Female"}, selectedID);
+                SingleChoiceDialogFragment singleDialog = new SingleChoiceDialogFragment();
+                singleDialog.setData("gender", new String[]{"Male", "Female"}, selectedID);
                 singleDialog.setListener(this);
                 singleDialog.show(fgManager, "gender");
                 break;
