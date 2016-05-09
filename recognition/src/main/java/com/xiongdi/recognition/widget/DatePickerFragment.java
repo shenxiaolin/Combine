@@ -1,6 +1,5 @@
 package com.xiongdi.recognition.widget;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -20,13 +19,12 @@ import java.util.Locale;
  * Created by moubiao on 2016/3/22.
  * 日期选择器的dialog
  */
-@SuppressLint("ValidFragment")
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     private DatePickerInterface dateInter;
     private Date saveDate;
 
-    public DatePickerFragment(String dateStr, DatePickerInterface dateInter) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+    public void setData(String dateStr, DatePickerInterface dateInter) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         try {
             saveDate = dateFormat.parse(dateStr);
         } catch (ParseException e) {

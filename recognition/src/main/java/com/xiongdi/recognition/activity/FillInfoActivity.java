@@ -138,7 +138,9 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
                 singleDialog.show(fgManager, "gender");
                 break;
             case R.id.birthday_tv:
-                new DatePickerFragment(birthdayTX.getText().toString(), this).show(fgManager, "date");
+                DatePickerFragment datePickerFragment = new DatePickerFragment();
+                datePickerFragment.setData(birthdayTX.getText().toString(), this);
+                datePickerFragment.show(fgManager, "date");
                 break;
             case R.id.bottom_left_bt:
                 finish();
