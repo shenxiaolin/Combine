@@ -34,6 +34,7 @@
     <dimen name="rectangle_stroke">2dp</dimen>
 
     <!--登录界面-->
+    <dimen name="login_font_size">25sp</dimen>
     <dimen name="user_name_margin_top">185dp</dimen>
     <dimen name="login_bt_margin_side">30dp</dimen>
     <dimen name="input_font_size">22sp</dimen>
