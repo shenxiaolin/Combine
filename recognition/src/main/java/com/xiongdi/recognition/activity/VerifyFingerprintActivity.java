@@ -24,6 +24,8 @@ import com.xiongdi.recognition.audio.AudioPlay;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by moubiao on 2016/3/25.
@@ -64,8 +66,8 @@ public class VerifyFingerprintActivity extends AppCompatActivity implements View
     }
 
     private void initCamera() {
-        verifyCamera = Camera.open(1);//一共两个摄像头，1是采集指纹的. 0是拍照的.
         try {
+            verifyCamera = Camera.open(1);//一共两个摄像头，1是采集指纹的. 0是拍照的.
             verifyCamera.setPreviewDisplay(verifyHolder);
         } catch (IOException e) {
             Toast.makeText(this, R.string.camera_open_failed, Toast.LENGTH_SHORT).show();
@@ -97,11 +99,13 @@ public class VerifyFingerprintActivity extends AppCompatActivity implements View
     }
 
     private boolean focus = false;
+    private boolean active = false;
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
-                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode && !focus) {
+        if ((KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
+                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) && !focus && !active) {
+            active = true;
             verifyCamera.autoFocus(this);
         }
 
@@ -213,7 +217,15 @@ public class VerifyFingerprintActivity extends AppCompatActivity implements View
                 e.printStackTrace();
             }
 
-            finish();
+            active = false;
+            //延时一秒后结束是因为当快速拍照键时，相机服务会报错
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            }, 1000);
         }
     }
 }
