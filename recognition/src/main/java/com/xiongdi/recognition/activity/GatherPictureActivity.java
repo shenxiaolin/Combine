@@ -88,7 +88,6 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
                     takePicture();
                 }
 
-
                 break;
             default:
                 break;
@@ -97,8 +96,8 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
-                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode && !focus) {
+        if ((KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
+                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) && !focus) {
             takePicture();
         }
 
