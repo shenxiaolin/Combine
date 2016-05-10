@@ -91,7 +91,12 @@ public class FileUtil {
     }
 
     public boolean deleteFile(String filePath) {
-        File file = new File(filePath);
-        return file.exists() && file.isFile() && file.delete();
+        if (filePath != null) {
+            File file = new File(filePath);
+
+            return file.exists() && file.isFile() && file.delete();
+        }
+
+        return false;
     }
 }

@@ -9,8 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.xiongdi.recognition.R;
@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Created by moubiao on 2016/3/22.
@@ -46,7 +47,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
 
     private EditText nameET, addressET, ID_NO_ET;
     private TextView fill_ID_tx, genderTX, birthdayTX;
-    private Button backBT, entryBT;
+    private ImageButton backBT, entryBT;
     private PersonDao personDao;
 
     FragmentManager fgManager;
@@ -86,17 +87,18 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
         genderTX = (TextView) findViewById(R.id.gender_tv);
         birthdayTX = (TextView) findViewById(R.id.birthday_tv);
 
-        backBT = (Button) findViewById(R.id.bottom_left_bt);
-        entryBT = (Button) findViewById(R.id.bottom_right_bt);
-        entryBT.setText(getString(R.string.bottom_gather));
+        backBT = (ImageButton) findViewById(R.id.bottom_left_bt);
+        entryBT = (ImageButton) findViewById(R.id.bottom_right_bt);
         View view = findViewById(R.id.bottom_middle_bt);
         if (view != null) {
             view.setVisibility(View.GONE);
         }
 
         fgManager = getSupportFragmentManager();
-        progressDialog = new ProgressDialogFragment(getString(R.string.saving_to_card));
-        askDialog = new AskDialogFragment(getString(R.string.common_tips), getString(R.string.save_to_card_message));
+        progressDialog = new ProgressDialogFragment();
+        progressDialog.setData(getString(R.string.saving_to_card));
+        askDialog = new AskDialogFragment();
+        askDialog.setData(getString(R.string.common_tips), getString(R.string.save_to_card_message));
     }
 
     private void iniData() {
@@ -109,10 +111,10 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
 
     private void refreshView() {
         ++gatherID;
-        fill_ID_tx.setText(String.format("%1$,05d", gatherID));
+        fill_ID_tx.setText(String.format(Locale.getDefault(), "%1$,05d", gatherID));
         nameET.setText("");
         addressET.setText("");
-        ID_NO_ET.setText(String.format("%1$,05d", gatherID));
+        ID_NO_ET.setText(String.format(Locale.getDefault(), "%1$,05d", gatherID));
     }
 
     private void setListener() {
@@ -131,12 +133,15 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.gender_tv:
-                SingleChoiceDialogFragment singleDialog = new SingleChoiceDialogFragment("gender", new String[]{"Male", "Female"}, selectedID);
+                SingleChoiceDialogFragment singleDialog = new SingleChoiceDialogFragment();
+                singleDialog.setData("gender", new String[]{"Male", "Female"}, selectedID);
                 singleDialog.setListener(this);
                 singleDialog.show(fgManager, "gender");
                 break;
             case R.id.birthday_tv:
-                new DatePickerFragment(birthdayTX.getText().toString(), this).show(fgManager, "date");
+                DatePickerFragment datePickerFragment = new DatePickerFragment();
+                datePickerFragment.setData(birthdayTX.getText().toString(), this);
+                datePickerFragment.show(fgManager, "date");
                 break;
             case R.id.bottom_left_bt:
                 finish();
@@ -192,7 +197,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onPreExecute() {
             String[] saveData = new String[]{
-                    String.format("%1$,05d", (gatherID - 1)),
+                    String.format(Locale.getDefault(), "%1$,05d", (gatherID - 1)),
                     gatherName,
                     gatherGender,
                     gatherBirthday,
@@ -303,7 +308,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
     private void saveFileToDevice(String toSaveString) {
         try {
             String filePath = getExternalFilesDir(null) + "/" + getResources().getString(R.string.app_name) + "/" +
-                    String.format("%1$,05d", gatherID) + "/" + TXT_NAME + ".ini";
+                    String.format(Locale.getDefault(), "%1$,05d", gatherID) + "/" + TXT_NAME + ".ini";
 
             File saveFile = new File(filePath);
             if (!saveFile.exists()) {
@@ -318,7 +323,7 @@ public class FillInfoActivity extends AppCompatActivity implements View.OnClickL
 
             showToast(getString(R.string.save_success));
         } catch (FileNotFoundException e) {
-            showToast(getString(R.string.file_no_eixt));
+            showToast(getString(R.string.file_no_exit));
             e.printStackTrace();
         } catch (IOException e) {
             showToast(getString(R.string.save_failed));

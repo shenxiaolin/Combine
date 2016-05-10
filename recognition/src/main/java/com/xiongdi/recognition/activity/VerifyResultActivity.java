@@ -7,8 +7,9 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,16 +21,23 @@ import com.xiongdi.recognition.util.StringUtil;
 import com.xiongdi.recognition.util.ToastUtil;
 import com.xiongdi.recognition.widget.ProgressDialogFragment;
 
+import java.util.Locale;
+
 /**
  * Created by moubiao on 2016/3/25.
  * 验证身份信息界面
  */
 public class VerifyResultActivity extends AppCompatActivity implements View.OnClickListener {
+    private final String TAG = "moubiao";
     private final int VERIFY_ACTIVITY = 0;
+    private final int KEY_CODE_SCAN_CARD_RIGHT = 249;
+    private final int KEY_CODE_SCAN_CARD_LEFT = 250;
+    private final int KEY_CODE_VERIFY_FINGERPRINT_LEFT = 251;
+    private final int KEY_CODE_VERIFY_FINGERPRINT_RIGHT = 252;
 
     private ImageView pictureIMG;
     private TextView personIDTV, personNameTV, personGenderTV, personBirthdayTV, personAddressTV;
-    private Button backTB, readCardBT, verifyBT;
+    private ImageButton backTB, readCardBT, verifyBT;
 
     private M1CardHelper m1CardHelper;
 
@@ -62,11 +70,11 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
         personBirthdayTV = (TextView) findViewById(R.id.verify_birthday).findViewById(R.id.verify_content_tv);
         personAddressTV = (TextView) findViewById(R.id.verify_address).findViewById(R.id.verify_content_tv);
 
-        backTB = (Button) findViewById(R.id.bottom_left_bt);
-        verifyBT = (Button) findViewById(R.id.bottom_right_bt);
-        verifyBT.setText(R.string.verify);
-        readCardBT = (Button) findViewById(R.id.bottom_middle_bt);
-        readCardBT.setText(R.string.read_card);
+        backTB = (ImageButton) findViewById(R.id.bottom_left_bt);
+        verifyBT = (ImageButton) findViewById(R.id.bottom_right_bt);
+        verifyBT.setBackgroundResource(R.drawable.common_gather_fingerprint);
+        readCardBT = (ImageButton) findViewById(R.id.bottom_middle_bt);
+        readCardBT.setBackgroundResource(R.drawable.common_read_card_bg);
     }
 
     private void setListener() {
@@ -82,8 +90,7 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                 finish();
                 break;
             case R.id.bottom_right_bt:
-                Intent intent = new Intent(VerifyResultActivity.this, VerifyActivity.class);
-                startActivityForResult(intent, VERIFY_ACTIVITY);
+                verifyFingerPrint();
                 break;
             case R.id.bottom_middle_bt:
                 new ReadTask().execute();
@@ -93,11 +100,26 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KEY_CODE_SCAN_CARD_LEFT == keyCode || KEY_CODE_SCAN_CARD_RIGHT == keyCode) {
+            new ReadTask().execute();
+        } else if (KEY_CODE_VERIFY_FINGERPRINT_LEFT == keyCode || KEY_CODE_VERIFY_FINGERPRINT_RIGHT == keyCode) {
+            verifyFingerPrint();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 读卡
+     */
     private class ReadTask extends AsyncTask<Void, Void, Boolean> {
-        ProgressDialogFragment progressDialog = new ProgressDialogFragment(getString(R.string.reading_from_card));
+        ProgressDialogFragment progressDialog = new ProgressDialogFragment();
 
         @Override
         protected void onPreExecute() {
+            progressDialog.setData(getString(R.string.reading_from_card));
             progressDialog.show(getSupportFragmentManager(), "save");
             m1CardHelper.openRFSignal();
         }
@@ -125,13 +147,21 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                 } else {
                     pictureIMG.setImageResource(R.mipmap.person_photo);
                 }
-                if(!StringUtil.hasLength(cardData[1])){
+                if (!StringUtil.hasLength(cardData[1])) {
                     ToastUtil.getInstance().showToast(getApplicationContext(), getString(R.string.common_no_data));
                 }
             } else {
                 ToastUtil.getInstance().showToast(getApplicationContext(), getString(R.string.read_failed_message));
             }
         }
+    }
+
+    /**
+     * 验证指纹
+     */
+    private void verifyFingerPrint() {
+        Intent intent = new Intent(VerifyResultActivity.this, VerifyFingerprintActivity.class);
+        startActivityForResult(intent, VERIFY_ACTIVITY);
     }
 
     @Override
@@ -145,7 +175,7 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                     Long recordCount = personDao.getQuantity();
                     Person person = personDao.queryById(Integer.parseInt(String.valueOf(recordCount)));
                     if (person != null) {
-                        personIDTV.setText(String.valueOf(person.getPersonID()));
+                        personIDTV.setText(String.format(Locale.getDefault(), "%1$,05d", person.getPersonID()));
                         personNameTV.setText(person.getName());
                         personGenderTV.setText(person.getGender());
                         personBirthdayTV.setText(person.getBirthday());

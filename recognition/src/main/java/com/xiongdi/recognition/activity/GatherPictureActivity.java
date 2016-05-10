@@ -2,10 +2,13 @@ package com.xiongdi.recognition.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -23,6 +26,11 @@ import java.io.IOException;
  * 拍照的activity
  */
 public class GatherPictureActivity extends AppCompatActivity implements View.OnClickListener, SurfaceHolder.Callback {
+    private int KEY_CODE_RIGHT_BOTTOM = 249;
+    private int KEY_CODE_LEFT_BOTTOM = 250;
+    private int KEY_CODE_LEFT_TOP = 251;
+    private int KEY_CODE_RIGHT_TOP = 252;
+
     private SurfaceView previewSFV;
     private ImageButton takeBT;
 
@@ -70,45 +78,59 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
         gatherID = data.getStringExtra("pictureName");
     }
 
-
     private boolean focus = false;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.take_picture_bt:
-                if (focus) {
-                    return;
+                if (!focus) {
+                    takePicture();
                 }
-                mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                    @Override
-                    public void onAutoFocus(boolean success, Camera camera) {
-                        focus = success;
-                        if (success) {
-                            mCamera.cancelAutoFocus();
-                            mCamera.takePicture(new Camera.ShutterCallback() {
-                                @Override
-                                public void onShutter() {
-                                }
-                            }, null, null, new Camera.PictureCallback() {
-                                @Override
-                                public void onPictureTaken(byte[] data, Camera camera) {
-                                    savePicture(data);
-                                    Intent intentData = new Intent();
-                                    intentData.putExtra("pictureUrl", pictureUrl);
-                                    setResult(Activity.RESULT_OK, intentData);
-                                    finish();
-                                }
-                            });
-                        }
-                    }
-                });
-
 
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
+                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) && !focus) {
+            takePicture();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 拍照
+     */
+    private void takePicture() {
+        mCamera.autoFocus(new Camera.AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                focus = success;
+                if (success) {
+                    mCamera.cancelAutoFocus();
+                    mCamera.takePicture(new Camera.ShutterCallback() {
+                        @Override
+                        public void onShutter() {
+                        }
+                    }, null, null, new Camera.PictureCallback() {
+                        @Override
+                        public void onPictureTaken(byte[] data, Camera camera) {
+                            savePicture(data);
+                            Intent intentData = new Intent();
+                            intentData.putExtra("pictureUrl", pictureUrl);
+                            setResult(Activity.RESULT_OK, intentData);
+                            finish();
+                        }
+                    });
+                }
+            }
+        });
     }
 
     @Override
@@ -143,8 +165,8 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
             mCamera.setDisplayOrientation(90);
             parameters.setRotation(90);
 
-            parameters.setPictureSize(264, 198);//192 144  160 120 240 180 264 198
-            parameters.setPreviewSize(264, 198);
+            parameters.setPictureSize(320, 240);//192 144  160 120 240 180 264 198 320 240
+            parameters.setPreviewSize(320, 240);
 
             mCamera.setParameters(parameters);
             mCamera.startPreview();
@@ -173,7 +195,9 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
             File pictureFile = new File(saveFolder, pictureName);
             try {
                 FileOutputStream fos = new FileOutputStream(pictureFile);
-                fos.write(data);
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.flush();
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();

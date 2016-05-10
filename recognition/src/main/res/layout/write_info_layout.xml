@@ -2,21 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@mipmap/main_green_bg"
               android:gravity="center"
               android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_size_10"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@color/common_blue"
+        android:gravity="center"
         android:text="@string/write_info_title"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="@dimen/font_size_20"/>
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/fill_information_title_font_size"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fill_information_row_margin_top"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -27,20 +28,23 @@
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
+                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
                 android:text="@string/info_title_ID"/>
 
             <TextView
                 android:id="@+id/fill_ID_tx"
                 style="@style/WriteInfoItemContentStyle"
-                android:text="00000"
-                />
+                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
+                android:text="00000"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/fill_information_column_gap"
+            android:paddingRight="@dimen/fill_information_row_margin_left">
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
@@ -57,7 +61,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fill_information_row_margin_top">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -67,11 +72,13 @@
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
+                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
                 android:text="@string/info_item_title_gender"/>
 
             <TextView
                 android:id="@+id/gender_tv"
                 style="@style/WriteInfoItemContentStyle"
+                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
                 android:text="male"/>
         </LinearLayout>
 
@@ -79,7 +86,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/fill_information_column_gap"
+            android:paddingRight="@dimen/fill_information_row_margin_left">
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
@@ -96,6 +105,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/fill_information_row_margin_top"
         android:layout_weight="1">
 
         <LinearLayout
@@ -106,11 +116,13 @@
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
+                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
                 android:text="@string/info_item_title_address"/>
 
             <EditText
                 android:id="@+id/address_ET"
                 style="@style/WriteInfoItemContentStyle"
+                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
                 android:imeOptions="actionDone|flagNoFullscreen"
                 android:maxLength="40"/>
         </LinearLayout>
@@ -119,7 +131,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/fill_information_column_gap"
+            android:paddingRight="@dimen/fill_information_row_margin_left">
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"

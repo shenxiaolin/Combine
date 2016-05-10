@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import com.xiongdi.recognition.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,7 +45,7 @@ public class CrashHandlerUtil implements Thread.UncaughtExceptionHandler {
 
         if (mCrashHandlerUtil != null) {
             try {
-                File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "Recognition");
+                File directory = new File(Environment.getExternalStorageDirectory() + File.separator + mContext.getResources().getString(R.string.app_name));
                 if (!directory.exists()) {
                     if (!directory.mkdirs()) {
                         Log.e(TAG, "uncaughtException: create directory recognition failed!");

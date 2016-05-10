@@ -13,7 +13,7 @@ import android.support.v4.app.DialogFragment;
 public class ProgressDialogFragment extends DialogFragment {
     private String message;
 
-    public ProgressDialogFragment(String message) {
+    public void setData(String message) {
         this.message = message;
     }
 

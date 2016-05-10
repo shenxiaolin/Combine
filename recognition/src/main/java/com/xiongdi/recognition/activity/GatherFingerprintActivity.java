@@ -6,9 +6,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -25,6 +25,11 @@ import java.io.File;
  * 采集指纹的界面
  */
 public class GatherFingerprintActivity extends AppCompatActivity implements View.OnClickListener, SurfaceHolder.Callback {
+    private int KEY_CODE_RIGHT_BOTTOM = 249;
+    private int KEY_CODE_LEFT_BOTTOM = 250;
+    private int KEY_CODE_LEFT_TOP = 251;
+    private int KEY_CODE_RIGHT_TOP = 252;
+
     private SurfaceView previewSFV;
     private ImageButton takeBT;
 
@@ -100,59 +105,24 @@ public class GatherFingerprintActivity extends AppCompatActivity implements View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.take_fingerprint_bt:
-                if (focus) {
-                    return;
+                if (!focus) {
+                    gatherFingerprint();
                 }
-                mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                    @Override
-                    public void onAutoFocus(boolean success, Camera camera) {
-                        focus = success;
-                        if (success) {
-                            mCamera.takePicture(new Camera.ShutterCallback() {
-                                @Override
-                                public void onShutter() {
-                                }
-                            }, null, null, new Camera.PictureCallback() {
-                                @Override
-                                public void onPictureTaken(byte[] data, Camera camera) {
-                                    try {
-                                        int w = camera.getParameters().getPictureSize().width;
-                                        int h = camera.getParameters().getPictureSize().height;
-                                        Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-                                        Bitmap bmp2 = BitmapFactory.decodeByteArray(data, 0, data.length);
-
-                                        int[] pix = new int[w * h];
-                                        bmp.getPixels(pix, 0, w, 0, 0, w, h);
-                                        bmp2.getPixels(pix, 0, w, 0, 0, w, h);
-
-                                        String filename = gatherID + "_" + fingerNum + ".bmp";
-
-                                        File fingerprintDir = new File(getExternalFilesDir(null) + "/"
-                                                + getResources().getString(R.string.app_name) + "/" + gatherID + "/");
-                                        if (!fingerprintDir.exists()) {
-                                            fingerprintDir.mkdirs();
-                                        }
-
-                                        String filePath31 = getExternalFilesDir(null) + "/"
-                                                + getResources().getString(R.string.app_name) + "/" + gatherID + "/" + filename;
-
-                                        int result = LibImgFun.mySaveImage(pix, w, h, filePath31);
-                                        Log.v("moubiao", "result = " + result);
-                                        setResult(Activity.RESULT_OK);
-                                        finish();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
 
                 break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
+                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) && !focus) {
+            gatherFingerprint();
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -175,5 +145,56 @@ public class GatherFingerprintActivity extends AppCompatActivity implements View
             mCamera.release();
             mCamera = null;
         }
+    }
+
+    /**
+     * 采集指纹
+     */
+    private void gatherFingerprint() {
+        mCamera.autoFocus(new Camera.AutoFocusCallback() {
+            @Override
+            public void onAutoFocus(boolean success, Camera camera) {
+                focus = success;
+                if (success) {
+                    mCamera.takePicture(new Camera.ShutterCallback() {
+                        @Override
+                        public void onShutter() {
+                        }
+                    }, null, null, new Camera.PictureCallback() {
+                        @Override
+                        public void onPictureTaken(byte[] data, Camera camera) {
+                            try {
+                                int w = camera.getParameters().getPictureSize().width;
+                                int h = camera.getParameters().getPictureSize().height;
+                                Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+                                Bitmap bmp2 = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+                                int[] pix = new int[w * h];
+                                bmp.getPixels(pix, 0, w, 0, 0, w, h);
+                                bmp2.getPixels(pix, 0, w, 0, 0, w, h);
+
+                                String filename = gatherID + "_" + fingerNum + ".bmp";
+
+                                File fingerprintDir = new File(getExternalFilesDir(null) + "/"
+                                        + getResources().getString(R.string.app_name) + "/" + gatherID + "/");
+                                if (!fingerprintDir.exists()) {
+                                    fingerprintDir.mkdirs();
+                                }
+
+                                String filePath31 = getExternalFilesDir(null) + "/"
+                                        + getResources().getString(R.string.app_name) + "/" + gatherID + "/" + filename;
+
+                                int result = LibImgFun.mySaveImage(pix, w, h, filePath31);
+                                Log.v("moubiao", "result = " + result);
+                                setResult(Activity.RESULT_OK);
+                                finish();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 }

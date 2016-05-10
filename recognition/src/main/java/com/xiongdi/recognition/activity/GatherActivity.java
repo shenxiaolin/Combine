@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,22 +14,24 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.jy.demo.fingerprint.CallDecoder;
 import com.example.jy.demo.fingerprint.CallFprint;
+import com.xiongdi.OpenJpeg;
 import com.xiongdi.recognition.R;
 import com.xiongdi.recognition.adapter.GatherInfoVpAdapter;
 import com.xiongdi.recognition.fragment.LeftHandFragment;
 import com.xiongdi.recognition.fragment.PictureFragment;
 import com.xiongdi.recognition.fragment.RightHandFragment;
+import com.xiongdi.recognition.util.BmpUtil;
 import com.xiongdi.recognition.util.FileUtil;
 import com.xiongdi.recognition.util.ToastUtil;
 import com.xiongdi.recognition.widget.ProgressDialogFragment;
 import com.xiongdi.recognition.widget.crop.Crop;
-import com.yzq.OpenJpeg;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,6 +42,11 @@ import java.util.List;
  * 采集指纹和头像的activity
  */
 public class GatherActivity extends AppCompatActivity implements View.OnClickListener {
+    private int KEY_CODE_RIGHT_BOTTOM = 249;
+    private int KEY_CODE_LEFT_BOTTOM = 250;
+    private int KEY_CODE_LEFT_TOP = 251;
+    private int KEY_CODE_RIGHT_TOP = 252;
+
     public final static int PICTURE_ACTIVITY = 0;//采集照片
     public final static int FINGERPRINT_ACTIVITY = 1;//采集指纹
     private static final int CROP_FROM_CAMERA = 6709;//裁剪照片
@@ -46,7 +55,7 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
 
     private TabLayout gatherTab;
     private ViewPager gatherVP;
-    private Button backBT, takePictureBT, saveBT;
+    private ImageButton backBT, takePictureBT, saveBT;
     private GatherInfoVpAdapter gatherAdapter;
     private List<Fragment> gatherData;
 
@@ -78,9 +87,9 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
-        backBT = (Button) findViewById(R.id.bottom_left_bt);
-        takePictureBT = (Button) findViewById(R.id.bottom_middle_bt);
-        saveBT = (Button) findViewById(R.id.bottom_right_bt);
+        backBT = (ImageButton) findViewById(R.id.bottom_left_bt);
+        takePictureBT = (ImageButton) findViewById(R.id.bottom_middle_bt);
+        saveBT = (ImageButton) findViewById(R.id.bottom_right_bt);
 
         gatherTab = (TabLayout) findViewById(R.id.gather_tab);
         gatherVP = (ViewPager) findViewById(R.id.gather_viewpager);
@@ -125,10 +134,7 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.bottom_middle_bt:
-                Intent intent = new Intent();
-                intent.setClass(GatherActivity.this, GatherPictureActivity.class);
-                intent.putExtra("pictureName", gatherID);
-                startActivityForResult(intent, PICTURE_ACTIVITY);
+                startGatherPictureActivity();
                 break;
             case R.id.bottom_right_bt:
                 if (haveInformation) {
@@ -143,11 +149,29 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
+                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) {
+            startGatherPictureActivity();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void startGatherPictureActivity() {
+        Intent intent = new Intent();
+        intent.setClass(GatherActivity.this, GatherPictureActivity.class);
+        intent.putExtra("pictureName", gatherID);
+        startActivityForResult(intent, PICTURE_ACTIVITY);
+    }
+
     private class SaveTask extends AsyncTask<Void, Void, Void> {
-        ProgressDialogFragment progressDialog = new ProgressDialogFragment(getString(R.string.saving_to_card));
+        ProgressDialogFragment progressDialog = new ProgressDialogFragment();
 
         @Override
         protected void onPreExecute() {
+            progressDialog.setData(getString(R.string.saving_to_card));
             progressDialog.show(getSupportFragmentManager(), "save");
         }
 
@@ -256,13 +280,17 @@ public class GatherActivity extends AppCompatActivity implements View.OnClickLis
      * 将照片压缩为.jp2格式
      */
     private boolean compressPicture() {
+        Bitmap croppedImage = BitmapFactory.decodeFile(pictureUrl);
+        BmpUtil bmpUtil = new BmpUtil();
+        String bmpPictureUrl = pictureUrl.substring(0, pictureUrl.length() - 4) + ".bmp";
+        bmpUtil.save(croppedImage, bmpPictureUrl);
         compressPicUrl = pictureUrl.substring(0, pictureUrl.length() - 4) + ".jp2";
-        OpenJpeg opj2k = new OpenJpeg();
-        opj2k.GetLibVersion();
-        if (0 != opj2k.CompressImage(pictureUrl, compressPicUrl, String.valueOf(25))) {
+        OpenJpeg.GetLibVersion();
+        if (0 != OpenJpeg.CompressImage(bmpPictureUrl, compressPicUrl, String.valueOf(40))) {
             compressPicUrl = null;
             return false;
         }
+        fileUtil.deleteFile(bmpPictureUrl);
 
         return true;
     }
