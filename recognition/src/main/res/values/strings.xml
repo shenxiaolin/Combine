@@ -7,6 +7,7 @@
     <string name="common_tips">tips</string>
     <string name="common_no_data">no data</string>
     <string name="web_url">http://www.xiongdi.cn/</string>
+    <string name="common_date">2016-03-22</string>
 
     <!--登录界面-->
     <string name="login">Login</string>
@@ -21,7 +22,9 @@
     <string name="info_item_title_gender">GENDER</string>
     <string name="info_item_title_birthday">BIRTHDAY</string>
     <string name="info_item_title_address">ADDRESS</string>
-    <string name="info_item_title_id_no">ID_NO</string>
+    <string name="info_item_title_ID_NO">ID_NO</string>
+    <string name="info_item_ID_constant">00000</string>
+    <string name="info_item_gender_constant">male</string>
 
     <string name="bottom_back">back</string>
     <string name="bottom_take_picture">take picture</string>

@@ -3,6 +3,10 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <!--底部状态栏-->
+    <dimen name="top_bar_height">43dp</dimen>
+    <dimen name="bottom_bar_height">45dp</dimen>
+
     <!-- 填写登记信息界面-->
     <dimen name="fill_information_title_font_size">25sp</dimen>
     <dimen name="fill_information_title_height">43dp</dimen>

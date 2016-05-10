@@ -1,50 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:gravity="center"
-              android:orientation="vertical">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/info_title"
         android:layout_width="match_parent"
-        android:layout_height="43dp"
+        android:layout_height="@dimen/top_bar_height"
         android:background="@color/common_blue"
         android:gravity="center"
         android:text="@string/write_info_title"
         android:textColor="@android:color/black"
         android:textSize="@dimen/fill_information_title_font_size"/>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fill_information_row_margin_top"
-        android:orientation="horizontal">
+        android:layout_below="@+id/info_title"
+        android:layout_marginBottom="@dimen/bottom_bar_height">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
                 android:text="@string/info_title_ID"/>
 
             <TextView
                 android:id="@+id/fill_ID_tx"
                 style="@style/WriteInfoItemContentStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
-                android:text="00000"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/fill_information_column_gap"
-            android:paddingRight="@dimen/fill_information_row_margin_left">
+                android:text="@string/info_item_ID_constant"/>
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
@@ -56,39 +44,14 @@
                 android:imeOptions="actionNext|flagNoFullscreen"
                 android:maxLength="15"/>
 
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fill_information_row_margin_top">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
                 android:text="@string/info_item_title_gender"/>
 
             <TextView
                 android:id="@+id/gender_tv"
                 style="@style/WriteInfoItemContentStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
-                android:text="male"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/fill_information_column_gap"
-            android:paddingRight="@dimen/fill_information_row_margin_left">
+                android:text="@string/info_item_gender_constant"/>
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
@@ -97,47 +60,21 @@
             <TextView
                 android:id="@+id/birthday_tv"
                 style="@style/WriteInfoItemContentStyle"
-                android:text="2016-03-22"/>
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/fill_information_row_margin_top"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+                android:text="@string/common_date"/>
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
                 android:text="@string/info_item_title_address"/>
 
             <EditText
                 android:id="@+id/address_ET"
                 style="@style/WriteInfoItemContentStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
                 android:imeOptions="actionDone|flagNoFullscreen"
                 android:maxLength="40"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/fill_information_column_gap"
-            android:paddingRight="@dimen/fill_information_row_margin_left">
 
             <TextView
                 style="@style/WriteInfoItemTitleStyle"
-                android:text="@string/info_item_title_id_no"/>
+                android:text="@string/info_item_title_ID_NO"/>
 
             <EditText
                 android:id="@+id/ID_NO_et"
@@ -148,8 +85,12 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
-    <include layout="@layout/bottom_bar"/>
+    <include
+        layout="@layout/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
 
-</LinearLayout>
+</RelativeLayout>
