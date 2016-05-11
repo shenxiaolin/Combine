@@ -29,6 +29,7 @@ public class GatherFingerprintActivity extends AppCompatActivity implements View
     private int KEY_CODE_LEFT_BOTTOM = 250;
     private int KEY_CODE_LEFT_TOP = 251;
     private int KEY_CODE_RIGHT_TOP = 252;
+    private int KEY_CODE_FRONT_CAMERA = 27;//前置摄像头
 
     private SurfaceView previewSFV;
     private ImageButton takeBT;
@@ -120,6 +121,13 @@ public class GatherFingerprintActivity extends AppCompatActivity implements View
         if ((KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
                 || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) && !focus) {
             gatherFingerprint();
+        }
+
+        if (KEY_CODE_FRONT_CAMERA == keyCode) {
+            if (event.getRepeatCount() == 25 && mCamera != null) {
+                gatherFingerprint();
+                return true;
+            }
         }
 
         return super.onKeyDown(keyCode, event);
