@@ -124,7 +124,7 @@ public class GatherFingerprintActivity extends AppCompatActivity implements View
         }
 
         if (KEY_CODE_FRONT_CAMERA == keyCode) {
-            if (event.getRepeatCount() == 25 && mCamera != null) {
+            if (event.getRepeatCount() == 25 && mCamera != null && !focus) {
                 gatherFingerprint();
                 return true;
             }

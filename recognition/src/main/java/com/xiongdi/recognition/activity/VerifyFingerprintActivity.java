@@ -111,7 +111,7 @@ public class VerifyFingerprintActivity extends AppCompatActivity implements View
         }
 
         if (KEY_CODE_FRONT_CAMERA == keyCode) {
-            if (event.getRepeatCount() == 25 && verifyCamera != null) {
+            if (event.getRepeatCount() == 25 && verifyCamera != null && !focus) {
                 verifyCamera.autoFocus(this);
                 return true;
             }
