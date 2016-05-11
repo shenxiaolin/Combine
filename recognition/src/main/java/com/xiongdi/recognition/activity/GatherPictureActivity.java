@@ -166,6 +166,9 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
     }
 
     private void setCameraParams() {
+        if (mCamera == null) {
+            return;
+        }
         try {
             Camera.Parameters parameters = mCamera.getParameters();
 
