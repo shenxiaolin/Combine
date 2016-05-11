@@ -150,6 +150,8 @@ public class VerifyResultActivity extends AppCompatActivity implements View.OnCl
                 if (!StringUtil.hasLength(cardData[1])) {
                     ToastUtil.getInstance().showToast(getApplicationContext(), getString(R.string.common_no_data));
                 }
+
+                verifyFingerPrint();
             } else {
                 ToastUtil.getInstance().showToast(getApplicationContext(), getString(R.string.read_failed_message));
             }
