@@ -1,6 +1,7 @@
 package com.xiongdi.recognition.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.OrientationEventListener;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -77,6 +79,9 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
     private void initData() {
         Intent data = getIntent();
         gatherID = data.getStringExtra("pictureName");
+
+        DetectScreenOrientation detectScreenOrientation = new DetectScreenOrientation(this);
+        detectScreenOrientation.enable();
     }
 
     private boolean focus = false;
@@ -224,6 +229,25 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
                 fos.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * 用来监测左横屏和右横屏切换时旋转摄像头的角度
+     */
+    private class DetectScreenOrientation extends OrientationEventListener {
+        public DetectScreenOrientation(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onOrientationChanged(int orientation) {
+            if (260 < orientation && orientation < 290) {
+                setCameraParams();
+            } else if (80 < orientation && orientation < 100) {
+                setCameraParams();
             }
         }
     }
