@@ -17,7 +17,7 @@ import com.xiongdi.recognition.R;
  * 头像
  */
 public class PictureFragment extends Fragment {
-    private ImageView pictureIMG;
+    private static ImageView pictureIMG;
     private String imgPath = null;
 
     @Override
