@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -162,8 +163,21 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
     private void setCameraParams() {
         try {
             Camera.Parameters parameters = mCamera.getParameters();
-            mCamera.setDisplayOrientation(90);
-            parameters.setRotation(90);
+
+            int orientation = judgeScreenOrientation();
+            if (Surface.ROTATION_0 == orientation) {
+                mCamera.setDisplayOrientation(90);
+                parameters.setRotation(90);
+            } else if (Surface.ROTATION_90 == orientation) {
+                mCamera.setDisplayOrientation(0);
+                parameters.setRotation(0);
+            } else if (Surface.ROTATION_180 == orientation) {
+                mCamera.setDisplayOrientation(180);
+                parameters.setRotation(180);
+            } else if (Surface.ROTATION_270 == orientation) {
+                mCamera.setDisplayOrientation(180);
+                parameters.setRotation(180);
+            }
 
             parameters.setPictureSize(320, 240);//192 144  160 120 240 180 264 198 320 240
             parameters.setPreviewSize(320, 240);
@@ -173,6 +187,15 @@ public class GatherPictureActivity extends AppCompatActivity implements View.OnC
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 判断屏幕方向
+     *
+     * @return 0：竖屏 1：左横屏 2：反向竖屏 3：右横屏
+     */
+    private int judgeScreenOrientation() {
+        return getWindowManager().getDefaultDisplay().getRotation();
     }
 
     private void releaseCamera() {
