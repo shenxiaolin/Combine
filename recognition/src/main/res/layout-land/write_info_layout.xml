@@ -24,17 +24,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/fill_information_row_margin_left"
+            android:paddingRight="@dimen/fill_information_row_margin_right">
 
             <TextView
-                style="@style/WriteInfoItemTitleStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
+                style="@style/WriteInfoItemTitleStyleLand"
                 android:text="@string/info_title_ID"/>
 
             <TextView
                 android:id="@+id/fill_ID_tx"
-                style="@style/WriteInfoItemContentStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
+                style="@style/WriteInfoItemContentStyleLand"
                 android:text="00000"/>
         </LinearLayout>
 
@@ -43,16 +43,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/fill_information_column_gap"
+            android:paddingLeft="@dimen/fill_information_row_margin_right"
             android:paddingRight="@dimen/fill_information_row_margin_left">
 
             <TextView
-                style="@style/WriteInfoItemTitleStyle"
+                style="@style/WriteInfoItemTitleStyleLand"
                 android:text="@string/info_item_title_name"/>
 
             <EditText
                 android:id="@+id/fill_name_text"
-                style="@style/WriteInfoItemContentStyle"
+                style="@style/WriteInfoItemContentStyleLand"
                 android:imeOptions="actionNext|flagNoFullscreen"
                 android:maxLength="15"/>
 
@@ -68,17 +68,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/fill_information_row_margin_left"
+            android:paddingRight="@dimen/fill_information_row_margin_right">
 
             <TextView
-                style="@style/WriteInfoItemTitleStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
+                style="@style/WriteInfoItemTitleStyleLand"
                 android:text="@string/info_item_title_gender"/>
 
             <TextView
                 android:id="@+id/gender_tv"
-                style="@style/WriteInfoItemContentStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
+                style="@style/WriteInfoItemContentStyleLand"
                 android:text="male"/>
         </LinearLayout>
 
@@ -87,16 +87,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/fill_information_column_gap"
+            android:paddingLeft="@dimen/fill_information_row_margin_right"
             android:paddingRight="@dimen/fill_information_row_margin_left">
 
             <TextView
-                style="@style/WriteInfoItemTitleStyle"
+                style="@style/WriteInfoItemTitleStyleLand"
                 android:text="@string/info_item_title_birthday"/>
 
             <TextView
                 android:id="@+id/birthday_tv"
-                style="@style/WriteInfoItemContentStyle"
+                style="@style/WriteInfoItemContentStyleLand"
                 android:text="2016-03-22"/>
 
         </LinearLayout>
@@ -112,17 +112,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/fill_information_row_margin_left"
+            android:paddingRight="@dimen/fill_information_row_margin_right">
 
             <TextView
-                style="@style/WriteInfoItemTitleStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
+                style="@style/WriteInfoItemTitleStyleLand"
                 android:text="@string/info_item_title_address"/>
 
             <EditText
                 android:id="@+id/address_ET"
-                style="@style/WriteInfoItemContentStyle"
-                android:layout_marginLeft="@dimen/fill_information_row_margin_left"
+                style="@style/WriteInfoItemContentStyleLand"
                 android:imeOptions="actionDone|flagNoFullscreen"
                 android:maxLength="40"/>
         </LinearLayout>
@@ -132,16 +132,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:paddingLeft="@dimen/fill_information_column_gap"
+            android:paddingLeft="@dimen/fill_information_row_margin_right"
             android:paddingRight="@dimen/fill_information_row_margin_left">
 
             <TextView
-                style="@style/WriteInfoItemTitleStyle"
+                style="@style/WriteInfoItemTitleStyleLand"
                 android:text="@string/info_item_title_ID_NO"/>
 
             <EditText
                 android:id="@+id/ID_NO_et"
-                style="@style/WriteInfoItemContentStyle"
+                style="@style/WriteInfoItemContentStyleLand"
                 android:imeOptions="actionDone|flagNoFullscreen"
                 android:inputType="number"
                 android:maxLength="10"/>
