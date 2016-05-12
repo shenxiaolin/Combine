@@ -36,6 +36,7 @@ public class VerifyFingerprintActivity extends AppCompatActivity implements View
     private int KEY_CODE_LEFT_BOTTOM = 250;
     private int KEY_CODE_LEFT_TOP = 251;
     private int KEY_CODE_RIGHT_TOP = 252;
+    private int KEY_CODE_FRONT_CAMERA = 27;//前置摄像头
 
     private SurfaceView previewSFV;
     private ImageButton takeBT;
@@ -107,6 +108,13 @@ public class VerifyFingerprintActivity extends AppCompatActivity implements View
                 || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) && !focus && !active) {
             active = true;
             verifyCamera.autoFocus(this);
+        }
+
+        if (KEY_CODE_FRONT_CAMERA == keyCode) {
+            if (event.getRepeatCount() == 25 && verifyCamera != null && !focus) {
+                verifyCamera.autoFocus(this);
+                return true;
+            }
         }
 
         return super.onKeyDown(keyCode, event);

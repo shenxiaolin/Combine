@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@mipmap/login_bg"
+                android:background="@mipmap/login_bg_land"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -10,7 +10,7 @@
         android:id="@+id/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/user_name_margin_top"
+        android:layout_marginTop="@dimen/user_name_margin_top_land"
         android:gravity="center_horizontal">
 
         <EditText
@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/web_url_margin_bottom"
+        android:layout_marginBottom="@dimen/web_url_margin_bottom_land"
         android:gravity="center"
         android:text="@string/web_url"
         android:textColor="@color/web_url_color"/>
