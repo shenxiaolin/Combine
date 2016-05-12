@@ -118,10 +118,10 @@ public class GatherFingerprintActivity extends AppCompatActivity implements View
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
-                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) && !focus) {
-            gatherFingerprint();
-        }
+//        if ((KEY_CODE_LEFT_BOTTOM == keyCode || KEY_CODE_LEFT_TOP == keyCode
+//                || KEY_CODE_RIGHT_BOTTOM == keyCode || KEY_CODE_RIGHT_TOP == keyCode) && !focus) {
+//            gatherFingerprint();
+//        }
 
         if (KEY_CODE_FRONT_CAMERA == keyCode) {
             if (event.getRepeatCount() == 25 && mCamera != null && !focus) {

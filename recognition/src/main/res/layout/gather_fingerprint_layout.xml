@@ -23,6 +23,7 @@
         android:layout_height="60dip"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/vf_take_photo_bt_margin_bottom"
-        android:background="@drawable/take_photo_bt_bg"/>
+        android:background="@drawable/take_photo_bt_bg"
+        android:visibility="gone"/>
 
 </LinearLayout>
