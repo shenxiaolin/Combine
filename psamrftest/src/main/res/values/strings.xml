@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">PSAMRFTest</string>
+
+    <!--通用字符串-->
+    <string name="common_sure">确定</string>
+    <string name="common_cancel">取消</string>
+
+    <!--PASM测试界面-->
+    <string name="start_test">开始测试</string>
+    <string name="stop_test">停止测试</string>
+    <string name="test_count_title">测试次数</string>
+    <string name="PSAM_serial_number_first">PASM 1</string>
+    <string name="PSAM_serial_number_second">PASM 2</string>
+    <string name="PSAM_serial_number_third">PASM 3</string>
+    <string name="PSAM_serial_number_forth">PASM 4</string>
+    <string name="PSAM_default_baud_rate">9600</string>
+    <string name="PSAM_default_voltage">1.8v</string>
+    <string name="PSAM_default_reset_model">冷复位</string>
 </resources>

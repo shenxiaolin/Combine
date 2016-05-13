@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/PSAM_serial_number_first"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/psam_set_params_dialog_title_font_size"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/setParamsDialogTextStyle"
+            android:gravity="center_vertical"
+            android:text="波特率"/>
+
+        <Spinner
+            android:id="@+id/baud_Rate_spinner"
+            style="@style/setParamsDialogSpinnerStyle"
+            android:entries="@array/baudRate"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/setParamsDialogTextStyle"
+            android:text="电压"/>
+
+
+        <Spinner
+            android:id="@+id/voltage_spinner"
+            style="@style/setParamsDialogSpinnerStyle"
+            android:entries="@array/voltage"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/setParamsDialogTextStyle"
+            android:text="复位模式"/>
+
+
+        <Spinner
+            android:id="@+id/reset_model_spinner"
+            style="@style/setParamsDialogSpinnerStyle"
+            android:entries="@array/resetModel"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/choose_sure_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/common_sure"/>
+
+        <Button
+            android:id="@+id/choose_cancel_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp"
+            android:text="@string/common_cancel"/>
+    </LinearLayout>
+
+</LinearLayout>
