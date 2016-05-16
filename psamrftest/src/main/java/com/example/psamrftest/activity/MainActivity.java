@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.rf_bt:
                 intent.setClass(MainActivity.this, RFTestActivity.class);
-
                 break;
             default:
                 break;
