@@ -49,14 +49,31 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/show_data_tv"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:padding="5dp"
-        android:text="test"/>
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <TextView
+            android:id="@+id/show_data_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:hint="测试结果"
+            android:padding="5dp"
+            android:textSize="30sp"/>
+
+        <ProgressBar
+            android:id="@+id/test_progress"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -83,27 +100,26 @@
                 android:id="@+id/test_count_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:gravity="center"
+                android:imeOptions="actionDone"
                 android:inputType="number"
                 android:minWidth="70dp"
                 android:text="0"/>
         </LinearLayout>
 
         <Button
+            style="@style/TestButtonStyle"
             android:id="@+id/start_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@drawable/rect_round_blue_bg"
             android:text="@string/start_test"/>
 
         <Button
+            style="@style/TestButtonStyle"
             android:id="@+id/stop_bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/rect_round_blue_bg"
             android:text="@string/stop_test"/>
     </LinearLayout>
 

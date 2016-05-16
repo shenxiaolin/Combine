@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.psamrftest.R;
 import com.example.psamrftest.fragment.PSAMSetParamsDialog;
@@ -34,6 +36,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
     private Button startBT, stopBT;
     private EditText testCountET;
     private TextView psamFirstTV, psamSecondTV, psamThirdTV, psamFourthTV, showDataTV;
+    private ProgressBar mProgressBar;
 
     private int slotIndex = 1;
     StringBuilder failedInfo;
@@ -65,7 +68,8 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
     private byte fourthSlotVoltage;
     private byte fourthSlotMode;
 
-    private boolean testState = false;//判断是否正在检测
+    private TestAsyncTask mTestAsyncTask;
+    private boolean testState = false;//判断是否正在测试
     private int cycleCount;//循环检测的次数
     private boolean flag = true;//控制线程结束
 
@@ -111,6 +115,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
         psamFourthTV = (TextView) findViewById(R.id.psam_tv_4);
 
         showDataTV = (TextView) findViewById(R.id.show_data_tv);
+        mProgressBar = (ProgressBar) findViewById(R.id.test_progress);
 
         testCountET = (EditText) findViewById(R.id.test_count_tv);
         startBT = (Button) findViewById(R.id.start_bt);
@@ -172,14 +177,28 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
         }
         cycleCount = Integer.parseInt(testCountET.getText().toString());
         flag = true;
-        new TestAsyncTask().execute();
+        testState = true;
+        mTestAsyncTask = new TestAsyncTask();
+        mTestAsyncTask.execute();
     }
 
     private void stopTestPSAM() {
         flag = false;
+        testState = false;
+        mProgressBar.setVisibility(View.GONE);
+        showDataTV.setVisibility(View.VISIBLE);
+        showDataTV.setText("测试中止");
     }
 
     private class TestAsyncTask extends AsyncTask<String, String, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            showDataTV.setVisibility(View.GONE);
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected Boolean doInBackground(String... params) {
@@ -191,7 +210,9 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     failedInfo.append("slot 1 reset info = ");
                     failedInfo.append(Converter.BytesToHexString(resetReceBuff, (int) resetLen[0]));
                     Log.e(TAG, "doInBackground: slot 1 reset failed!");
+                    publishProgress("slot 1 reset failed!", String.valueOf(false));
                     flag = false;
+                    break;
                 }
 
                 //卡槽2
@@ -200,7 +221,9 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     failedInfo.append("slot 2 reset info = ");
                     failedInfo.append(Converter.BytesToHexString(resetReceBuff, (int) resetLen[0]));
                     Log.e(TAG, "doInBackground: slot 2 reset failed!");
+                    publishProgress("slot 2 reset failed!", String.valueOf(false));
                     flag = false;
+                    break;
                 }
 
                 //卡槽3
@@ -209,7 +232,9 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     failedInfo.append("slot 3 reset info = ");
                     failedInfo.append(Converter.BytesToHexString(resetReceBuff, (int) resetLen[0]));
                     Log.e(TAG, "doInBackground: slot 3 reset failed!");
+                    publishProgress("slot 3 reset failed!", String.valueOf(false));
                     flag = false;
+                    break;
                 }
 
                 //卡槽4
@@ -218,13 +243,21 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     failedInfo.append("slot 4 reset info = ");
                     failedInfo.append(Converter.BytesToHexString(resetReceBuff, (int) resetLen[0]));
                     Log.e(TAG, "doInBackground: slot 4 reset failed!");
+                    publishProgress("slot 4 reset failed!", String.valueOf(false));
                     flag = false;
+                    break;
                 }
 
                 //发送apdu指令
                 for (int i = 1; i < 5; i++) {
                     if (!PSAMUtil.sendAPDU((byte) 1, apduSendBufByte, (short) apduSendBufByte.length, apduReceBuff, Revlen, SW)) {
                         Log.e(TAG, "doInBackground: " + Converter.BytesToHexString(apduReceBuff, (int) Revlen[0]));
+                        String error = "slot " + i + " send apdu failed!";
+                        failedInfo.delete(0, failedInfo.length());
+                        failedInfo.append(error);
+                        publishProgress(failedInfo.toString(), String.valueOf(false));
+                        flag = false;
+                        break;
                     } else {
                         Log.d(TAG, "doInBackground: " + Converter.BytesToHexString(apduReceBuff, (int) Revlen[0]));
                     }
@@ -234,11 +267,12 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     //控制循环
                     tempCount--;
                     if (-1 == tempCount) {
+                        publishProgress("测试通过", String.valueOf(true));
                         flag = false;
+                        testState = false;
+                        break;
                     }
                 }
-
-                publishProgress(Converter.BytesToHexString(apduReceBuff, (int) Revlen[0]));
             }
 
             return null;
@@ -248,14 +282,31 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
 
-            showDataTV.setText(values[0]);
+            if (!Boolean.parseBoolean(values[1])) {
+                mProgressBar.setVisibility(View.GONE);
+                showDataTV.setVisibility(View.VISIBLE);
+                showDataTV.setText(values[0]);
+            } else {
+                mProgressBar.setVisibility(View.GONE);
+                showDataTV.setVisibility(View.VISIBLE);
+                showDataTV.setText(values[0]);
+            }
         }
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         PSAMUtil.closePSAMModule();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mTestAsyncTask != null && mTestAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            Toast.makeText(getApplicationContext(), "请先停止测试", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
