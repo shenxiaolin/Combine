@@ -212,6 +212,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     Log.e(TAG, "doInBackground: slot 1 reset failed!");
                     publishProgress("slot 1 reset failed!", String.valueOf(false));
                     flag = false;
+                    testState = false;
                     break;
                 }
 
@@ -223,6 +224,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     Log.e(TAG, "doInBackground: slot 2 reset failed!");
                     publishProgress("slot 2 reset failed!", String.valueOf(false));
                     flag = false;
+                    testState = false;
                     break;
                 }
 
@@ -234,6 +236,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     Log.e(TAG, "doInBackground: slot 3 reset failed!");
                     publishProgress("slot 3 reset failed!", String.valueOf(false));
                     flag = false;
+                    testState = false;
                     break;
                 }
 
@@ -245,6 +248,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     Log.e(TAG, "doInBackground: slot 4 reset failed!");
                     publishProgress("slot 4 reset failed!", String.valueOf(false));
                     flag = false;
+                    testState = false;
                     break;
                 }
 
@@ -257,6 +261,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                         failedInfo.append(error);
                         publishProgress(failedInfo.toString(), String.valueOf(false));
                         flag = false;
+                        testState = false;
                         break;
                     } else {
                         Log.d(TAG, "doInBackground: " + Converter.BytesToHexString(apduReceBuff, (int) Revlen[0]));
