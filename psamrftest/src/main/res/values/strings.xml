@@ -5,6 +5,10 @@
     <string name="common_sure">确定</string>
     <string name="common_cancel">取消</string>
 
+    <!--主界面-->
+    <string name="pasm_test">PSAM TEST</string>
+    <string name="rf_test">RF TEST</string>
+
     <!--PASM测试界面-->
     <string name="start_test">开始测试</string>
     <string name="stop_test">停止测试</string>

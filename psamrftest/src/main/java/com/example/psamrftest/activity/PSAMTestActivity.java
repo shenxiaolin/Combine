@@ -183,11 +183,13 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void stopTestPSAM() {
-        flag = false;
-        testState = false;
-        mProgressBar.setVisibility(View.GONE);
-        showDataTV.setVisibility(View.VISIBLE);
-        showDataTV.setText("测试中止");
+        if (testState) {
+            flag = false;
+            testState = false;
+            mProgressBar.setVisibility(View.GONE);
+            showDataTV.setVisibility(View.VISIBLE);
+            showDataTV.setText("测试中止");
+        }
     }
 
     private class TestAsyncTask extends AsyncTask<String, String, Boolean> {
