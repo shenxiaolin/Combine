@@ -17,6 +17,7 @@ import com.example.psamrftest.fragment.PSAMSetParamsDialog;
 import com.example.psamrftest.interfaces.SetPSAMParamsInterface;
 import com.example.psamrftest.util.Converter;
 import com.example.psamrftest.util.PSAMUtil;
+import com.example.psamrftest.util.ToastUtil;
 
 import java.util.List;
 
@@ -310,7 +311,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         if (mTestAsyncTask != null && mTestAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
-            Toast.makeText(getApplicationContext(), "请先停止测试", Toast.LENGTH_SHORT).show();
+            ToastUtil.getInstance().showToast(getApplicationContext(), "请先停止测试");
             return;
         }
         super.onBackPressed();

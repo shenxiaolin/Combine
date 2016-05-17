@@ -15,24 +15,25 @@ import com.example.psamrftest.R;
 import com.example.psamrftest.util.Converter;
 import com.example.psamrftest.util.RadiofrequencyUtil;
 import com.example.psamrftest.util.ToastUtil;
-import com.xiongdi.EmpPad;
 
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by moubiao on 2016/5/13.
- * <p>
+ * <p/>
  * RF测试界面
  */
 public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
     private String TAG = "moubiao";
 
     private RadioGroup mRadioGroup;
-    private Button RFTestBT;
+    private Button RFStartTestBT, RFStopTestBT;
     private TextView cardTypeTV, cardSerialTV, testResultTV;
     private ProgressBar testProgress;
+
+    private boolean testState = false;//是否正在测试
+    private boolean abort = false;//是否中断测试
+    private RFTestTask mTestTask;
 
     private int aerialIndex = 1;
     private byte[] uidlen = new byte[1];
@@ -71,12 +72,14 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
 
         testProgress = (ProgressBar) findViewById(R.id.m1_card_test_progress);
 
-        RFTestBT = (Button) findViewById(R.id.RF_test_bt);
+        RFStartTestBT = (Button) findViewById(R.id.start_test_bt);
+        RFStopTestBT = (Button) findViewById(R.id.stop_test_bt);
     }
 
     private void setListener() {
         mRadioGroup.setOnCheckedChangeListener(this);
-        RFTestBT.setOnClickListener(this);
+        RFStartTestBT.setOnClickListener(this);
+        RFStopTestBT.setOnClickListener(this);
     }
 
     @Override
@@ -96,8 +99,17 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.RF_test_bt:
-                new RFTestTask().execute();
+            case R.id.start_test_bt:
+                cardTypeTV.setText("");
+                cardSerialTV.setText("");
+                testState = true;
+                abort = false;
+                mTestTask = new RFTestTask();
+                mTestTask.execute();
+                break;
+            case R.id.stop_test_bt:
+                testState = false;
+                abort = true;
                 break;
             default:
                 break;
@@ -123,12 +135,11 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                 publishProgress("init RF model failed!", "", String.valueOf(true));
             }
 
-            boolean search = true;
-            while (search) {
+            while (testState) {
                 if (!RadiofrequencyUtil.getSerialNumber(0, uidlen, pUID)) {
                     Log.e(TAG, "doInBackground: get serial number failed!");
                 } else {
-                    search = false;
+                    testState = false;
                     Log.e(TAG, "doInBackground: get serial number success!");
                 }
             }
@@ -142,7 +153,7 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             SAK = pUID[uidlen[0] - 3];
 
             if (((SAK & 0x20) != 0) && (ATQA != 0x0344) && (ATQA != 0x0000)) {//A卡
-                publishProgress(getString(R.string.card_type_a), Converter.BytesToHexString(pUID, pUID.length), String.valueOf(false));
+                publishProgress(getString(R.string.card_type_a), Converter.BytesToHexString(pUID, uidlen[0]), String.valueOf(false));
                 if (!RadiofrequencyUtil.resetCpuCard(RevBuff)) {
                     publishProgress("cpu card reset failed!", "", String.valueOf(true));
                     Log.e(TAG, "doInBackground: cpu card reset failed!");
@@ -155,8 +166,9 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                     if (!RadiofrequencyUtil.sendApdu(TmpBuff, 5, RevBuff, OutLen)) {
                         publishProgress("send apdu failed!", "", String.valueOf(true));
                         Log.e(TAG, "doInBackground: send apdu failed!");
+                        return false;
                     } else {
-                        Log.d(TAG, "doInBackground: apdu data = " + Converter.BytesToHexString(RevBuff, RevBuff.length));
+                        Log.d(TAG, "doInBackground: apdu data = " + Converter.BytesToHexString(RevBuff, OutLen[0]));
                     }
                     if (9 == i) {
                         publishProgress("test cpu card success!", "", String.valueOf(true));
@@ -164,7 +176,7 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                 }
 
             } else if (ATQA == 0x0004) {//M卡，1K
-                publishProgress(getString(R.string.card_type_m_1k), Converter.BytesToHexString(pUID, pUID.length), String.valueOf(false));
+                publishProgress(getString(R.string.card_type_m_1k), Converter.BytesToHexString(pUID, uidlen[0]), String.valueOf(false));
                 System.arraycopy(pUID, 0, Serial, 0, 4);
 
                 if (!testM1Card(Serial)) {
@@ -172,7 +184,7 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                     Log.e(TAG, "doInBackground: M1 card 1K test failed!");
                 }
             } else if (ATQA == 0x0002) {//M卡，4K
-                publishProgress(getString(R.string.card_type_m_4k), Converter.BytesToHexString(pUID, pUID.length), Converter.BytesToHexString(pUID, pUID.length), String.valueOf(false));
+                publishProgress(getString(R.string.card_type_m_4k), Converter.BytesToHexString(pUID, uidlen[0]), Converter.BytesToHexString(pUID, uidlen[0]), String.valueOf(false));
 
                 System.arraycopy(pUID, 0, Serial, 0, 4);
                 if (!testM1Card(Serial)) {
@@ -213,6 +225,10 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             } else {
                 cardTypeTV.setText(values[0]);
                 cardSerialTV.setText(values[1]);
+            }
+
+            if (abort) {
+                testResultTV.setText("测试中止");
             }
         }
 
@@ -266,9 +282,6 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             return false;
         }
 
-//        for (i = 0; i < RevBuff.length; i++) {
-//            RevBuff[i] = (byte) 0;
-//        }
         Arrays.fill(RevBuff, (byte) 0);
 
         if (!RadiofrequencyUtil.readM1Card((byte) 16, RevBuff)) {
@@ -347,6 +360,15 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
         }
 
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mTestTask != null && AsyncTask.Status.RUNNING == mTestTask.getStatus()) {
+            ToastUtil.getInstance().showToast(getApplicationContext(), "请先停止测试");
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
