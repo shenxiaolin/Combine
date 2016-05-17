@@ -193,7 +193,6 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                 }
 
             } else if (ATQA == 0x0004) {//M卡，1K
-            } else if (ATQA == 0x0004) {//M卡，1K
                 publishProgress(getString(R.string.card_type_m_1k), Converter.BytesToHexString(pUID, uidlen[0]), String.valueOf(false));
                 System.arraycopy(pUID, 0, Serial, 0, 4);
 
