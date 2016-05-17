@@ -8,7 +8,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -16,8 +18,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.PSAMTestActivity"/>
-        <activity android:name=".activity.RFTestActivity"/>
+        <activity
+            android:name=".activity.PSAMTestActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.RFTestActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
