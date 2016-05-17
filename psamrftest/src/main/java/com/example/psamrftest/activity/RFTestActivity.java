@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -27,12 +29,13 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
     private String TAG = "moubiao";
 
     private RadioGroup mRadioGroup;
+    private RadioButton innerRB, outRB;
     private Button RFStartTestBT, RFStopTestBT;
-    private TextView cardTypeTV, cardSerialTV, testResultTV, cycleCountTV;
+    private TextView cardTypeTV, cardSerialTV, testResultTV;
+    private EditText cycleCountET;
     private ProgressBar testProgress;
 
     private int cycleCount = 10;
-    private boolean testState = false;//是否正在测试
     private boolean abort = false;//是否中断测试
     private RFTestTask mTestTask;
 
@@ -66,8 +69,10 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
 
     private void initView() {
         mRadioGroup = (RadioGroup) findViewById(R.id.aerial_radio_group);
+        innerRB = (RadioButton) findViewById(R.id.inner_aerial_radio_bt);
+        outRB = (RadioButton) findViewById(R.id.out_aerial_radio_bt);
 
-        cycleCountTV = (TextView) findViewById(R.id.cycle_count_tv);
+        cycleCountET = (EditText) findViewById(R.id.cycle_count_tv);
         cardTypeTV = (TextView) findViewById(R.id.card_type_tv);
         cardSerialTV = (TextView) findViewById(R.id.card_serial_number_tv);
         testResultTV = (TextView) findViewById(R.id.m1_card_test_result);
@@ -106,12 +111,19 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                 mTestTask.execute();
                 break;
             case R.id.stop_test_bt:
-                testState = false;
                 abort = true;
                 break;
             default:
                 break;
         }
+    }
+
+    private void enableOrDisableButton(boolean enable) {
+        innerRB.setClickable(enable);
+        outRB.setClickable(enable);
+        cycleCountET.setFocusable(enable);
+        cycleCountET.setFocusableInTouchMode(enable);
+        RFStartTestBT.setClickable(enable);
     }
 
     private class RFTestTask extends AsyncTask<String, String, Boolean> {
@@ -120,11 +132,11 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
         protected void onPreExecute() {
             super.onPreExecute();
             showOrHideProgress(true);
+            enableOrDisableButton(false);
             cardTypeTV.setText("");
             cardSerialTV.setText("");
-            testState = true;
             abort = false;
-            cycleCount = Integer.parseInt(cycleCountTV.getText().toString());
+            cycleCount = Integer.parseInt(cycleCountET.getText().toString());
         }
 
         @Override
@@ -139,11 +151,16 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             }
 
             //获取序列号
-            while (testState) {
+            boolean searchCard = true;
+            while (searchCard) {
+                if (abort) {
+                    return false;
+                }
+
                 if (!RadiofrequencyUtil.getSerialNumber(0, uidlen, pUID)) {
                     Log.e(TAG, "doInBackground: searching card....");
                 } else {
-                    testState = false;
+                    searchCard = false;
                     Log.e(TAG, "doInBackground: get serial number success!");
                 }
             }
@@ -162,14 +179,14 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                 if (!RadiofrequencyUtil.resetCpuCard(RevBuff)) {
                     publishProgress("cpu card reset failed!", "", String.valueOf(true));
                     Log.e(TAG, "doInBackground: cpu card reset failed!");
+                    return false;
                 }
 
                 byte[] TmpData = new byte[]{0x00, (byte) 0x84, 0x00, 0x00, 0x04};
                 System.arraycopy(TmpData, 0, TmpBuff, 0, TmpData.length);
 
-                boolean cycle = true;
                 int tempCycleCount = cycleCount;
-                while (cycle) {
+                while (true) {
                     if (abort) {
                         return false;
                     }
@@ -186,9 +203,7 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                         tempCycleCount--;
                         if (0 == tempCycleCount) {
                             publishProgress("test cpu card success!", "", String.valueOf(true));
-                            cycle = false;
-                            testState = false;
-                            break;
+                            return true;
                         }
                     }
                 }
@@ -205,17 +220,13 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                 publishProgress(getString(R.string.card_type_m_4k), Converter.BytesToHexString(pUID, uidlen[0]), Converter.BytesToHexString(pUID, uidlen[0]), String.valueOf(false));
 
                 System.arraycopy(pUID, 0, Serial, 0, 4);
-                boolean cycle = true;
                 int tempCycleCount = cycleCount;
-                while (cycle) {
+                while (true) {
                     if (abort) {
                         return false;
                     }
 
                     if (!testM1Card(Serial)) {
-                        cycle = false;
-                        testState = false;
-                        Log.e(TAG, "doInBackground: M1 card 4K test failed!");
                         if (1 == errorCode) {
                             publishProgress("authenticate M1 Card failed!", "", String.valueOf(true));
                         } else if (2 == errorCode) {
@@ -235,6 +246,8 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                         } else if (-1 == errorCode) {
                             publishProgress(getString(R.string.abort_test), "", String.valueOf(true));
                         }
+
+                        return false;
                     }
 
                     if (cycleCount != 0) {
@@ -242,9 +255,7 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                         tempCycleCount--;
                         if (0 == tempCycleCount) {
                             publishProgress("test M1 card success!", "", String.valueOf(true));
-                            cycle = false;
-                            testState = false;
-                            break;
+                            return true;
                         }
                     }
                 }
@@ -278,6 +289,7 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             if (abort) {
                 testResultTV.setText(getString(R.string.abort_test));
             }
+            enableOrDisableButton(true);
         }
     }
 
