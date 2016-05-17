@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.psamrftest.R;
 import com.example.psamrftest.fragment.PSAMSetParamsDialog;
@@ -23,7 +22,7 @@ import java.util.List;
 
 /**
  * Created by moubiao on 2016/5/13.
- * <p>
+ * <p/>
  * PASAM卡测试界面
  */
 public class PSAMTestActivity extends AppCompatActivity implements View.OnClickListener, SetPSAMParamsInterface {
@@ -193,12 +192,26 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    private void enableOrDisableButton(boolean enable) {
+        psamFirstTV.setClickable(enable);
+        psamSecondTV.setClickable(enable);
+        psamThirdTV.setClickable(enable);
+        psamFourthTV.setClickable(enable);
+
+        testCountET.setFocusable(enable);
+        testCountET.setFocusableInTouchMode(enable);
+
+        startBT.setClickable(enable);
+        stopBT.setClickable(!enable);
+    }
+
     private class TestAsyncTask extends AsyncTask<String, String, Boolean> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
+            enableOrDisableButton(false);
             showDataTV.setVisibility(View.GONE);
             mProgressBar.setVisibility(View.VISIBLE);
         }
@@ -219,7 +232,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     publishProgress("slot 1 reset failed!", String.valueOf(false));
                     flag = false;
                     testState = false;
-                    break;
+                    return false;
                 }
 
                 long slotSecondStart = System.currentTimeMillis();
@@ -236,7 +249,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     publishProgress("slot 2 reset failed!", String.valueOf(false));
                     flag = false;
                     testState = false;
-                    break;
+                    return false;
                 }
 
                 long slotThirdStart = System.currentTimeMillis();
@@ -252,7 +265,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     publishProgress("slot 3 reset failed!", String.valueOf(false));
                     flag = false;
                     testState = false;
-                    break;
+                    return false;
                 }
 
                 long slotFourthStart = System.currentTimeMillis();
@@ -268,7 +281,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     publishProgress("slot 4 reset failed!", String.valueOf(false));
                     flag = false;
                     testState = false;
-                    break;
+                    return false;
                 }
 
                 spendTime += System.currentTimeMillis() - slotFourthStart;
@@ -285,9 +298,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                         publishProgress(failedInfo.toString(), String.valueOf(false));
                         flag = false;
                         testState = false;
-                        break;
-                    } else {
-//                        Log.d(TAG, "doInBackground: " + Converter.BytesToHexString(apduReceBuff, (int) Revlen[0]));
+                        return false;
                     }
                     spendTime += System.currentTimeMillis() - startAPDU;
                     Log.d(TAG, "doInBackground: ----------send apdu time = " + (System.currentTimeMillis() - startAPDU));
@@ -296,11 +307,11 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                 if (cycleCount != 0) {
                     //控制循环
                     tempCount--;
-                    if (-1 == tempCount) {
+                    if (0 == tempCount) {
                         publishProgress("测试通过", String.valueOf(true));
                         flag = false;
                         testState = false;
-                        break;
+                        return true;
                     }
                 }
             }
@@ -308,7 +319,7 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
             Log.d(TAG, "doInBackground: only spend time = " + spendTime);
             Log.d(TAG, "doInBackground: spend time = " + (System.currentTimeMillis() - startTime));
 
-            return null;
+            return true;
         }
 
         @Override
@@ -324,6 +335,13 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                 showDataTV.setVisibility(View.VISIBLE);
                 showDataTV.setText(values[0]);
             }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            enableOrDisableButton(true);
         }
     }
 
