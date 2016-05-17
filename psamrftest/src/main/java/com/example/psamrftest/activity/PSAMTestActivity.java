@@ -206,8 +206,11 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
         @Override
         protected Boolean doInBackground(String... params) {
             int tempCount = cycleCount;//正在循环的次数
+            long startTime = System.currentTimeMillis();
+            long spendTime = 0L;
             while (flag) {
                 //卡槽1
+                long slotFirstStart = System.currentTimeMillis();
                 if (!PSAMUtil.resetPSAM((byte) 1, firstSlotRate, firstSlotVoltage, resetLen, resetReceBuff, firstSlotMode)) {
                     failedInfo.delete(0, failedInfo.length());
                     failedInfo.append("slot 1 reset info = ");
@@ -219,7 +222,12 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     break;
                 }
 
+                long slotSecondStart = System.currentTimeMillis();
+                spendTime += slotSecondStart - slotFirstStart;
+                Log.d(TAG, "doInBackground: ----------slot first reset time = " + (slotSecondStart - slotFirstStart));
+
                 //卡槽2
+
                 if (!PSAMUtil.resetPSAM((byte) 2, secondSlotRate, secondSlotVoltage, resetLen, resetReceBuff, secondSlotMode)) {
                     failedInfo.delete(0, failedInfo.length());
                     failedInfo.append("slot 2 reset info = ");
@@ -230,6 +238,10 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     testState = false;
                     break;
                 }
+
+                long slotThirdStart = System.currentTimeMillis();
+                spendTime += slotThirdStart - slotSecondStart;
+                Log.d(TAG, "doInBackground: ----------slot second reset time = " + (slotThirdStart - slotSecondStart));
 
                 //卡槽3
                 if (!PSAMUtil.resetPSAM((byte) 3, thirdSlotRate, thirdSlotVoltage, resetLen, resetReceBuff, thirdSlotMode)) {
@@ -243,6 +255,10 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     break;
                 }
 
+                long slotFourthStart = System.currentTimeMillis();
+                spendTime += slotFourthStart - slotThirdStart;
+                Log.d(TAG, "doInBackground: ----------slot third reset time = " + (slotFourthStart - slotThirdStart));
+
                 //卡槽4
                 if (!PSAMUtil.resetPSAM((byte) 4, fourthSlotRate, fourthSlotVoltage, resetLen, resetReceBuff, fourthSlotMode)) {
                     failedInfo.delete(0, failedInfo.length());
@@ -255,9 +271,13 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     break;
                 }
 
+                spendTime += System.currentTimeMillis() - slotFourthStart;
+                Log.d(TAG, "doInBackground: ----------slot fourth reset time = " + (System.currentTimeMillis() - slotFourthStart));
+
                 //发送apdu指令
                 for (int i = 1; i < 5; i++) {
-                    if (!PSAMUtil.sendAPDU((byte) 1, apduSendBufByte, (short) apduSendBufByte.length, apduReceBuff, Revlen, SW)) {
+                    long startAPDU = System.currentTimeMillis();
+                    if (!PSAMUtil.sendAPDU((byte) i, apduSendBufByte, (short) apduSendBufByte.length, apduReceBuff, Revlen, SW)) {
                         Log.e(TAG, "doInBackground: " + Converter.BytesToHexString(apduReceBuff, (int) Revlen[0]));
                         String error = "slot " + i + " send apdu failed!";
                         failedInfo.delete(0, failedInfo.length());
@@ -267,8 +287,10 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                         testState = false;
                         break;
                     } else {
-                        Log.d(TAG, "doInBackground: " + Converter.BytesToHexString(apduReceBuff, (int) Revlen[0]));
+//                        Log.d(TAG, "doInBackground: " + Converter.BytesToHexString(apduReceBuff, (int) Revlen[0]));
                     }
+                    spendTime += System.currentTimeMillis() - startAPDU;
+                    Log.d(TAG, "doInBackground: ----------send apdu time = " + (System.currentTimeMillis() - startAPDU));
                 }
 
                 if (cycleCount != 0) {
@@ -282,6 +304,9 @@ public class PSAMTestActivity extends AppCompatActivity implements View.OnClickL
                     }
                 }
             }
+
+            Log.d(TAG, "doInBackground: only spend time = " + spendTime);
+            Log.d(TAG, "doInBackground: spend time = " + (System.currentTimeMillis() - startTime));
 
             return null;
         }
