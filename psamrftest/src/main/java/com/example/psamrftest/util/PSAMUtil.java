@@ -49,9 +49,12 @@ public class PSAMUtil {
     }
 
     public static boolean sendAPDU(byte Slot, byte[] buffer, short length, byte[] rbuffer, short[] Revlen, short[] SW) {
+        long startTime = System.currentTimeMillis();
         if (0 == EmpPad.Sim_Apdu(Slot, buffer, length, rbuffer, Revlen, SW)) {
+            Log.d(TAG, "sendAPDU: success spend time = " + (System.currentTimeMillis() - startTime));
             return true;
         } else {
+            Log.d(TAG, "sendAPDU: failed spend time = " + (System.currentTimeMillis() - startTime));
             Log.e(TAG, "send APDU: failed!");
             return false;
         }

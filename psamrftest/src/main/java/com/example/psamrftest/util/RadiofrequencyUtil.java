@@ -95,10 +95,14 @@ public class RadiofrequencyUtil {
      * @param outLen  接收数据长度
      */
     public static boolean sendApdu(byte[] send, int len, byte[] outData, short[] outLen) {
+        long startTime = System.currentTimeMillis();
+        Log.d(TAG, "sendApdu: send apdu start----->");
         if (0 != EmpPad.Rfa_APDU(send, len, outData, outLen)) {
+            Log.d(TAG, "sendApdu: send apdu failed end time = " + (System.currentTimeMillis() - startTime));
             Log.e(TAG, "sendApdu: failed!");
             return false;
         }
+        Log.d(TAG, "sendApdu: send apdu success end time = " + (System.currentTimeMillis() - startTime));
         return true;
     }
 
