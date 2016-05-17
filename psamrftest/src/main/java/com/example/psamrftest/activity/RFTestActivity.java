@@ -45,7 +45,7 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
     private byte[] TmpBuff = new byte[1000];
     private short[] OutLen = new short[1];
     private byte[] Serial = new byte[4];
-    private int errorCode = 0;//0表示成功
+    private int errorCode = 0;//0表示成功 -1:中断测试
 
 
     @Override
@@ -156,6 +156,7 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             ATQA = (short) (pUID[uidlen[0] - 1] * 256 + pUID[uidlen[0] - 2]);
             SAK = pUID[uidlen[0] - 3];
 
+            ///////////////////////根据不同的卡做不同的操作////////////////////////////////////
             if (((SAK & 0x20) != 0) && (ATQA != 0x0344) && (ATQA != 0x0000)) {//A卡
                 publishProgress(getString(R.string.card_type_a), Converter.BytesToHexString(pUID, uidlen[0]), String.valueOf(false));
                 if (!RadiofrequencyUtil.resetCpuCard(RevBuff)) {
@@ -204,27 +205,48 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
                 publishProgress(getString(R.string.card_type_m_4k), Converter.BytesToHexString(pUID, uidlen[0]), Converter.BytesToHexString(pUID, uidlen[0]), String.valueOf(false));
 
                 System.arraycopy(pUID, 0, Serial, 0, 4);
-                if (!testM1Card(Serial)) {
-                    Log.e(TAG, "doInBackground: M1 card 4K test failed!");
-                    if (1 == errorCode) {
-                        publishProgress("authenticate M1 Card failed!", "", String.valueOf(true));
-                    } else if (2 == errorCode) {
-                        publishProgress("write M1 card failed!", "", String.valueOf(true));
-                    } else if (3 == errorCode) {
-                        publishProgress("read M1 card failed!", "", String.valueOf(true));
-                    } else if (4 == errorCode) {
-                        publishProgress("write value M1 card failed!", "", String.valueOf(true));
-                    } else if (5 == errorCode) {
-                        publishProgress("read value M1 card failed!", "", String.valueOf(true));
-                    } else if (6 == errorCode) {
-                        publishProgress("increase write M1 card failed!", "", String.valueOf(true));
-                    } else if (7 == errorCode) {
-                        publishProgress("decrease write M1 card failed!", "", String.valueOf(true));
-                    } else if (8 == errorCode) {
-                        publishProgress("restore write M1 card failed!", "", String.valueOf(true));
+                boolean cycle = true;
+                int tempCycleCount = cycleCount;
+                while (cycle) {
+                    if (abort) {
+                        return false;
                     }
-                } else {
-                    publishProgress("test M1 card success!", "", String.valueOf(true));
+
+                    if (!testM1Card(Serial)) {
+                        cycle = false;
+                        testState = false;
+                        Log.e(TAG, "doInBackground: M1 card 4K test failed!");
+                        if (1 == errorCode) {
+                            publishProgress("authenticate M1 Card failed!", "", String.valueOf(true));
+                        } else if (2 == errorCode) {
+                            publishProgress("write M1 card failed!", "", String.valueOf(true));
+                        } else if (3 == errorCode) {
+                            publishProgress("read M1 card failed!", "", String.valueOf(true));
+                        } else if (4 == errorCode) {
+                            publishProgress("write value M1 card failed!", "", String.valueOf(true));
+                        } else if (5 == errorCode) {
+                            publishProgress("read value M1 card failed!", "", String.valueOf(true));
+                        } else if (6 == errorCode) {
+                            publishProgress("increase write M1 card failed!", "", String.valueOf(true));
+                        } else if (7 == errorCode) {
+                            publishProgress("decrease write M1 card failed!", "", String.valueOf(true));
+                        } else if (8 == errorCode) {
+                            publishProgress("restore write M1 card failed!", "", String.valueOf(true));
+                        } else if (-1 == errorCode) {
+                            publishProgress(getString(R.string.abort_test), "", String.valueOf(true));
+                        }
+                    }
+
+                    if (cycleCount != 0) {
+                        //控制循环
+                        tempCycleCount--;
+                        if (0 == tempCycleCount) {
+                            publishProgress("test M1 card success!", "", String.valueOf(true));
+                            cycle = false;
+                            testState = false;
+                            break;
+                        }
+                    }
                 }
             } else if (ATQA == 0x0044) {//未定义
 
@@ -275,7 +297,7 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
     /**
      * 测试M1卡
      *
-     * @param SNR
+     * @param SNR 序列号
      * @return
      */
     private boolean testM1Card(byte[] SNR) {
@@ -283,11 +305,12 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
         byte[] TmpBuff = new byte[16];
         byte[] RevBuff = new byte[16];
 
-        for (i = 0; i < TmpBuff.length; i++) {
-            TmpBuff[i] = (byte) 0xFF;
-        }
         Arrays.fill(TmpBuff, (byte) 0xFF);
 
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         if (!RadiofrequencyUtil.authenticateM1Card((byte) 0x0A, (byte) 4, TmpBuff, SNR)) {
             errorCode = 1;
             return false;
@@ -297,6 +320,10 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             TmpBuff[i] = (byte) i;
         }
 
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         if (!RadiofrequencyUtil.writeM1Card((byte) 16, TmpBuff)) {
             errorCode = 2;
             return false;
@@ -304,11 +331,15 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
 
         Arrays.fill(RevBuff, (byte) 0);
 
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         if (!RadiofrequencyUtil.readM1Card((byte) 16, RevBuff)) {
             errorCode = 3;
             return false;
         }
-        Log.d(TAG, "BLOCK16:" + Converter.BytesToHexString(RevBuff, 16));//BCD2ASC(RevBuff,16)
+
         for (i = 0; i < RevBuff.length; i++) {
             if (TmpBuff[i] != RevBuff[i]) {
                 Log.e(TAG, "RFID Write or Read ..........failed!");
@@ -322,8 +353,16 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
         TmpBuff[2] = 0;
         TmpBuff[3] = 0;
 
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         if (!RadiofrequencyUtil.writeValueM1Card((byte) 17, TmpBuff)) {
             errorCode = 4;
+            return false;
+        }
+        if (abort) {
+            errorCode = -1;
             return false;
         }
         if (!RadiofrequencyUtil.readValueM1Card((byte) 17, RevBuff)) {
@@ -339,6 +378,10 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             }
         }
 
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         TmpBuff[0] = 0x04;
         TmpBuff[1] = 0;
         TmpBuff[2] = 0;
@@ -347,11 +390,19 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             errorCode = 6;
             return false;
         }
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         if (!RadiofrequencyUtil.readM1Card((byte) 17, RevBuff)) {
             errorCode = 3;
             return false;
         }
 
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         TmpBuff[0] = 0x04;
         TmpBuff[1] = 0;
         TmpBuff[2] = 0;
@@ -360,13 +411,25 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             errorCode = 7;
             return false;
         }
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         if (!RadiofrequencyUtil.readM1Card((byte) 17, TmpBuff)) {
             errorCode = 3;
             return false;
         }
 
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         if (!RadiofrequencyUtil.restoreTransferM1Card((byte) 17, (byte) 16)) {
             errorCode = 8;
+            return false;
+        }
+        if (abort) {
+            errorCode = -1;
             return false;
         }
         if (!RadiofrequencyUtil.readM1Card((byte) 16, TmpBuff)) {
@@ -374,6 +437,10 @@ public class RFTestActivity extends AppCompatActivity implements RadioGroup.OnCh
             return false;
         }
 
+        if (abort) {
+            errorCode = -1;
+            return false;
+        }
         if (!RadiofrequencyUtil.readM1Card((byte) 17, TmpBuff)) {
             errorCode = 3;
             return false;
